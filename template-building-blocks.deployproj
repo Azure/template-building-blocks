@@ -29,13 +29,13 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
-    <None Include="drivers\Bash\deploy-template-with-param.sh" />
-    <None Include="drivers\Json\deploy-template-with-param.json" />
-    <None Include="drivers\Json\deploy-template-with-param.parameters.json" />
-    <None Include="drivers\Json\deploy-template-return-outputs.json" />
-    <None Include="drivers\Json\output-mapper.json" />
-    <None Include="drivers\Powershell\Deploy-Template.ps1" />
-    <None Include="drivers\Powershell\deploy-vnet-n-subnets.ps1" />
+    <None Include="drivers\bash\deploy-template-with-param.sh" />
+    <None Include="drivers\json\deploy-template-with-param.json" />
+    <None Include="drivers\json\deploy-template-with-param.parameters.json" />
+    <None Include="drivers\json\deploy-template-return-outputs.json" />
+    <None Include="drivers\json\output-mapper.json" />
+    <None Include="drivers\ps\Deploy-Template.ps1" />
+    <None Include="drivers\ps\deploy-vnet-n-subnets.ps1" />
     <None Include="scripts\apache.sh" />
     <None Include="scripts\iisaspnet.ps1" />
     <None Include="scripts\iisaspnet.ps1.zip" />
