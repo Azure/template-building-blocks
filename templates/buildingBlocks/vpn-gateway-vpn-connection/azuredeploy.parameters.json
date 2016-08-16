@@ -1,0 +1,36 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "baseName": {
+      "value": "my-base-name"
+    },
+    "infrastructureSettings": {
+      "value": {
+        "vnetName": "drew-ra-vnet",
+        "virtualNetworkGateway": {
+          "name": "drew-ra-gw",
+          "gatewayType": "Vpn",
+          "vpnType": "RouteBased",
+          "sku": "Standard"
+        },
+        "connection": {
+          "name": "drew-ra-vpn",
+          "connectionType": "IPsec",
+          "sharedKey": "123secret",
+          "virtualNetworkGateway1": {
+            "name": "drew-ra-gw"
+          },
+          "localNetworkGateway": {
+            "name": "drew-ra-lgw",
+            "ipAddress": "10.20.30.40",
+            "addressPrefixes": [ "192.168.0.0/16", "10.5.0.0/16" ]
+          },
+          "virtualNetworkGateway2": {
+            "name": "drew-ra-gw2"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,29 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkSettings": {
+      "value": {
+        "name": "a0-cn-vnet",
+        "addressPrefixes": [
+          "10.0.0.0/16"
+        ],
+        "subnets": [
+          {
+            "name": "a0-web-sn",
+            "addressPrefix": "10.0.0.0/24"
+          },
+          {
+            "name": "a0-biz-sn",
+            "addressPrefix": "10.0.1.0/24"
+          },
+          {
+            "name": "a0-data-sn",
+            "addressPrefix": "10.0.2.0/24"
+          }
+        ],
+        "dnsServers": []
+      }
+    }
+  }
+}

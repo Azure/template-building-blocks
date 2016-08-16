@@ -1,0 +1,53 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object",
+      "defaultValue": {
+        "parentTemplateUniqueString": "bbVnet"
+      }
+    },
+    "virtualNetworkSettings": {
+      "type": "object",
+      "metadata": {
+        "description": "Settings for virtual network"
+      }
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualNetworkSettings'))))]",
+    "virtualNetworkTemplate": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/virtualNetworks/virtualNetwork.json')]",
+    "vnetName": "[parameters('virtualNetworkSettings').name]",
+    "deploymentTemplateName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployVNet-', variables('templateUniqueString'))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('deploymentTemplateName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('virtualNetworkTemplate')]"
+        },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-deployVNet')]"
+            }
+          },
+          "virtualNetworkSettings": {
+            "value": "[parameters('virtualNetworkSettings')]"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "resources": {
+      "type": "array",
+      "value": "[reference(variables('deploymentTemplateName')).outputResources]"
+    }
+  }
+}

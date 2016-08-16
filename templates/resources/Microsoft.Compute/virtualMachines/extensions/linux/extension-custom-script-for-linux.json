@@ -1,0 +1,28 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "typeHandlerVersion": {
+      "type": "string",
+      "defaultValue": "1.4"
+    },
+    "settings": {
+      "type": "object"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+  ],
+  "outputs": {
+    "properties": {
+      "type": "object",
+      "value": {
+        "publisher": "Microsoft.OSTCExtensions",
+        "type": "CustomScriptForLinux",
+        "typeHandlerVersion": "[parameters('typeHandlerVersion')]",
+        "settings": "[parameters('settings')]"
+      }
+    }
+  }
+}

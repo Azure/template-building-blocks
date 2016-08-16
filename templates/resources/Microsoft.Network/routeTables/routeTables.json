@@ -1,0 +1,53 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object",
+      "defaultValue": {
+        "parentTemplateUniqueString": "UDR"
+      }
+    },
+    "virtualNetworkSettings": {
+      "type": "object"
+    },
+    "routeTableSettings": {
+      "type": "array"
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualNetworkSettings')), string(parameters('routeTableSettings'))))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-DeployRT', copyIndex(), '-', variables('templateUniqueString'))]",
+      "copy": {
+        "name": "iterator",
+        "count": "[length(parameters('routeTableSettings'))]"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, 'routeTable.json')]"
+        },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-DeployRT', copyIndex())]"
+            }
+          },
+          "virtualNetworkSettings": {
+            "value": "[parameters('virtualNetworkSettings')]"
+          },
+          "routeTableSetting": {
+            "value": "[parameters('routeTableSettings')[copyIndex()]]"
+          }
+        }
+      }
+    }
+  ],
+    "outputs": {
+    }
+}

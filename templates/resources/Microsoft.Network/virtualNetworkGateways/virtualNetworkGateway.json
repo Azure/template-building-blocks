@@ -1,0 +1,89 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": { "type": "object" },
+    "virtualNetworkSettings": {
+      "type": "object"
+    },
+    "virtualNetworkGatewaySettings": {
+      "type": "object"
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualNetworkSettings')), string(parameters('virtualNetworkGatewaySettings'))))]",
+    "publicIPAddressName": "[concat(parameters('virtualNetworkGatewaySettings').name, '-pip')]",
+    "publicIPAddressReferenceTemplateName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', variables('publicIPAddressName'), 'Ref-', variables('templateUniqueString'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2016-03-30",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('publicIPAddressName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "publicIPAllocationMethod": "Dynamic"
+      }
+    },
+    {
+      "apiVersion": "2016-03-30",
+      "type": "Microsoft.Network/virtualNetworkGateways",
+      "name": "[parameters('virtualNetworkGatewaySettings').name]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[variables('publicIPAddressName')]"
+      ],
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "[concat(parameters('virtualNetworkGatewaySettings').name, '-ipconfig')]",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkSettings').name, 'GatewaySubnet')]"
+              },
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+              }
+            }
+          }
+        ],
+        "gatewayType": "[parameters('virtualNetworkGatewaySettings').gatewayType]",
+        "vpnType": "[parameters('virtualNetworkGatewaySettings').vpnType]",
+        "enableBgp": "false",
+        "sku": {
+          "name": "[parameters('virtualNetworkGatewaySettings').sku]",
+          "tier": "[parameters('virtualNetworkGatewaySettings').sku]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('publicIPAddressReferenceTemplateName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[uri(deployment().properties.templateLink.uri, '../../common/reference.json')]"
+        },
+        "parameters": {
+          "resourceType": {
+            "value": "Microsoft.Network/publicIPAddresses"
+          },
+          "resourceName1": {
+            "value": "[variables('publicIPAddressName')]"
+          }
+        }
+      },
+      "dependsOn": [
+        "[parameters('virtualNetworkGatewaySettings').name]"
+      ]
+    }
+  ],
+  "outputs": {
+    "publicIPAddress": {
+      "type": "object",
+      "value": "[reference(variables('publicIPAddressReferenceTemplateName')).outputs.reference.value]"
+    }
+  }
+}

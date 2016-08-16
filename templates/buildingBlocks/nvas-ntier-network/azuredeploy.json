@@ -1,0 +1,101 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object",
+      "defaultValue": {
+        "parentTemplateUniqueString": "bbNVAs"
+      }
+    },
+    "loadBalancerSettings": {
+      "type": "object",
+      "metadata": {
+        "description": "Settings for infrastructure"
+      }
+    },
+    "virtualMachinesSettings": {
+      "type": "object",
+      "metadata": {
+        "description": "Settings for virtual machines"
+      }
+    },
+    "virtualNetworkSettings": {
+      "type": "object",
+      "metadata": {
+        "description": "Settings for virtual network"
+      }
+    },
+    "buildingBlockSettings": {
+      "type": "object",
+      "metadata": {
+        "description": "Settings for building block"
+      }
+    },
+    "routeTableSettings": {
+      "type": "array",
+      "metadata": {
+        "description": "Settings for route table."
+      }
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('loadBalancerSettings')), string(parameters('virtualMachinesSettings')), string(parameters('virtualNetworkSettings')), string(parameters('buildingBlockSettings')), string(parameters('routeTableSettings'))))]",
+    "location": "[resourceGroup().location]",
+    "vmPrefix": "[concat(parameters('virtualMachinesSettings').namePrefix, '-vm')]",
+    "routeTableTemplate": "[uri(deployment().properties.templateLink.uri, '../userDefinedRoutes/azuredeploy.json')]",
+    "loadBalancerTemplate": "[uri(deployment().properties.templateLink.uri, '../loadBalancer-backend-n-vm/azuredeploy.json')]",
+    "routeTableDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployRt-', variables('templateUniqueString'))]",
+    "lbDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployLbVMs-', variables('templateUniqueString'))]",
+    "extensionDeploymentNamePrefix": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployVmExt-')]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('routeTableDeploymentName')]",
+      "dependsOn": [
+        "[variables('lbDeploymentName')]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": { "uri": "[variables('routeTableTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-deployRt')]"
+            }
+          },
+          "virtualNetworkSettings": { "value": "[parameters('virtualNetworkSettings')]" },
+          "routeTableSettings": { "value": "[parameters('routeTableSettings')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('lbDeploymentName')]",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": { "uri": "[variables('loadBalancerTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-deployLbVMs')]"
+            }
+          },
+          "virtualMachinesSettings": { "value": "[parameters('virtualMachinesSettings')]" },
+          "virtualNetworkSettings": { "value": "[parameters('virtualNetworkSettings')]" },
+          "buildingBlockSettings": { "value": "[parameters('buildingBlockSettings')]" },
+          "loadBalancerSettings": { "value": "[parameters('loadBalancerSettings')]" }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "resources": {
+      "type": "array",
+      "value": "[concat(reference(variables('routeTableDeploymentName')).outputResources, reference(variables('lbDeploymentName')).outputResources)]"
+    }
+  }
+}
