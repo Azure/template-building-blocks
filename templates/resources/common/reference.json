@@ -40,8 +40,8 @@
     "subscription": "[variables('subscriptions')[mod(add(length(parameters('subscription')), 2), add(length(parameters('subscription')), 1))]]",
     "resourceGroup": "[variables('resourceGroups')[mod(add(length(parameters('resourceGroup')), 2), add(length(parameters('resourceGroup')), 1))]]",
     "referenceTemplates": [
-      "referenceOneParameter.json",
-      "referenceTwoParameters.json"
+      "reference-one-parameter.json",
+      "reference-two-parameters.json"
     ],
     "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-reference-', variables('templateUniqueString'))]"
   },

@@ -13,7 +13,7 @@
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualMachinesSettings')), parameters('vmStartIndex'), parameters('vmCount'), string(parameters('loadBalancerBackendAddressPools')), string(parameters('loadBalancerNatRules')), parameters('vmIndex'), parameters('vnetName')))]",
-    "referenceTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/referenceOneParameter.json')]",
+    "referenceTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/reference-one-parameter.json')]",
     "nicCount": "[length(parameters('virtualMachinesSettings').nics)]",
     "updateNicsTemplate": {
       "true": "[uri(deployment().properties.templateLink.uri, 'lb-update-public-nic-backendPools.json')]",

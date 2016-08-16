@@ -70,8 +70,8 @@
     <None Include="templates\resources\common\collector-nop.json" />
     <None Include="templates\resources\common\collector.json" />
     <None Include="templates\resources\common\reference.json" />
-    <None Include="templates\resources\common\referenceOneParameter.json" />
-    <None Include="templates\resources\common\referenceTwoParameters.json" />
+    <None Include="templates\resources\common\reference-one-parameter.json" />
+    <None Include="templates\resources\common\reference-two-parameters.json" />
     <None Include="templates\resources\common\replicator-internal.json" />
     <None Include="templates\resources\common\replicator-nop.json" />
     <None Include="templates\resources\common\replicator.json" />

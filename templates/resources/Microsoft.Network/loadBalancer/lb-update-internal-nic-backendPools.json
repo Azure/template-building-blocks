@@ -9,7 +9,7 @@
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('nicReference'))))]",
-    "referenceTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/referenceOneParameter.json')]"
+    "referenceTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/reference-one-parameter.json')]"
   },
   "resources": [
     {
