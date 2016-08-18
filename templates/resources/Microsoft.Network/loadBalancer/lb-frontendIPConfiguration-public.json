@@ -16,7 +16,7 @@
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('source')), string(parameters('context')), string(parameters('state')), parameters('iteration')))]",
-    "publicIpAddressName": "[concat(parameters('source').name, parameters('iteration'), '-pip')]",
+    "publicIpAddressName": "[concat(parameters('source').name, '-pip')]",
     "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployPIP-', variables('templateUniqueString'))]"
   },
   "resources": [
