@@ -50,14 +50,14 @@
           "source": { "value": "[parameters('virtualMachinesSettings')]" },
           "context": {
             "value": {
-              "vnetName": "[parameters('virtualNetworkSettings').name]",
-              "vnetResourceGroup": "[parameters('virtualNetworkSettings').resourceGroup]",
-              "vmNamePrefix": "[parameters('virtualMachinesSettings').namePrefix]",
-              "vmNamePostFixStartIndex": "[add(parameters('context').vmStartIndex, parameters('context').deployedVMCount)]",
-              "deployedVMCount": "[parameters('context').deployedVMCount]",
-              "storageAccounts": {
-                "diagnostic": "[parameters('context').storageAccounts.diagnostic]",
-                "vhd": "[parameters('context').storageAccounts.vhd]"
+                "vnetName": "[parameters('virtualNetworkSettings').name]",
+                "vnetResourceGroup": "[parameters('virtualNetworkSettings').resourceGroup]",
+                "vmNamePrefix": "[parameters('virtualMachinesSettings').namePrefix]",
+                "vmNamePostFixStartIndex": "[add(parameters('context').vmStartIndex, parameters('context').deployedVMCount)]",
+                "deployedVMCount": "[parameters('context').deployedVMCount]",
+                "storageAccounts": {
+                  "diagnostic": "[parameters('context').storageAccounts.diagnostic]",
+                  "vhd": "[parameters('context').storageAccounts.vhd]"
               },
               "availabilitySetName": "[parameters('context').availabilitySetName]"
             }

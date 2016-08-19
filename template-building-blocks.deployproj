@@ -49,6 +49,7 @@
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\4-vm-2-sa-2-nic-3-dd-public-ip.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\nic-test1.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\nic-test2.parameters.json" />
+    <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vm-extensions.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\azuredeploy.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\azuredeploy.parameters.json" />
     <None Include="templates\buildingBlocks\nvas-ntier-network\azuredeploy.json" />
@@ -108,6 +109,9 @@
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\virtualMachine-nic.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\virtualMachines-nics-settings.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\virtualMachines-settings.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\vm-extension-passthrough-settings-mapper.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\vm-extension-settings-helper.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\vm-extension-settings.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\vm-per-storage-helper.json" />
     <None Include="templates\resources\Microsoft.Network\connections\connection-ExpressRoute.json" />
     <None Include="templates\resources\Microsoft.Network\connections\connection-IPsec.json" />
