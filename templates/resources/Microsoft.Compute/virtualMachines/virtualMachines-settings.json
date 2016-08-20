@@ -25,7 +25,6 @@
     "nicSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nicSettings-', variables('templateUniqueString'))]",
     "dataDiskSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-dataDiskSettings-', variables('templateUniqueString'))]",
     "vmSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-vmSetting-', variables('templateUniqueString'))]",
-    "extensionsSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-extSettings-', variables('templateUniqueString'))]"
   },
   "resources": [
     {
@@ -105,31 +104,6 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "name": "[variables('extensionsSettingDeploymentName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": { "uri": "[variables('collectorTemplate')]" },
-        "parameters": {
-          "deploymentContext": {
-            "value": {
-              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-extSettings')]"
-            }
-          },
-          "source": { "value": "[parameters('source').extensions]" },
-          "context": {
-            "value": {
-              "virtualMachineSettings": "[parameters('source')]",
-              "storageAccounts": "[parameters('context').storageAccounts]",
-              "vmName": "[variables('vmName')]"
-            }
-          },
-          "mapperTemplateUri": { "value": "[uri(deployment().properties.templateLink.uri, 'vm-extension-settings.json')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
       "name": "[variables('vmSettingDeploymentName')]",
       "properties": {
         "mode": "Incremental",
@@ -166,7 +140,7 @@
                   },
                   "dataDisks": "[reference(variables('dataDiskSettingDeploymentName')).outputs.result.value]",
                   "diagnosticsStorageUri": "[concat('http://', parameters('context').storageAccounts.diagnostic, '.blob.core.windows.net')]",
-                  "extensions": "[reference(variables('extensionsSettingDeploymentName')).outputs.result.value]"
+                  "extensions": "[parameters('source').extensions]"
                 }
               ]
             }
