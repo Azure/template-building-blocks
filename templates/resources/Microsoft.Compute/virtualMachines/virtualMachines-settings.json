@@ -24,7 +24,7 @@
     "osSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-osSetting-', variables('templateUniqueString'))]",
     "nicSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nicSettings-', variables('templateUniqueString'))]",
     "dataDiskSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-dataDiskSettings-', variables('templateUniqueString'))]",
-    "vmSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-vmSetting-', variables('templateUniqueString'))]"
+    "vmSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-vmSetting-', variables('templateUniqueString'))]",
   },
   "resources": [
     {
@@ -139,7 +139,8 @@
                     "caching": "[parameters('source').osDisk.caching]"
                   },
                   "dataDisks": "[reference(variables('dataDiskSettingDeploymentName')).outputs.result.value]",
-                  "diagnosticsStorageUri": "[concat('http://', parameters('context').storageAccounts.diagnostic, '.blob.core.windows.net')]"
+                  "diagnosticsStorageUri": "[concat('http://', parameters('context').storageAccounts.diagnostic, '.blob.core.windows.net')]",
+                  "extensions": "[parameters('source').extensions]"
                 }
               ]
             }

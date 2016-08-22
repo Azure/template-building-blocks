@@ -106,8 +106,8 @@
           {
             "isPublic": "true",
             "subnetName": "rs1-web-sn",
-            "privateIPAllocationMethod": "static",
-            "publicIPAllocationMethod": "dynamic",
+            "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
             "dnsServers": [

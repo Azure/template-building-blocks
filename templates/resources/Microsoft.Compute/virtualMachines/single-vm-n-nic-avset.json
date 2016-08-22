@@ -14,7 +14,9 @@
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualMachinesSetting'))))]",
     "location": "[resourceGroup().location]",
     "collectorTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/collector.json')]",
-    "nicsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployNics-', variables('templateUniqueString'))]"
+    "extensionsTemplate": "[uri(deployment().properties.templateLink.uri, 'extensions/virtualMachine-extensions.json')]",
+    "nicsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployNics-', variables('templateUniqueString'))]",
+    "extensionsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployExts-', variables('templateUniqueString'))]"
   },
   "resources": [
     {
@@ -33,6 +35,32 @@
           "source": { "value": "[parameters('virtualMachinesSetting').nics]" },
           "context": { "value": { } },
           "mapperTemplateUri": { "value": "[uri(deployment().properties.templateLink.uri, 'virtualMachine-nic.json')]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('extensionsDeployment')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachinesSetting').vmName)]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": { "uri": "[variables('extensionsTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-deployExts')]"
+            }
+          },
+          "source": { "value": "[parameters('virtualMachinesSetting').extensions]" },
+          "context": {
+            "value": {
+              "virtualMachinesSetting": "[parameters('virtualMachinesSetting')]",
+              "vmName": "[parameters('virtualMachinesSetting').vmName]"
+            }
+          }
         }
       }
     },
