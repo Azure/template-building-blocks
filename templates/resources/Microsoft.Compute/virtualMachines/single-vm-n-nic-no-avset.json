@@ -106,8 +106,7 @@
             "storageUri": "[parameters('virtualMachinesSetting').diagnosticsStorageUri]"
           }
         }
-      },
-      "resources": "[parameters('virtualMachinesSetting').extensions]"
+      }
     }
   ]
 }
