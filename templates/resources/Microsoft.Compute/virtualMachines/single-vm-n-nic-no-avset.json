@@ -57,7 +57,8 @@
           "source": { "value": "[parameters('virtualMachinesSetting').extensions]" },
           "context": {
             "value": {
-              "virtualMachinesSetting": "[parameters('virtualMachinesSetting')]"
+              "virtualMachinesSetting": "[parameters('virtualMachinesSetting')]",
+              "vmName": "[parameters('virtualMachinesSetting').vmName]"
             }
           }
         }

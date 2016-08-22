@@ -59,6 +59,8 @@
     <None Include="templates\buildingBlocks\nvas-ntier-network\scenarios\setup-script.ps1" />
     <None Include="templates\buildingBlocks\userDefinedRoutes\azuredeploy.json" />
     <None Include="templates\buildingBlocks\userDefinedRoutes\azuredeploy.parameters.json" />
+    <None Include="templates\buildingBlocks\virtualMachine-extensions\azuredeploy.json" />
+    <None Include="templates\buildingBlocks\virtualMachine-extensions\azuredeploy.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\azuredeploy.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-with-2-subnets-1-dns.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-with-3tier-subnets.parameters.json" />
@@ -89,6 +91,7 @@
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\linux\jmeter\2.8\extension-jmeter-2.8.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\linux\jmeter\2.8\install-jmeter-2.8.sh" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachines-extensions.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-passthrough-settings-mapper.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings-helper.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings.json" />

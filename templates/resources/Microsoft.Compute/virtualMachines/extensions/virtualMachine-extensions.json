@@ -12,7 +12,7 @@
     "extensionSettingsTemplate": "[uri(deployment().properties.templateLink.uri, 'vm-extension-settings.json')]",
     "extensionsSettingDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-extSettings-', variables('templateUniqueString'))]",
     "extensionsDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-exts-', variables('templateUniqueString'))]",
-    "vmName": "[parameters('context').virtualMachinesSetting.vmName]",
+    "vmName": "[parameters('context').vmName]",
     "extensionTemplates": [
       "[uri(deployment().properties.templateLink.uri, 'virtualMachines-extensions-nop.json')]",
       "[uri(deployment().properties.templateLink.uri, 'virtualMachine-extensions-internal.json')]"
@@ -52,11 +52,7 @@
             }
           },
           "source": { "value": "[reference(variables('extensionsSettingDeploymentName')).outputs.result.value]" },
-          "context": {
-            "value": {
-              "vmName": "[variables('vmName')]"
-            }
-          }
+          "context": { "value": "[parameters('context')]" }
         }
       }
     }
