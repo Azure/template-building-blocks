@@ -90,12 +90,13 @@
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\linux\enable-iptables-routes\extension-enable-iptables-routes.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\linux\jmeter\2.8\extension-jmeter-2.8.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\linux\jmeter\2.8\install-jmeter-2.8.sh" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions-multiple.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachines-extensions.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-passthrough-settings-mapper.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings-helper.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings.json" />
-    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions-internal.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions-one.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachines-extensions-nop.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\windows\enable-default-gateway-multi-nic\enable-default-gateway.ps1" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\n-vm-m-storage.json" />

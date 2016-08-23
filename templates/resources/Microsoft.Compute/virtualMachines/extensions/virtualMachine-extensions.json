@@ -15,8 +15,13 @@
     "vmName": "[parameters('context').vmName]",
     "extensionTemplates": [
       "[uri(deployment().properties.templateLink.uri, 'virtualMachines-extensions-nop.json')]",
-      "[uri(deployment().properties.templateLink.uri, 'virtualMachine-extensions-internal.json')]"
-    ]
+      "[uri(deployment().properties.templateLink.uri, 'virtualMachine-extensions-one.json')]",
+      "[uri(deployment().properties.templateLink.uri, 'virtualMachine-extensions-multiple.json')]"
+    ],
+    "modOne": "[mod(add(length(parameters('source')), 2), add(length(parameters('source')), 1))]",
+    "tempCount": "[sub(length(parameters('source')), variables('modOne'))]",
+    "modTwo": "[mod(add(variables('tempCount'), 2), add(variables('tempCount'), 1))]",
+    "extensionTemplatesIndex": "[add(variables('modOne'), variables('modTwo'))]"
   },
   "resources": [
     {
@@ -44,7 +49,7 @@
       "name": "[variables('extensionsDeploymentName')]",
       "properties": {
         "mode": "Incremental",
-        "templateLink": { "uri": "[variables('extensionTemplates')[mod(add(length(parameters('source')), 2), add(length(parameters('source')), 1))]]" },
+        "templateLink": { "uri": "[variables('extensionTemplates')[variables('extensionTemplatesIndex')]]" },
         "parameters": {
           "deploymentContext": {
             "value": {
