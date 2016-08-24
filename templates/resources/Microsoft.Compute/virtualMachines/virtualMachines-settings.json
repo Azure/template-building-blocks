@@ -139,6 +139,7 @@
                     "caching": "[parameters('source').osDisk.caching]"
                   },
                   "dataDisks": "[reference(variables('dataDiskSettingDeploymentName')).outputs.result.value]",
+                  "diagnosticsStorageAccountName": "[parameters('context').storageAccounts.diagnostic]",
                   "diagnosticsStorageUri": "[concat('http://', parameters('context').storageAccounts.diagnostic, '.blob.core.windows.net')]",
                   "extensions": "[parameters('source').extensions]"
                 }

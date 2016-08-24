@@ -106,6 +106,8 @@
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\public-nic-dynamic-private-settings.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\public-nic-static-private-settings.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\single-vm-n-nic-avset.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\single-vm-n-nic-diagnostics-extension-windows.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\single-vm-n-nic-diagnostics-extension-linux.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\single-vm-n-nic-no-avset.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\single-vm-n-nic.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\virtualMachine-configuration-settings-linux-password.json" />
