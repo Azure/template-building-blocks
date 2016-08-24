@@ -7,7 +7,7 @@
         "namePrefix": "rsvm",
         "computerNamePrefix": "cn",
         "size": "Standard_DS2_v2",
-        "osType": "windows",
+        "osType": "linux",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
@@ -15,26 +15,13 @@
           {
             "isPublic": "true",
             "subnetName": "rs1-web-sn",
-            "privateIPAllocationMethod": "static",
-            "publicIPAllocationMethod": "dynamic",
+            "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
             "dnsServers": [
-              "10.0.0.10",
-              "10.0.0.11"
             ],
             "isPrimary": "true"
-          },
-          {
-            "isPublic": "false",
-            "subnetName": "rs1-biz-sn",
-            "privateIPAllocationMethod": "dynamic",
-            "enableIPForwarding": false,
-            "dnsServers": [
-              "10.0.0.10",
-              "10.0.0.11"
-            ],
-            "isPrimary": "false"
           }
         ],
         "imageReference": {
@@ -44,11 +31,8 @@
           "version": "latest"
         },
         "dataDisks": {
-          "count": 2,
+          "count": 0,
           "properties": {
-            "diskSizeGB": 127,
-            "caching": "None",
-            "createOption": "Empty"
           }
         },
         "osDisk": {
@@ -76,7 +60,17 @@
                 "Processes": "test.exe"
               }
             }
+          },
+          {
+            "name": "malware",
+            "publisher": "Symantec",
+            "type": "SymantecEndpointProtection",
+            "typeHandlerVersion": "12.1",
+            "settingsMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+            "properties": {
+            }
           }
+
         ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
@@ -87,7 +81,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "rs1-dev-vnet",
-        "resourceGroup": "rs-bb44-rg"
+        "resourceGroup": "rs-bb55-rg"
       }
     },
     "buildingBlockSettings": {
