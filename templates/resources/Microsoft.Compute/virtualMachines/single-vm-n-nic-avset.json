@@ -16,7 +16,9 @@
     "collectorTemplate": "[uri(deployment().properties.templateLink.uri, '../../common/collector.json')]",
     "extensionsTemplate": "[uri(deployment().properties.templateLink.uri, 'extensions/virtualMachine-extensions.json')]",
     "nicsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployNics-', variables('templateUniqueString'))]",
-    "extensionsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployExts-', variables('templateUniqueString'))]"
+    "extensionsDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployExts-', variables('templateUniqueString'))]",
+    "diagnosticsExtensionTemplate": "[uri(deployment().properties.templateLink.uri, concat('single-vm-n-nic-diagnostics-extension-', parameters('virtualMachinesSetting').osType, '.json'))]",
+    "diagnosticsExtensionDeployment": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployDiag-', variables('templateUniqueString'))]"
   },
   "resources": [
     {
@@ -41,9 +43,33 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
-      "name": "[variables('extensionsDeployment')]",
+      "name": "[variables('diagnosticsExtensionDeployment')]",
       "dependsOn": [
         "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachinesSetting').vmName)]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": { "uri": "[variables('diagnosticsExtensionTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-deployDiag')]"
+            }
+          },
+          "source": { "value": "[parameters('virtualMachinesSetting')]" },
+          "context": {
+            "value": {
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('extensionsDeployment')]",
+      "dependsOn": [
+        "[variables('diagnosticsExtensionDeployment')]"
       ],
       "properties": {
         "mode": "Incremental",
