@@ -11,7 +11,7 @@
             "loadBalancerType": "internal",
             "internalLoadBalancerSettings": {
               "privateIPAddress": "10.0.0.254",
-              "subnetName": "rs1-web-sn"
+              "subnetName": "bb-web-sn"
             }
           }
         ],
@@ -22,7 +22,8 @@
             "backendPort": 80,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep1",
-            "frontendIPConfigurationName": "lbfe1"
+            "frontendIPConfigurationName": "lbfe1",
+            "probeName": "lbp1"
           },
           {
             "name": "lbr2",
@@ -30,7 +31,8 @@
             "backendPort": 443,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep2",
-            "frontendIPConfigurationName": "lbfe1"
+            "frontendIPConfigurationName": "lbfe1",
+            "probeName": "lbp2"
           }
         ],
         "probes": [
@@ -95,7 +97,7 @@
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "rsvm",
+        "namePrefix": "bb-vm",
         "computerNamePrefix": "cn",
         "size": "Standard_DS2",
         "osType": "windows",
@@ -105,25 +107,21 @@
         "nics": [
           {
             "isPublic": "true",
-            "subnetName": "rs1-web-sn",
+            "subnetName": "bb-web-sn",
             "privateIPAllocationMethod": "Static",
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
             "dnsServers": [
-              "10.0.0.10",
-              "10.0.0.11"
             ],
             "isPrimary": "true"
           },
           {
             "isPublic": "false",
-            "subnetName": "rs1-biz-sn",
+            "subnetName": "bb-biz-sn",
             "privateIPAllocationMethod": "dynamic",
             "enableIPForwarding": false,
             "dnsServers": [
-              "10.0.0.10",
-              "10.0.0.11"
             ],
             "isPrimary": "false"
           }
@@ -135,7 +133,7 @@
           "version": "latest"
         },
         "dataDisks": {
-          "count": 2,
+          "count": 1,
           "properties": {
             "diskSizeGB": 127,
             "caching": "None",
@@ -145,9 +143,10 @@
         "osDisk": {
           "caching": "ReadWrite"
         },
+        "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "rs-as"
+          "name": "bb-as"
         }
       },
       "metadata": {
@@ -156,8 +155,8 @@
     },
     "virtualNetworkSettings": {
       "value": {
-        "name": "rs1-dev-vnet",
-        "resourceGroup": "rs-bb77-rg"
+        "name": "bb-dev-vnet",
+        "resourceGroup": "bb-ilb-rg"
       },
       "metadata": {
         "description": "Infrastructure Settings"
@@ -166,7 +165,7 @@
     "buildingBlockSettings": {
       "value": {
         "storageAccountsCount": 1,
-        "vmCount": 3,
+        "vmCount": 2,
         "vmStartIndex": 0
       },
       "metadata": {
