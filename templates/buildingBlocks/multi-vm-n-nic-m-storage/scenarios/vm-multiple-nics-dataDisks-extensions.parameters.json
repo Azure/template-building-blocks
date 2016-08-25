@@ -4,7 +4,7 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "",
+        "namePrefix": "cn",
         "computerNamePrefix": "cn",
         "size": "Standard_DS2_v2",
         "osType": "windows",
