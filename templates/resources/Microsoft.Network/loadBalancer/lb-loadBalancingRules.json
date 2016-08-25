@@ -17,15 +17,23 @@
   "variables": {
     "frontendIPConfiguration": "[resourceId('Microsoft.Network/loadBalancers/frontendIPConfigurations', parameters('context').loadBalancerName, parameters('source').frontendIPConfigurationName)]",
     "backendAddressPoolId": "[resourceId('Microsoft.Network/loadBalancers/backendAddressPools', parameters('context').loadBalancerName, parameters('source').backendPoolName)]",
+    "probeId": "[resourceId('Microsoft.Network/loadBalancers/probes', parameters('context').loadBalancerName, parameters('source').probeName)]",
     "instance": [
       {
         "name": "[parameters('source').name]",
         "properties": {
-          "frontendIPConfiguration": { "id": "[variables('frontendIPConfiguration')]" },
-          "backendAddressPool": { "id": "[variables('backendAddressPoolId')]" },
+          "frontendIPConfiguration": {
+            "id": "[variables('frontendIPConfiguration')]"
+          },
+          "backendAddressPool": {
+            "id": "[variables('backendAddressPoolId')]"
+          },
           "frontendPort": "[parameters('source').frontendPort]",
           "backendPort": "[parameters('source').backendPort]",
-          "protocol": "[parameters('source').protocol]"
+          "protocol": "[parameters('source').protocol]",
+          "probe": {
+            "id": "[variables('probeId')]"
+          }
         }
       }
     ]
