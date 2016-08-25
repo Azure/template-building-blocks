@@ -26,14 +26,14 @@
       "name": "[variables('settingsDeploymentName')]",
       "properties": {
         "mode": "Incremental",
-        "templateLink": { "uri": "[parameters('source').settingsMapperUri]" },
+        "templateLink": { "uri": "[parameters('source').settingsConfigMapperUri]" },
         "parameters": {
           "deploymentContext": {
             "value": {
               "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-setting', parameters('iteration'))]"
             }
           },
-          "source": { "value": "[parameters('source').properties]" },
+          "source": { "value": "[parameters('source').settingsConfig]" },
           "context": { "value": "[parameters('context')]" }
         }
       }
