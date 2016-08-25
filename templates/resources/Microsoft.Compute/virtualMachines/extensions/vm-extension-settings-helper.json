@@ -51,7 +51,7 @@
             "publisher": "[parameters('source').publisher]",
             "type": "[parameters('source').type]",
             "typeHandlerVersion": "[parameters('source').typeHandlerVersion]",
-            "autoUpgradeMinorVersion": true,
+            "autoUpgradeMinorVersion": "[parameters('source').autoUpgradeMinorVersion]",
             "protectedSettings": "[reference(variables('settingsDeploymentName')).outputs.settings.value.protectedSettings]",
             "settings": "[reference(variables('settingsDeploymentName')).outputs.settings.value.settings]"
           }
