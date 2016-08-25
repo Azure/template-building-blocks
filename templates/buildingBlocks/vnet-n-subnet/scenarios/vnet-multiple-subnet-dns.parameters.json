@@ -4,17 +4,19 @@
   "parameters": {
     "virtualNetworkSettings": {
       "value": {
-        "name": "myapp1-cn-vnet",
-        "addressPrefixes": [
-          "10.0.0.0/16"
-        ],
+        "name": "bb-dev-vnet",
+        "addressPrefixes": [ "10.0.0.0/16" ],
         "subnets": [
           {
-            "name": "myapp1-web-sn",
+            "name": "bb-web-sn",
             "addressPrefix": "10.0.0.0/24"
           },
           {
-            "name": "myapp1-data-sn",
+            "name": "bb-biz-sn",
+            "addressPrefix": "10.0.1.0/24"
+          },
+          {
+            "name": "bb-data-sn",
             "addressPrefix": "10.0.2.0/24"
           }
         ],

@@ -56,9 +56,8 @@
     <None Include="templates\buildingBlocks\userDefinedRoutes\scenarios\azuredeploy.parameters.json" />
     <None Include="templates\buildingBlocks\virtualMachine-extensions\azuredeploy.json" />
     <None Include="templates\buildingBlocks\virtualMachine-extensions\scenarios\azuredeploy.parameters.json" />
-    <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\azuredeploy.parameters.json" />
-    <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-with-2-subnets-1-dns.parameters.json" />
-    <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-with-3tier-subnets.parameters.json" />
+    <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet.parameters.json" />
+    <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet-dns.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\azuredeploy.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\azuredeploy.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\scenarios\azuredeploy.parameters.json" />
