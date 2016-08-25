@@ -7,7 +7,7 @@
         "namePrefix": "rsvm",
         "computerNamePrefix": "cn",
         "size": "Standard_DS2_v2",
-        "osType": "linux",
+        "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
@@ -83,7 +83,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "rs1-dev-vnet",
-        "resourceGroup": "rs-bb55-rg"
+        "resourceGroup": "rs-bb22-rg"
       }
     },
     "buildingBlockSettings": {
