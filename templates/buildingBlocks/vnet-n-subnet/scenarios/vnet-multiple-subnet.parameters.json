@@ -8,20 +8,20 @@
         "addressPrefixes": [ "10.0.0.0/16" ],
         "subnets": [
           {
-            "name": "bb-web-sn",
+            "name": "web",
             "addressPrefix": "10.0.0.0/24"
           },
           {
-            "name": "bb-biz-sn",
+            "name": "biz",
             "addressPrefix": "10.0.1.0/24"
           },
           {
-            "name": "bb-data-sn",
+            "name": "data",
             "addressPrefix": "10.0.2.0/24"
           },
           {
-            "name": "Gateway",
-            "addressPrefix": "10.0.3.0/24"
+            "name": "GatewaySubnet",
+            "addressPrefix": "10.0.255.224/27"
           }
         ],
         "dnsServers": []
