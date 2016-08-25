@@ -7,7 +7,7 @@
         "namePrefix": "rsvm",
         "computerNamePrefix": "cn",
         "size": "Standard_DS2_v2",
-        "osType": "linux",
+        "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
@@ -44,8 +44,9 @@
             "publisher": "Microsoft.Azure.Security",
             "type": "IaaSAntimalware",
             "typeHandlerVersion": "1.3",
-            "settingsMapperUri": "https://pnparmtest.blob.core.windows.net/roshar/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
-            "properties": {
+            "autoUpgradeMinorVersion": true,
+            "settingsConfigMapperUri": "https://pnparmtest.blob.core.windows.net/roshar/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+            "settingsConfig": {
               "AntimalwareEnabled": true,
               "RealtimeProtectionEnabled": "false",
               "ScheduledScanSettings": {
@@ -66,8 +67,9 @@
             "publisher": "Symantec",
             "type": "SymantecEndpointProtection",
             "typeHandlerVersion": "12.1",
-            "settingsMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
-            "properties": {
+            "autoUpgradeMinorVersion": true,
+            "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+            "settingsConfig": {
             }
           }
 
@@ -81,7 +83,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "rs1-dev-vnet",
-        "resourceGroup": "rs-bb55-rg"
+        "resourceGroup": "rs-bb22-rg"
       }
     },
     "buildingBlockSettings": {
