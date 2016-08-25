@@ -53,7 +53,7 @@
     <None Include="templates\buildingBlocks\nvas-ntier-network\scenarios\network-topology.png" />
     <None Include="templates\buildingBlocks\nvas-ntier-network\scenarios\setup-script.ps1" />
     <None Include="templates\buildingBlocks\userDefinedRoutes\azuredeploy.json" />
-    <None Include="templates\buildingBlocks\userDefinedRoutes\scenarios\azuredeploy.parameters.json" />
+    <None Include="templates\buildingBlocks\userDefinedRoutes\scenarios\multiple-routes-on-subnets.parameters.json" />
     <None Include="templates\buildingBlocks\virtualMachine-extensions\azuredeploy.json" />
     <None Include="templates\buildingBlocks\virtualMachine-extensions\scenarios\multiple-extensions-on-vms.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet.parameters.json" />
