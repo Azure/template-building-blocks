@@ -60,9 +60,8 @@
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet-dns.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\azuredeploy.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\azuredeploy.json" />
+    <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\scenarios\er.parameters.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\scenarios\vpn.parameters.json" />
-    <None Include="templates\buildingBlocks\vpn-gateway-vpn-er-failover\azuredeploy.json" />
-    <None Include="templates\buildingBlocks\vpn-gateway-vpn-er-failover\scenarios\azuredeploy.parameters.json" />
     <None Include="templates\resources\common\collector-internal.json" />
     <None Include="templates\resources\common\collector-nop.json" />
     <None Include="templates\resources\common\collector.json" />
