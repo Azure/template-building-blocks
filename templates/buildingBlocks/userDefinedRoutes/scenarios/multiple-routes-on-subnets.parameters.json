@@ -1,0 +1,45 @@
+﻿{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+  "parameters": {
+    "routeTableSettings": {
+      "value": [
+        {
+          "name": "bb-nva-rt1",
+          "subnets": [
+            "bb-web-sn",
+            "bb-biz-sn"
+          ],
+          "routes": [
+            {
+              "name": "route1",
+              "addressPrefix": "10.0.2.0/24",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "10.0.255.224"
+            }
+          ]
+        },
+        {
+          "name": "bb-nva-rt2",
+          "subnets": [
+            "bb-data-sn"
+          ],
+          "routes": [
+            {
+              "name": "route1",
+              "addressPrefix": "10.0.0.0/24",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "10.0.255.224"
+            },
+            {
+              "name": "route1",
+              "addressPrefix": "10.0.1.0/24",
+              "nextHopType": "VirtualAppliance",
+              "nextHopIpAddress": "10.0.255.224"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

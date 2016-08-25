@@ -4,20 +4,24 @@
   "parameters": {
     "virtualNetworkSettings": {
       "value": {
-        "name": "rs1-dev-vnet",
+        "name": "bb-dev-vnet",
         "addressPrefixes": [ "10.0.0.0/16" ],
         "subnets": [
           {
-            "name": "rs1-web-sn",
+            "name": "bb-web-sn",
             "addressPrefix": "10.0.0.0/24"
           },
           {
-            "name": "rs1-biz-sn",
+            "name": "bb-biz-sn",
             "addressPrefix": "10.0.1.0/24"
           },
           {
-            "name": "rs1-data-sn",
+            "name": "bb-data-sn",
             "addressPrefix": "10.0.2.0/24"
+          },
+          {
+            "name": "Gateway",
+            "addressPrefix": "10.0.3.0/24"
           }
         ],
         "dnsServers": []

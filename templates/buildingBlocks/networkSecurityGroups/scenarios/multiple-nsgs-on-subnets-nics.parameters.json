@@ -1,0 +1,86 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualNetworkSettings": {
+      "value": {
+        "name": "bb-dev-vnet",
+        "resourceGroup": "bb-nsg-rg"
+      }
+    },
+    "networkSecurityGroupsSettings": {
+      "value": [
+        {
+          "name": "bb-nsg1",
+          "subnets": [
+            "bb-web-sn"
+          ],
+          "networkInterfaces": [
+            "bb-vm-vm0-nic1",
+            "bb-vm-vm1-nic1"
+          ],
+          "securityRules": [
+            {
+              "name": "RDPAllow",
+              "direction": "Inbound",
+              "priority": 100,
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "access": "Allow",
+              "protocol": "Tcp"
+            },
+            {
+              "name": "SMTPAllow",
+              "direction": "Inbound",
+              "priority": 200,
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "25",
+              "access": "Allow",
+              "protocol": "Tcp"
+            }
+          ]
+        },
+        {
+          "name": "bb-nsg2",
+          "subnets": [
+            "bb-biz-sn",
+            "bb-data-sn"
+          ],
+          "networkInterfaces": [
+            "bb-vm-vm0-nic3",
+            "bb-vm-vm1-nic2"
+          ],
+          "securityRules": [
+            {
+              "name": "RDPAllow",
+              "direction": "Inbound",
+              "priority": 1000,
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "3389",
+              "access": "Allow",
+              "protocol": "Tcp"
+            },
+            {
+              "name": "SMTPAllow",
+              "direction": "Inbound",
+              "priority": 200,
+              "sourceAddressPrefix": "*",
+              "destinationAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "110",
+              "access": "Allow",
+              "protocol": "Tcp"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
+
