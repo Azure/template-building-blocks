@@ -44,6 +44,7 @@
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\internal-loadBalancer.parameters.json" />
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\public-loadBalancer.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\azuredeploy.json" />
+    <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vms-single-nic-extensions.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vm-multiple-nics-dataDisks-extensions.parameters.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\azuredeploy.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\scenarios\multiple-nsgs-on-subnets-nics.parameters.json" />
@@ -58,7 +59,7 @@
     <None Include="templates\buildingBlocks\virtualMachine-extensions\scenarios\multiple-extensions-on-vms.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet.parameters.json" />
     <None Include="templates\buildingBlocks\vnet-n-subnet\scenarios\vnet-multiple-subnet-dns.parameters.json" />
-    <None Include="templates\buildingBlocks\vnet-n-subnet\telmo-azuredeploy.json" />
+    <None Include="templates\buildingBlocks\vnet-n-subnet\azuredeploy.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\azuredeploy.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\scenarios\er.parameters.json" />
     <None Include="templates\buildingBlocks\vpn-gateway-vpn-connection\scenarios\vpn.parameters.json" />
