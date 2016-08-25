@@ -44,9 +44,9 @@
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\internal-loadBalancer.parameters.json" />
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\public-loadBalancer.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\azuredeploy.json" />
-    <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vm-multiple-nics-dataDisks-extensions.json" />
+    <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vm-multiple-nics-dataDisks-extensions.parameters.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\azuredeploy.json" />
-    <None Include="templates\buildingBlocks\networkSecurityGroups\scenarios\azuredeploy.parameters.json" />
+    <None Include="templates\buildingBlocks\networkSecurityGroups\scenarios\multiple-nsgs-on-subnets-nics.parameters.json" />
     <None Include="templates\buildingBlocks\nvas-ntier-network\azuredeploy.json" />
     <None Include="templates\buildingBlocks\nvas-ntier-network\azuredeploy.parameters.json" />
     <None Include="templates\buildingBlocks\nvas-ntier-network\scenarios\2-nva-gwy-vm-ipfwding-enabled.parameters.json" />
