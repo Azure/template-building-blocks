@@ -41,8 +41,8 @@
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cn-lb",
-        "computerNamePrefix": "cn-lb",
+        "namePrefix": "cnlb",
+        "computerNamePrefix": "cnlb",
         "size": "Standard_DS2_v2",
         "osType": "windows",
         "adminUsername": "testuser",
@@ -53,7 +53,7 @@
             "isPublic": "false",
             "subnetName": "web",
             "privateIPAllocationMethod": "Static",
-            "startingIPAddress": "10.0.0.1",
+            "startingIPAddress": "10.0.0.11",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
