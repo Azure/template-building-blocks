@@ -7,7 +7,7 @@
         "name": "bb-dev-web-lb",
         "frontendIPConfigurations": [
           {
-            "name": "lbfe1",
+            "name": "bb-dev-lbfe1",
             "loadBalancerType": "public"
           }
         ],
@@ -18,7 +18,7 @@
             "backendPort": 80,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep1",
-            "frontendIPConfigurationName": "lbfe1",
+            "frontendIPConfigurationName": "bb-dev-lbfe1",
             "probeName": "lbp1"
           }
         ],
@@ -53,7 +53,7 @@
             "isPublic": "false",
             "subnetName": "web",
             "privateIPAllocationMethod": "Static",
-            "startingIPAddress": "10.0.0.101",
+            "startingIPAddress": "10.0.1.101",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
