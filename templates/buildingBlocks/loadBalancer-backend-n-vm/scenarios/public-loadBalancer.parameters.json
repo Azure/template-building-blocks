@@ -4,7 +4,7 @@
   "parameters": {
     "loadBalancerSettings": {
       "value": {
-        "name": "web-lb",
+        "name": "bb-dev-web-lb",
         "frontendIPConfigurations": [
           {
             "name": "lbfe1",
@@ -41,8 +41,8 @@
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cnlb",
-        "computerNamePrefix": "cnlb",
+        "namePrefix": "bb-dev-web",
+        "computerNamePrefix": "bb-dev-web",
         "size": "Standard_DS2_v2",
         "osType": "windows",
         "adminUsername": "testuser",
@@ -80,7 +80,7 @@
         "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-lb-as"
+          "name": "bb-dev-lb-as"
         }
       },
       "metadata": {

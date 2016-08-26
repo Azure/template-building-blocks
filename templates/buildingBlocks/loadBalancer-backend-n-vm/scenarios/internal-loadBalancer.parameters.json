@@ -4,13 +4,13 @@
   "parameters": {
     "loadBalancerSettings": {
       "value": {
-        "name": "web-lb",
+        "name": "bb-dev-web-lb",
         "frontendIPConfigurations": [
           {
             "name": "lbfe1",
             "loadBalancerType": "internal",
             "internalLoadBalancerSettings": {
-              "privateIPAddress": "10.0.0.254",
+              "privateIPAddress": "10.0.0.253",
               "subnetName": "web"
             }
           }
@@ -45,8 +45,8 @@
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cnweb",
-        "computerNamePrefix": "cnweb",
+        "namePrefix": "bb-dev-web",
+        "computerNamePrefix": "bb-dev-web",
         "size": "Standard_DS4_v2",
         "osType": "windows",
         "adminUsername": "testuser",
@@ -58,7 +58,7 @@
             "subnetName": "web",
             "privateIPAllocationMethod": "Static",
             "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.1",
+            "startingIPAddress": "10.0.0.11",
             "enableIPForwarding": true,
             "dnsServers": [
             ],
@@ -94,7 +94,7 @@
         "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-lb-as"
+          "name": "bb-dev-lb-as"
         }
       },
       "metadata": {

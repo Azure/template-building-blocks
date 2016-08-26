@@ -14,10 +14,9 @@
         "nics": [
           {
             "isPublic": "true",
-            "subnetName": "web",
-            "privateIPAllocationMethod": "Static",
+            "subnetName": "management",
+            "privateIPAllocationMethod": "Dynamic",
             "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.242",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
@@ -74,8 +73,8 @@
 
         ],
         "availabilitySet": {
-          "useExistingAvailabilitySet": "yes",
-          "name": "bb-dev-as"
+          "useExistingAvailabilitySet": "no",
+          "name": ""
         }
       }
     },
@@ -87,9 +86,9 @@
     },
     "buildingBlockSettings": {
       "value": {
-        "storageAccountsCount": 2,
-        "vmCount": 2,
-        "vmStartIndex": 3
+        "storageAccountsCount": 1,
+        "vmCount": 1,
+        "vmStartIndex": 1
       }
     }
   }

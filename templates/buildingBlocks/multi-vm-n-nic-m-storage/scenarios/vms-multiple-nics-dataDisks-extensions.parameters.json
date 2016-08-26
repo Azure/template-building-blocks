@@ -4,8 +4,8 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cn",
-        "computerNamePrefix": "cn",
+        "namePrefix": "bb-dev",
+        "computerNamePrefix": "bb-dev",
         "size": "Standard_DS4_v2",
         "osType": "windows",
         "adminUsername": "testuser",
@@ -15,8 +15,8 @@
           {
             "isPublic": "true",
             "subnetName": "web",
-            "privateIPAllocationMethod": "static",
-            "publicIPAllocationMethod": "dynamic",
+            "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
             "dnsServers": [
@@ -26,7 +26,7 @@
           {
             "isPublic": "false",
             "subnetName": "biz",
-            "privateIPAllocationMethod": "dynamic",
+            "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
@@ -35,7 +35,7 @@
           {
             "isPublic": "false",
             "subnetName": "data",
-            "privateIPAllocationMethod": "static",
+            "privateIPAllocationMethod": "Static",
             "startingIPAddress": "10.0.2.240",
             "enableIPForwarding": false,
             "dnsServers": [
@@ -98,7 +98,7 @@
         ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "no",
-          "name": "bb-as"
+          "name": "bb-dev-as"
         }
       }
     },

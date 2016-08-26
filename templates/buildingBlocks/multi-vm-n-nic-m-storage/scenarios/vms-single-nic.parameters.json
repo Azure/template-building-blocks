@@ -4,8 +4,8 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cnlinux",
-        "computerNamePrefix": "cnlinux",
+        "namePrefix": "bb-dev",
+        "computerNamePrefix": "bb-dev",
         "size": "Standard_DS2_v2",
         "osType": "linux",
         "adminUsername": "testuser",
@@ -15,8 +15,8 @@
           {
             "isPublic": "false",
             "subnetName": "web",
-            "privateIPAllocationMethod": "static",
-            "publicIPAllocationMethod": "dynamic",
+            "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.101",
             "enableIPForwarding": false,
             "dnsServers": [
@@ -40,7 +40,7 @@
         "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "no",
-          "name": "bb-linux-as"
+          "name": "bb-dev-linux-as"
         }
       }
     },
