@@ -8,7 +8,11 @@
         "frontendIPConfigurations": [
           {
             "name": "lbfe1",
-            "loadBalancerType": "public"
+            "loadBalancerType": "internal",
+            "internalLoadBalancerSettings": {
+              "privateIPAddress": "10.0.0.254",
+              "subnetName": "web"
+            }
           }
         ],
         "loadBalancingRules": [
@@ -49,6 +53,14 @@
           {
             "name": "lb-bep1",
             "nicIndex": 0
+          },
+          {
+            "name": "lb-bep2",
+            "nicIndex": 0
+          },
+          {
+            "name": "lb-bep3",
+            "nicIndex": 0
           }
         ],
         "inboundNatRules": [
@@ -60,29 +72,58 @@
             "natRuleType": "All",
             "protocol": "Tcp",
             "nicIndex": 0
+          },
+          {
+            "namePrefix": "nat2",
+            "frontendIPConfigurationName": "lbfe1",
+            "frontendPort": 9042,
+            "backendPort": 9042,
+            "natRuleType": "Single",
+            "protocol": "Tcp",
+            "vmIndex": 1,
+            "nicIndex": 0
+          },
+          {
+            "namePrefix": "nat3",
+            "frontendIPConfigurationName": "lbfe1",
+            "frontendPort": 25,
+            "natRuleType": "FloatingIp",
+            "protocol": "Tcp",
+            "vmIndex": 2,
+            "nicIndex": 0
           }
         ]
       }
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "cn-lb",
-        "computerNamePrefix": "cn-lb",
-        "size": "Standard_DS2_v2",
+        "namePrefix": "cnweb",
+        "computerNamePrefix": "cnweb",
+        "size": "Standard_DS4_v2",
         "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
         "nics": [
           {
-            "isPublic": "false",
+            "isPublic": "true",
             "subnetName": "web",
             "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.1",
-            "enableIPForwarding": false,
+            "enableIPForwarding": true,
             "dnsServers": [
             ],
             "isPrimary": "true"
+          },
+          {
+            "isPublic": "false",
+            "subnetName": "biz",
+            "privateIPAllocationMethod": "Dynamic",
+            "enableIPForwarding": false,
+            "dnsServers": [
+            ],
+            "isPrimary": "false"
           }
         ],
         "imageReference": {

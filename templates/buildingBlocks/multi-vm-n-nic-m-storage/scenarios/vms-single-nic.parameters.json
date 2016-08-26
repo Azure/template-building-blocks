@@ -1,0 +1,61 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "virtualMachinesSettings": {
+      "value": {
+        "namePrefix": "cnlinux",
+        "computerNamePrefix": "cnlinux",
+        "size": "Standard_DS2_v2",
+        "osType": "linux",
+        "adminUsername": "testuser",
+        "adminPassword": "AweS0me@PW",
+        "osAuthenticationType": "password",
+        "nics": [
+          {
+            "isPublic": "false",
+            "subnetName": "web",
+            "privateIPAllocationMethod": "static",
+            "publicIPAllocationMethod": "dynamic",
+            "startingIPAddress": "10.0.0.101",
+            "enableIPForwarding": false,
+            "dnsServers": [
+            ],
+            "isPrimary": "true"
+          }
+        ],
+        "imageReference": {
+          "publisher": "Canonical",
+          "offer": "UbuntuServer",
+          "sku": "14.04.5-LTS",
+          "version": "latest"
+        },
+        "dataDisks": {
+          "count": 0,
+          "properties": {}
+        },
+        "osDisk": {
+          "caching": "ReadWrite"
+        },
+        "extensions": [ ],
+        "availabilitySet": {
+          "useExistingAvailabilitySet": "no",
+          "name": "bb-linux-as"
+        }
+      }
+    },
+    "virtualNetworkSettings": {
+      "value": {
+        "name": "bb-dev-vnet",
+        "resourceGroup": "bb-dev-rg"
+      }
+    },
+    "buildingBlockSettings": {
+      "value": {
+        "storageAccountsCount": 5,
+        "vmCount": 20,
+        "vmStartIndex": 1
+      }
+    }
+  }
+}

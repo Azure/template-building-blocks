@@ -42,8 +42,10 @@
     <None Include="scripts\nva.sh" />
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\azuredeploy.json" />
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\internal-loadBalancer.parameters.json" />
+    <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\internal-loadBalancer-multi-backends.parameters.json" />
     <None Include="templates\buildingBlocks\loadBalancer-backend-n-vm\scenarios\public-loadBalancer.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\azuredeploy.json" />
+    <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vms-single-nic.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vms-single-nic-extensions.parameters.json" />
     <None Include="templates\buildingBlocks\multi-vm-n-nic-m-storage\scenarios\vm-multiple-nics-dataDisks-extensions.parameters.json" />
     <None Include="templates\buildingBlocks\networkSecurityGroups\azuredeploy.json" />
