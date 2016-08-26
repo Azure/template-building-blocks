@@ -4,9 +4,9 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "bb-dev",
-        "computerNamePrefix": "bb-dev",
-        "size": "Standard_DS4_v2",
+        "namePrefix": "bb-dev-jb",
+        "computerNamePrefix": "bb-dev-jb",
+        "size": "Standard_DS2_v2",
         "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
