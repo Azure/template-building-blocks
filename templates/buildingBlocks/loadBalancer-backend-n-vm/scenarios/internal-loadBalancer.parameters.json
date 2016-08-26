@@ -4,14 +4,14 @@
   "parameters": {
     "loadBalancerSettings": {
       "value": {
-        "name": "bb-dev-web-lb",
+        "name": "bb-dev-biz-lb",
         "frontendIPConfigurations": [
           {
-            "name": "lbfe1",
+            "name": "bb-dev-biz-lbfe1",
             "loadBalancerType": "internal",
             "internalLoadBalancerSettings": {
-              "privateIPAddress": "10.0.0.253",
-              "subnetName": "web"
+              "privateIPAddress": "10.0.2.100",
+              "subnetName": "biz"
             }
           }
         ],
@@ -22,7 +22,7 @@
             "backendPort": 80,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep1",
-            "frontendIPConfigurationName": "lbfe1",
+            "frontendIPConfigurationName": "bb-dev-biz-lbfe1",
             "probeName": "lbp1"
           }
         ],
@@ -45,7 +45,7 @@
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "bb-dev-web",
+        "namePrefix": "bb-dev-biz",
         "computerNamePrefix": "bb-dev-web",
         "size": "Standard_DS4_v2",
         "osType": "windows",
@@ -54,24 +54,13 @@
         "osAuthenticationType": "password",
         "nics": [
           {
-            "isPublic": "true",
-            "subnetName": "web",
-            "privateIPAllocationMethod": "Static",
-            "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.11",
-            "enableIPForwarding": true,
-            "dnsServers": [
-            ],
-            "isPrimary": "true"
-          },
-          {
             "isPublic": "false",
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
-            "isPrimary": "false"
+            "isPrimary": "true"
           }
         ],
         "imageReference": {
@@ -94,7 +83,7 @@
         "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-dev-lb-as"
+          "name": "bb-dev-biz-lb-as"
         }
       },
       "metadata": {
