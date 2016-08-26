@@ -89,7 +89,7 @@
       "value": {
         "storageAccountsCount": 2,
         "vmCount": 2,
-        "vmStartIndex": 1
+        "vmStartIndex": 3
       }
     }
   }
