@@ -14,10 +14,10 @@
         "nics": [
           {
             "isPublic": "false",
-            "subnetName": "web",
+            "subnetName": "data",
             "privateIPAllocationMethod": "Static",
             "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.101",
+            "startingIPAddress": "10.0.3.101",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
@@ -52,8 +52,8 @@
     },
     "buildingBlockSettings": {
       "value": {
-        "storageAccountsCount": 5,
-        "vmCount": 20,
+        "storageAccountsCount": 3,
+        "vmCount": 3,
         "vmStartIndex": 1
       }
     }
