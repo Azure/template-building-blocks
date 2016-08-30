@@ -32,7 +32,7 @@
       "name": "[concat(parameters('virtualNetworkSettings').name, '/', parameters('subnets').outSubnet.name)]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[concat(parameters('virtualNetworkSettings').name, '/', parameters('subnets').inSubnet.name)]"
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('virtualNetworkSettings').name, '/subnets/', parameters('subnets').inSubnet.name)]"
       ],
       "properties": {
         "addressPrefix": "[parameters('subnets').outSubnet.addressPrefix]"

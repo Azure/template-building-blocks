@@ -25,17 +25,13 @@
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('dmzSettings')), string(parameters('virtualNetworkSettings'))))]",
 
     "routeTableDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nvaRt-', variables('templateUniqueString'))]",
-    "extensionDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nvaExt-', variables('templateUniqueString'))]",
     "lbDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nvaLbVMs-', variables('templateUniqueString'))]",
-    "extensionDeploymentNamePrefix": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-deployVmExt-')]",
     "subnetsDeploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-nvaSubnets-', variables('templateUniqueString'))]",
 
     "loadBalancerTemplate": "[uri(deployment().properties.templateLink.uri, '../loadBalancer-backend-n-vm/azuredeploy.json')]",
-    "extensionsTemplate": "[uri(deployment().properties.templateLink.uri, '../virtualMachine-extensions/azuredeploy.json')]",
-
     "subnetTemplates": {
-      "no": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/virtualNetworks/subnets-nop.json')]",
-      "yes": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/virtualNetworks/subnets-new.json')]"
+      "yes": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/virtualNetworks/subnets-nop.json')]",
+      "no": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/virtualNetworks/subnets-new.json')]"
     },
     "routeTableTemplates": {
       "yes": "[uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Network/routeTables/routeTable-nop.json')]",
@@ -145,7 +141,7 @@
       "name": "[variables('subnetsDeploymentName')]",
       "properties": {
         "mode": "Incremental",
-        "templateLink": { "uri": "[variables('subnetTemplates')[tolower(parameters('dmzSettings').useExistingSubnets)]]" },
+        "templateLink": { "uri": "[variables('subnetTemplates')[tolower(parameters('dmzSettings').subnets.useExistingSubnets)]]" },
         "parameters": {
           "deploymentContext": {
             "value": {
@@ -200,33 +196,12 @@
           "routeTableSettings": { "value": "[reference(variables('routeTableSettingsTemplateName')).outputs.result.value]" }
         }
       }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "name": "[variables('extensionDeploymentName')]",
-      "dependsOn": [
-        "[variables('lbDeploymentName')]"
-      ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": { "uri": "[variables('extensionsTemplate')]" },
-        "parameters": {
-          "deploymentContext": {
-            "value": {
-              "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-nvaExt')]"
-            }
-          },
-          "virtualNetworkSettings": { "value": "[parameters('virtualNetworkSettings')]" },
-          "virtualMachinesExtensionSettings": { "value": "[parameters('dmzSettings').applianceSettings.virtualMachineSettings.extensions]" }
-        }
-      }
     }
   ],
   "outputs": {
     "resources": {
       "type": "array",
-      "value": "[concat(reference(variables('routeTableDeploymentName')).outputResources, reference(variables('lbDeploymentName')).outputResources, reference(variables('extensionDeploymentName')).outputResources)]"
+      "value": "[concat(reference(variables('routeTableDeploymentName')).outputResources, reference(variables('lbDeploymentName')).outputResources)]"
     }
   }
 }

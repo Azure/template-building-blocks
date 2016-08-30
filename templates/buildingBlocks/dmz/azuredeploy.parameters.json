@@ -14,7 +14,7 @@
         "applianceSettings": {
           "ports": [
             {
-              "port": 8001,
+              "port": 80,
               "protocol": "Tcp",
               "healthProbe": "hp1"
             }
@@ -22,8 +22,8 @@
           "healthProbes": [
             {
               "name": "hp1",
-              "port": 8001,
-              "protocol": "Tcp",
+              "port": 80,
+              "protocol": "http",
               "requestPath": "/"
             }
           ],
@@ -40,7 +40,32 @@
               "sku": "14.04.5-LTS",
               "version": "latest"
             },
-            "extensions": [ ]
+            "extensions": [
+              {
+                "name": "IaaSAntimalware",
+                "publisher": "Microsoft.Azure.Security",
+                "type": "IaaSAntimalware",
+                "typeHandlerVersion": "1.3",
+                "autoUpgradeMinorVersion": true,
+                "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+                "settingsConfig": {
+                  "AntimalwareEnabled": true,
+                  "RealtimeProtectionEnabled": "false",
+                  "ScheduledScanSettings": {
+                    "isEnabled": "false",
+                    "day": "7",
+                    "time": "120",
+                    "scanType": "Quick"
+                  },
+                  "Exclusions": {
+                    "Extensions": ".gif",
+                    "Paths": "c:\\test",
+                    "Processes": "test.exe"
+                  }
+                },
+                "protectedSettingsConfig": { }
+              }
+            ]
           }
         },
         "securedAddressSpace": [ "10.0.1.0/24", "10.0.2.0/24" ],
@@ -61,7 +86,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "bb-dev-vnet",
-        "resourceGroup": "ra-nva-rg"
+        "resourceGroup": "rs-bb55-rg"
       }
     }
   }

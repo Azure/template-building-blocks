@@ -41,7 +41,7 @@
       "osDisk": {
         "caching": "ReadWrite"
       },
-      "extensions": [ ],
+      "extensions": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.extensions]",
       "availabilitySet": {
         "useExistingAvailabilitySet": "No",
         "name": "nva"
