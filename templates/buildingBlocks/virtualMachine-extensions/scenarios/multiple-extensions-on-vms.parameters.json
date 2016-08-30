@@ -33,7 +33,8 @@
                   "Paths": "c:\\test",
                   "Processes": "test.exe"
                 }
-              }
+              },
+              "protectedSettingsConfig": { }
             },
             {
               "name": "malware",
@@ -43,7 +44,8 @@
               "autoUpgradeMinorVersion": true,
               "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
               "settingsConfig": {
-              }
+              },
+              "protectedSettingsConfig": { }
             }
           ]
         },
@@ -55,8 +57,8 @@
               "publisher": "Microsoft.Azure.Security",
               "type": "IaaSAntimalware",
               "typeHandlerVersion": "1.3",
-              "settingsMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
-              "properties": {
+              "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+              "settingsConfig": {
                 "AntimalwareEnabled": true,
                 "RealtimeProtectionEnabled": "false",
                 "ScheduledScanSettings": {
@@ -70,7 +72,8 @@
                   "Paths": "c:\\test",
                   "Processes": "test.exe"
                 }
-              }
+              },
+              "protectedSettingsConfig": { }
             }
           ]
         }

@@ -33,7 +33,7 @@
               "parentTemplateUniqueString": "[concat(variables('templateUniqueString'), '-setting', parameters('iteration'))]"
             }
           },
-          "source": { "value": "[parameters('source').settingsConfig]" },
+          "source": { "value": "[parameters('source')]" },
           "context": { "value": "[parameters('context')]" }
         }
       }
