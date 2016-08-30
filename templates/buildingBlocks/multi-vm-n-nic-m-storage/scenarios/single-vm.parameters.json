@@ -4,8 +4,8 @@
   "parameters": {
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "bb-vm",
-        "computerNamePrefix": "cn",
+        "namePrefix": "bb-dev-jb",
+        "computerNamePrefix": "bb-dev-jb",
         "size": "Standard_DS2_v2",
         "osType": "windows",
         "adminUsername": "testuser",
@@ -14,33 +14,13 @@
         "nics": [
           {
             "isPublic": "true",
-            "subnetName": "bb-web-sn",
-            "privateIPAllocationMethod": "Static",
+            "subnetName": "management",
+            "privateIPAllocationMethod": "Dynamic",
             "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.240",
-            "enableIPForwarding": true,
+            "enableIPForwarding": false,
             "dnsServers": [
             ],
             "isPrimary": "true"
-          },
-          {
-            "isPublic": "false",
-            "subnetName": "bb-biz-sn",
-            "privateIPAllocationMethod": "dynamic",
-            "enableIPForwarding": false,
-            "dnsServers": [
-            ],
-            "isPrimary": "false"
-          },
-          {
-            "isPublic": "false",
-            "subnetName": "bb-data-sn",
-            "privateIPAllocationMethod": "Static",
-            "startingIPAddress": "10.0.0.240",
-            "enableIPForwarding": false,
-            "dnsServers": [
-            ],
-            "isPrimary": "false"
           }
         ],
         "imageReference": {
@@ -50,12 +30,8 @@
           "version": "latest"
         },
         "dataDisks": {
-          "count": 2,
-          "properties": {
-            "diskSizeGB": 127,
-            "caching": "None",
-            "createOption": "Empty"
-          }
+          "count": 0,
+          "properties": {}
         },
         "osDisk": {
           "caching": "ReadWrite"
@@ -82,8 +58,7 @@
                 "Paths": "c:\\test",
                 "Processes": "test.exe"
               }
-            },
-            "protectedSettingsConfig": { }
+            }
           },
           {
             "name": "malware",
@@ -93,28 +68,27 @@
             "autoUpgradeMinorVersion": true,
             "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
             "settingsConfig": {
-            },
-            "protectedSettingsConfig": { }
+            }
           }
 
         ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-as"
+          "name": ""
         }
       }
     },
     "virtualNetworkSettings": {
       "value": {
         "name": "bb-dev-vnet",
-        "resourceGroup": "bb-multivm-rg"
+        "resourceGroup": "bb-dev-rg"
       }
     },
     "buildingBlockSettings": {
       "value": {
-        "storageAccountsCount": 2,
-        "vmCount": 2,
-        "vmStartIndex": 0
+        "storageAccountsCount": 1,
+        "vmCount": 1,
+        "vmStartIndex": 1
       }
     }
   }

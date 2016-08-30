@@ -5,34 +5,34 @@
     "routeTableSettings": {
       "value": [
         {
-          "name": "bb-nva-rt1",
+          "name": "bb-dev-web-biz-rt",
           "subnets": [
-            "bb-web-sn",
-            "bb-biz-sn"
+            "web",
+            "biz"
           ],
           "routes": [
             {
-              "name": "route1",
-              "addressPrefix": "10.0.2.0/24",
+              "name": "toData",
+              "addressPrefix": "10.0.3.0/24",
               "nextHopType": "VirtualAppliance",
               "nextHopIpAddress": "10.0.255.224"
             }
           ]
         },
         {
-          "name": "bb-nva-rt2",
+          "name": "bb-dev-data-rt",
           "subnets": [
-            "bb-data-sn"
+            "data"
           ],
           "routes": [
             {
-              "name": "route1",
+              "name": "toWeb",
               "addressPrefix": "10.0.0.0/24",
               "nextHopType": "VirtualAppliance",
               "nextHopIpAddress": "10.0.255.224"
             },
             {
-              "name": "route1",
+              "name": "toBiz",
               "addressPrefix": "10.0.1.0/24",
               "nextHopType": "VirtualAppliance",
               "nextHopIpAddress": "10.0.255.224"
