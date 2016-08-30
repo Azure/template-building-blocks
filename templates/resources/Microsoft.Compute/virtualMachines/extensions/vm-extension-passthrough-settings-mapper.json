@@ -8,8 +8,8 @@
   },
   "variables": {
     "instance": {
-      "settings": "[parameters('source')]",
-      "protectedSettings": { }
+      "settings": "[parameters('source').settingsConfig]",
+      "protectedSettings": "[parameters('source').protectedSettingsConfig]"
     }
 
   },
