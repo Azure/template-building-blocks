@@ -4,10 +4,10 @@
   "parameters": {
     "loadBalancerSettings": {
       "value": {
-        "name": "web-ilb",
+        "name": "bb-dev-web-lb",
         "frontendIPConfigurations": [
           {
-            "name": "lbfe1",
+            "name": "bb-dev-lbfe1",
             "loadBalancerType": "public"
           }
         ],
@@ -18,17 +18,8 @@
             "backendPort": 80,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep1",
-            "frontendIPConfigurationName": "lbfe1",
+            "frontendIPConfigurationName": "bb-dev-lbfe1",
             "probeName": "lbp1"
-          },
-          {
-            "name": "lbr2",
-            "frontendPort": 443,
-            "backendPort": 443,
-            "protocol": "Tcp",
-            "backendPoolName": "lb-bep2",
-            "frontendIPConfigurationName": "lbfe1",
-            "probeName": "lbp2"
           }
         ],
         "probes": [
@@ -37,89 +28,36 @@
             "port": 80,
             "protocol": "Http",
             "requestPath": "/"
-          },
-          {
-            "name": "lbp2",
-            "port": 443,
-            "protocol": "Http",
-            "requestPath": "/"
           }
         ],
         "backendPools": [
           {
             "name": "lb-bep1",
             "nicIndex": 0
-          },
-          {
-            "name": "lb-bep2",
-            "nicIndex": 0
-          },
-          {
-            "name": "lb-bep3",
-            "nicIndex": 0
           }
         ],
-        "inboundNatRules": [
-          {
-            "namePrefix": "nat1",
-            "frontendIPConfigurationName": "lbfe1",
-            "startingFrontendPort": 50001,
-            "backendPort": 3389,
-            "natRuleType": "All",
-            "protocol": "Tcp",
-            "nicIndex": 0
-          },
-          {
-            "namePrefix": "nat2",
-            "frontendIPConfigurationName": "lbfe1",
-            "frontendPort": 9042,
-            "backendPort": 9042,
-            "natRuleType": "Single",
-            "protocol": "Tcp",
-            "vmIndex": 1,
-            "nicIndex": 0
-          },
-          {
-            "namePrefix": "nat3",
-            "frontendIPConfigurationName": "lbfe1",
-            "frontendPort": 25,
-            "natRuleType": "FloatingIp",
-            "protocol": "Tcp",
-            "vmIndex": 2,
-            "nicIndex": 0
-          }
-        ]
+        "inboundNatRules": [ ]
       }
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "bb-vm",
-        "computerNamePrefix": "cn",
-        "size": "Standard_DS2",
+        "namePrefix": "bb-dev-web",
+        "computerNamePrefix": "bb-dev-web",
+        "size": "Standard_DS2_v2",
         "osType": "windows",
         "adminUsername": "testuser",
         "adminPassword": "AweS0me@PW",
         "osAuthenticationType": "password",
         "nics": [
           {
-            "isPublic": "true",
-            "subnetName": "bb-web-sn",
-            "privateIPAllocationMethod": "Static",
-            "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.240",
-            "enableIPForwarding": true,
-            "dnsServers": [
-            ],
-            "isPrimary": "true"
-          },
-          {
             "isPublic": "false",
-            "subnetName": "bb-biz-sn",
-            "privateIPAllocationMethod": "dynamic",
+            "subnetName": "web",
+            "privateIPAllocationMethod": "Static",
+            "startingIPAddress": "10.0.1.101",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
-            "isPrimary": "false"
+            "isPrimary": "true"
           }
         ],
         "imageReference": {
@@ -139,10 +77,23 @@
         "osDisk": {
           "caching": "ReadWrite"
         },
-        "extensions": [ ],
+        "extensions": [
+          {
+            "name": "iis-config-ext",
+            "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.20",
+            "autoUpgradeMinorVersion": true,
+            "settingsConfig": {
+              "modulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/ra-multi-vm-extend/guidance-compute-multi-vm/extensions/windows/iisaspnet.ps1.zip",
+              "configurationFunction": "iisaspnet.ps1\\iisaspnet"
+            }
+          }
+        ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-as"
+          "name": "bb-dev-lb-as"
         }
       },
       "metadata": {
@@ -152,7 +103,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "bb-dev-vnet",
-        "resourceGroup": "bb-ilb-rg"
+        "resourceGroup": "bb-dev-rg"
       },
       "metadata": {
         "description": "Infrastructure Settings"
@@ -160,9 +111,9 @@
     },
     "buildingBlockSettings": {
       "value": {
-        "storageAccountsCount": 1,
-        "vmCount": 2,
-        "vmStartIndex": 0
+        "storageAccountsCount": 2,
+        "vmCount": 3,
+        "vmStartIndex": 1
       },
       "metadata": {
         "description": "Settings specific to the building block"

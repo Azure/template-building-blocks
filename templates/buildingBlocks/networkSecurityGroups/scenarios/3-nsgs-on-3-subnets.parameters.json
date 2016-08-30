@@ -11,20 +11,18 @@
     "networkSecurityGroupsSettings": {
       "value": [
         {
-          "name": "bb-dev-nsg1",
+          "name": "bb-dev-web-nsg",
           "subnets": [
-            "web"
+            "web",
+            "biz"
           ],
-          "networkInterfaces": [
-            "bb-dev-web1-nic1",
-            "bb-dev-web2-nic1"
-          ],
+          "networkInterfaces": [ ],
           "securityRules": [
             {
               "name": "RDPAllow",
               "direction": "Inbound",
               "priority": 100,
-              "sourceAddressPrefix": "*",
+              "sourceAddressPrefix": "10.0.0.128/25",
               "destinationAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
@@ -32,34 +30,30 @@
               "protocol": "Tcp"
             },
             {
-              "name": "SSHAllow",
+              "name": "HTTPAllow",
               "direction": "Inbound",
               "priority": 200,
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "sourcePortRange": "*",
-              "destinationPortRange": "22",
+              "destinationPortRange": "80",
               "access": "Allow",
               "protocol": "Tcp"
             }
           ]
         },
         {
-          "name": "bb-dev-nsg2",
+          "name": "bb-dev-data-nsg",
           "subnets": [
-            "biz",
             "data"
           ],
-          "networkInterfaces": [
-            "bb-dev-web1-nic2",
-            "bb-dev-web1-nic3"
-          ],
+          "networkInterfaces": [ ],
           "securityRules": [
             {
               "name": "RDPAllow",
               "direction": "Inbound",
               "priority": 100,
-              "sourceAddressPrefix": "*",
+              "sourceAddressPrefix": "10.0.0.128/25",
               "destinationAddressPrefix": "*",
               "sourcePortRange": "*",
               "destinationPortRange": "3389",
@@ -67,13 +61,13 @@
               "protocol": "Tcp"
             },
             {
-              "name": "SSHAllow",
+              "name": "SQLAllow",
               "direction": "Inbound",
               "priority": 200,
               "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "sourcePortRange": "*",
-              "destinationPortRange": "22",
+              "destinationPortRange": "1433",
               "access": "Allow",
               "protocol": "Tcp"
             }

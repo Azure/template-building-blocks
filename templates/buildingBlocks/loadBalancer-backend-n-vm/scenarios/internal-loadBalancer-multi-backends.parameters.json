@@ -4,14 +4,14 @@
   "parameters": {
     "loadBalancerSettings": {
       "value": {
-        "name": "bb-dev-biz-lb",
+        "name": "bb-dev-web-lb",
         "frontendIPConfigurations": [
           {
-            "name": "bb-dev-biz-lbfe1",
+            "name": "lbfe1",
             "loadBalancerType": "internal",
             "internalLoadBalancerSettings": {
-              "privateIPAddress": "10.0.2.100",
-              "subnetName": "biz"
+              "privateIPAddress": "10.0.0.254",
+              "subnetName": "web"
             }
           }
         ],
@@ -22,8 +22,17 @@
             "backendPort": 80,
             "protocol": "Tcp",
             "backendPoolName": "lb-bep1",
-            "frontendIPConfigurationName": "bb-dev-biz-lbfe1",
+            "frontendIPConfigurationName": "lbfe1",
             "probeName": "lbp1"
+          },
+          {
+            "name": "lbr2",
+            "frontendPort": 443,
+            "backendPort": 443,
+            "protocol": "Tcp",
+            "backendPoolName": "lb-bep2",
+            "frontendIPConfigurationName": "lbfe1",
+            "probeName": "lbp2"
           }
         ],
         "probes": [
@@ -32,20 +41,63 @@
             "port": 80,
             "protocol": "Http",
             "requestPath": "/"
+          },
+          {
+            "name": "lbp2",
+            "port": 443,
+            "protocol": "Http",
+            "requestPath": "/"
           }
         ],
         "backendPools": [
           {
             "name": "lb-bep1",
             "nicIndex": 0
+          },
+          {
+            "name": "lb-bep2",
+            "nicIndex": 0
+          },
+          {
+            "name": "lb-bep3",
+            "nicIndex": 0
           }
         ],
-        "inboundNatRules": []
+        "inboundNatRules": [
+          {
+            "namePrefix": "nat1",
+            "frontendIPConfigurationName": "lbfe1",
+            "startingFrontendPort": 50001,
+            "backendPort": 3389,
+            "natRuleType": "All",
+            "protocol": "Tcp",
+            "nicIndex": 0
+          },
+          {
+            "namePrefix": "nat2",
+            "frontendIPConfigurationName": "lbfe1",
+            "frontendPort": 9042,
+            "backendPort": 9042,
+            "natRuleType": "Single",
+            "protocol": "Tcp",
+            "vmIndex": 1,
+            "nicIndex": 0
+          },
+          {
+            "namePrefix": "nat3",
+            "frontendIPConfigurationName": "lbfe1",
+            "frontendPort": 25,
+            "natRuleType": "FloatingIp",
+            "protocol": "Tcp",
+            "vmIndex": 2,
+            "nicIndex": 0
+          }
+        ]
       }
     },
     "virtualMachinesSettings": {
       "value": {
-        "namePrefix": "bb-dev-biz",
+        "namePrefix": "bb-dev-web",
         "computerNamePrefix": "bb-dev-web",
         "size": "Standard_DS4_v2",
         "osType": "windows",
@@ -54,13 +106,24 @@
         "osAuthenticationType": "password",
         "nics": [
           {
+            "isPublic": "true",
+            "subnetName": "web",
+            "privateIPAllocationMethod": "Static",
+            "publicIPAllocationMethod": "Dynamic",
+            "startingIPAddress": "10.0.0.21",
+            "enableIPForwarding": true,
+            "dnsServers": [
+            ],
+            "isPrimary": "true"
+          },
+          {
             "isPublic": "false",
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
             "dnsServers": [
             ],
-            "isPrimary": "true"
+            "isPrimary": "false"
           }
         ],
         "imageReference": {
@@ -83,7 +146,7 @@
         "extensions": [ ],
         "availabilitySet": {
           "useExistingAvailabilitySet": "No",
-          "name": "bb-dev-biz-lb-as"
+          "name": "bb-dev-lb-as"
         }
       },
       "metadata": {
@@ -102,7 +165,7 @@
     "buildingBlockSettings": {
       "value": {
         "storageAccountsCount": 2,
-        "vmCount": 5,
+        "vmCount": 2,
         "vmStartIndex": 1
       },
       "metadata": {
