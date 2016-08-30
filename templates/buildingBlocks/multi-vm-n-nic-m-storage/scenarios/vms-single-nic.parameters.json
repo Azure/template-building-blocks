@@ -39,7 +39,7 @@
         },
         "extensions": [ ],
         "availabilitySet": {
-          "useExistingAvailabilitySet": "no",
+          "useExistingAvailabilitySet": "No",
           "name": "bb-dev-linux-as"
         }
       }

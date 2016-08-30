@@ -97,7 +97,7 @@
 
         ],
         "availabilitySet": {
-          "useExistingAvailabilitySet": "no",
+          "useExistingAvailabilitySet": "No",
           "name": "bb-dev-as"
         }
       }

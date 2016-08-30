@@ -73,7 +73,7 @@
 
         ],
         "availabilitySet": {
-          "useExistingAvailabilitySet": "no",
+          "useExistingAvailabilitySet": "No",
           "name": ""
         }
       }
