@@ -1,0 +1,59 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": { "type": "object" },
+    "context": { "type": "object" }
+  },
+  "variables": {
+    "instance": {
+      "namePrefix": "nva",
+      "computerNamePrefix": "nva",
+      "size": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.size]",
+      "osType": "linux",
+      "adminUsername": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.adminUsername]",
+      "adminPassword": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.adminPassword]",
+      "osAuthenticationType": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.osAuthenticationType]",
+      "sshPublicKey": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.sshPublicKey]",
+      "nics": [
+        {
+          "isPublic": "false",
+          "subnetName": "[parameters('context').dmzSettings.subnets.inSubnet.name]",
+          "privateIPAllocationMethod": "dynamic",
+          "enableIPForwarding": true,
+          "dnsServers": [ ],
+          "isPrimary": "true"
+        },
+        {
+          "isPublic": "false",
+          "subnetName": "[parameters('context').dmzSettings.subnets.outSubnet.name]",
+          "privateIPAllocationMethod": "dynamic",
+          "enableIPForwarding": true,
+          "dnsServers": [ ],
+          "isPrimary": "false"
+        }
+      ],
+      "imageReference": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.imageReference]",
+      "dataDisks": {
+        "count": 0,
+        "properties": { }
+      },
+      "osDisk": {
+        "caching": "ReadWrite"
+      },
+      "extensions": [ ],
+      "availabilitySet": {
+        "useExistingAvailabilitySet": "No",
+        "name": "nva"
+      }
+    }
+  },
+  "resources": [
+  ],
+  "outputs": {
+    "result": {
+      "type": "object",
+      "value": "[variables('instance')]"
+    }
+  }
+}
