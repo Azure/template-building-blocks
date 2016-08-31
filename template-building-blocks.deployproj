@@ -29,12 +29,6 @@
       <Visible>False</Visible>
     </None>
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
-    <None Include="drivers\bash\deploy-template-with-param.sh" />
-    <None Include="drivers\json\deploy-template-with-param.parameters.json" />
-    <None Include="drivers\json\deploy-template-return-outputs.json" />
-    <None Include="drivers\json\output-mapper.json" />
-    <None Include="drivers\ps\Deploy-Template.ps1" />
-    <None Include="drivers\ps\deploy-vnet-n-subnets.ps1" />
     <None Include="scenarios\dmz\azuredeploy.json" />
     <None Include="scenarios\dmz\parameters\azuredeploy.parameters.json" />
     <None Include="scenarios\dmz\parameters\internal-dmz.parameters.json" />

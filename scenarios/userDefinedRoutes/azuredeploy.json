@@ -21,7 +21,7 @@
       "apiVersion": "2016-02-01",
       "name": "[concat('deploy-', variables('templateDescription'))]",
       "properties": {
-        "mode": "Complete",
+        "mode": "Incremental",
         "templateLink": {
           "uri": "[concat(variables('baseUri'), '/buildingBlocks/userDefinedRoutes/azuredeploy.json')]"
         },
