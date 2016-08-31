@@ -101,7 +101,7 @@
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings-helper.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\vm-extension-settings.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions-one.json" />
-    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachines-extensions-nop.json" />
+    <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\virtualMachine-extensions-nop.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\extensions\windows\enable-default-gateway-multi-nic\enable-default-gateway.ps1" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\n-vm-m-storage.json" />
     <None Include="templates\resources\Microsoft.Compute\virtualMachines\n-vm-n-nic.json" />
