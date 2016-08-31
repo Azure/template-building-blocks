@@ -2,16 +2,10 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "virtualNetworkSettings": {
-      "value": {
-        "name": "bb-dev-vnet",
-        "resourceGroup": "bb-ext-rg"
-      }
-    },
     "virtualMachinesExtensionSettings": {
       "value": [
         {
-          "vms": [ "bb-vm-vm0", "bb-vm-vm2" ],
+          "vms": [ "bb-dev-vm1", "bb-dev-vm2" ],
           "extensions": [
             {
               "name": "IaaSAntimalware",
@@ -50,7 +44,7 @@
           ]
         },
         {
-          "vms": [ "bb-vm-vm1" ],
+          "vms": [ "bb-dev-vm3" ],
           "extensions": [
             {
               "name": "IaaSAntimalware",
