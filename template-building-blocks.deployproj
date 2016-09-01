@@ -30,9 +30,10 @@
     </None>
     <Content Include="Scripts\Deploy-AzureResourceGroup.ps1" />
     <None Include="scenarios\dmz\azuredeploy.json" />
-    <None Include="scenarios\dmz\parameters\azuredeploy.parameters.json" />
-    <None Include="scenarios\dmz\parameters\internal-dmz.parameters.json" />
-    <None Include="scenarios\dmz\parameters\public-dmz.parameters.json" />
+    <None Include="scenarios\dmz\parameters\internal-dmz-existing-subnets.parameters.json" />
+    <None Include="scenarios\dmz\parameters\internal-dmz-new-subnets.parameters.json" />
+    <None Include="scenarios\dmz\parameters\public-dmz-existing-subnets.parameters.json" />
+    <None Include="scenarios\dmz\parameters\public-dmz-new-subnets.parameters.json" />
     <None Include="scenarios\loadBalancer-backend-n-vm\azuredeploy.json" />
     <None Include="scenarios\loadBalancer-backend-n-vm\parameters\internal-loadBalancer-multi-backends.parameters.json" />
     <None Include="scenarios\loadBalancer-backend-n-vm\parameters\internal-loadBalancer.parameters.json" />
@@ -48,7 +49,10 @@
     <None Include="scenarios\userDefinedRoutes\azuredeploy.json" />
     <None Include="scenarios\userDefinedRoutes\parameters\multiple-routes-on-subnets.parameters.json" />
     <None Include="scenarios\virtualMachine-extensions\azuredeploy.json" />
+    <None Include="scenarios\virtualMachine-extensions\parameters\multiple-extensions-multiple-vms.parameters.json" />
     <None Include="scenarios\virtualMachine-extensions\parameters\multiple-extensions-on-vms.parameters.json" />
+    <None Include="scenarios\virtualMachine-extensions\parameters\multiple-extensions-single-vm.parameters.json" />
+    <None Include="scenarios\virtualMachine-extensions\parameters\single-extension-multiple-vms.parameters.json" />
     <None Include="scenarios\vnet-n-subnet\azuredeploy.json" />
     <None Include="scenarios\vnet-n-subnet\parameters\vnet-3-tier-mgmt-gw.parameters.json" />
     <None Include="scenarios\vnet-n-subnet\parameters\vnet-multiple-subnet-dns.parameters.json" />
