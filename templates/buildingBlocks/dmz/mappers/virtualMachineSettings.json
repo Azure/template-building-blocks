@@ -7,7 +7,7 @@
   },
   "variables": {
     "instance": {
-      "namePrefix": "nva",
+      "namePrefix": "[parameters('context').dmzSettings.namePrefix]",
       "computerNamePrefix": "nva",
       "size": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.size]",
       "osType": "linux",

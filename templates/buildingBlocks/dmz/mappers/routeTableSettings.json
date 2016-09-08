@@ -40,7 +40,7 @@
       "type": "array",
       "value": [
         {
-          "name": "nva-rt1",
+          "name": "[concat(parameters('context').dmzSettings.namePrefix, '-rt1')]",
           "subnets": [
             "GatewaySubnet"
           ],

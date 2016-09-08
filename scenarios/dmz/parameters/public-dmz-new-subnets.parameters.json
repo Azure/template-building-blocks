@@ -4,6 +4,7 @@
   "parameters": {
     "dmzSettings": {
       "value": {
+        "namePrefix": "internet-dmz",
         "endpoint": {
           "hasPublicEndpoint": "yes",
           "internalLoadBalancerSettings": { }
