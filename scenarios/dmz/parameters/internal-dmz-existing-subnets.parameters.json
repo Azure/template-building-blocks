@@ -4,6 +4,7 @@
   "parameters": {
     "dmzSettings": {
       "value": {
+        "namePrefix": "intranet-dmz",
         "endpoint": {
           "hasPublicEndpoint": "no",
           "internalLoadBalancerSettings": {

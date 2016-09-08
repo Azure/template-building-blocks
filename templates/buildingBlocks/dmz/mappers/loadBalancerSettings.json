@@ -60,7 +60,7 @@
     "result": {
       "type": "object",
       "value": {
-        "name": "nva-lb",
+        "name": "[concat(parameters('context').dmzSettings.namePrefix, '-lb')]",
         "frontendIPConfigurations": [
           {
             "name": "nva-lb-fe",
