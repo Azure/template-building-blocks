@@ -44,7 +44,7 @@
       "extensions": "[parameters('context').dmzSettings.applianceSettings.virtualMachineSettings.extensions]",
       "availabilitySet": {
         "useExistingAvailabilitySet": "No",
-        "name": "nva"
+        "name": "[concat(parameters('context').dmzSettings.namePrefix, '-as')]"
       }
     }
   },
