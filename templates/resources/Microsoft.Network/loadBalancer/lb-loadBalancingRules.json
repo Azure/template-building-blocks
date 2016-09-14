@@ -31,6 +31,7 @@
           "frontendPort": "[parameters('source').frontendPort]",
           "backendPort": "[parameters('source').backendPort]",
           "protocol": "[parameters('source').protocol]",
+          "enableFloatingIP": "[parameters('source').enableFloatingIP]",
           "probe": {
             "id": "[variables('probeId')]"
           }
