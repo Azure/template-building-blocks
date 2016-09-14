@@ -9,6 +9,7 @@
           {
             "name": "lbfe1",
             "loadBalancerType": "internal",
+            "domainNameLabel": "",
             "internalLoadBalancerSettings": {
               "privateIPAddress": "10.0.0.254",
               "subnetName": "web"

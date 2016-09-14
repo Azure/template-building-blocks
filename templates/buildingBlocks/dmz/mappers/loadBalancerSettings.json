@@ -65,6 +65,7 @@
           {
             "name": "nva-lb-fe",
             "loadBalancerType": "[variables('loadBalancerType')[tolower(parameters('context').dmzSettings.endpoint.hasPublicEndpoint)]]",
+            "domainNameLabel": "[parameters('context').dmzSettings.endpoint.domainNameLabel]",
             "internalLoadBalancerSettings": "[parameters('context').dmzSettings.endpoint.internalLoadBalancerSettings]"
           }
         ],

@@ -9,6 +9,7 @@
           {
             "name": "bb-dev-biz-lbfe1",
             "loadBalancerType": "internal",
+            "domainNameLabel": "",
             "internalLoadBalancerSettings": {
               "privateIPAddress": "10.0.2.100",
               "subnetName": "biz"

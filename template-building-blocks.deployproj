@@ -137,6 +137,7 @@
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-backendPools.json" />
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-empty-nic-array-helper.json" />
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-frontendIPConfiguration-internal.json" />
+    <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-frontendIPConfiguration-public-dns-label.json" />
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-frontendIPConfiguration-public.json" />
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-frontendIPConfiguration-settings.json" />
     <None Include="templates\resources\Microsoft.Network\loadBalancer\lb-inboundNatRules-all-settings.json" />
