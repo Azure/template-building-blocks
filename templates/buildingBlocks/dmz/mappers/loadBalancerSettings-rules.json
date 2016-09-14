@@ -23,7 +23,8 @@
         "protocol": "[parameters('source').protocol]",
         "backendPoolName": "nva-lb-Bep",
         "frontendIPConfigurationName": "nva-lb-fe",
-        "probeName": "[parameters('source').healthProbe]"
+        "probeName": "[parameters('source').healthProbe]",
+        "enableFloatingIP": false
       }
     ]
 
