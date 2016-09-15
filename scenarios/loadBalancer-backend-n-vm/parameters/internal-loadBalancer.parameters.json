@@ -60,6 +60,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
+            "domainNameLabel": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -95,7 +96,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "bb-dev-vnet",
-        "resourceGroup": "bb-dev-rg"
+        "resourceGroup": "rs-t77-rg"
       },
       "metadata": {
         "description": "Infrastructure Settings"

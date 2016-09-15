@@ -17,15 +17,8 @@
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('source')), string(parameters('context')), string(parameters('state')), parameters('iteration')))]",
 
-    "publicIpConfigurations": [
-      "[uri(deployment().properties.templateLink.uri, 'lb-frontendIPConfiguration-public.json')]",
-      "[uri(deployment().properties.templateLink.uri, 'lb-frontendIPConfiguration-public-dns-label.json')]"
-    ],
-
-    "templateToInvoke": "[variables('publicIpConfigurations')[mod(add(length(parameters('source').domainNameLabel), 2), add(length(parameters('source').domainNameLabel), 1))]]",
-
     "ipConfigurations": {
-      "public": "[variables('templateToInvoke')]",
+      "public": "[uri(deployment().properties.templateLink.uri, 'lb-frontendIPConfiguration-public.json')]",
       "internal": "[uri(deployment().properties.templateLink.uri, 'lb-frontendIPConfiguration-internal.json')]"
     },
     "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-config', parameters('iteration'), '-', variables('templateUniqueString'))]"

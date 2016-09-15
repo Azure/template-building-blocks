@@ -19,6 +19,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
+            "domainNameLabel": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -28,6 +29,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
+            "domainNameLabel": "",
             "dnsServers": [
             ],
             "isPrimary": "false"
@@ -38,6 +40,7 @@
             "privateIPAllocationMethod": "Static",
             "startingIPAddress": "10.0.2.240",
             "enableIPForwarding": false,
+            "domainNameLabel": "",
             "dnsServers": [
             ],
             "isPrimary": "false"

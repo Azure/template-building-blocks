@@ -16,7 +16,8 @@
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('source')), string(parameters('context')), string(parameters('state')), parameters('iteration')))]",
-    "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-publicDynamic-', variables('templateUniqueString'))]"
+    "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-publicDynamic-', variables('templateUniqueString'))]",
+    "pipTemplate": "[uri(deployment().properties.templateLink.uri, '../../Microsoft.Network/publicIPAddresses/publicIPAddress.json')]"
   },
   "resources": [
     {
@@ -25,47 +26,16 @@
       "name": "[variables('deploymentName')]",
       "properties": {
         "mode": "Incremental",
-        "template": {
-          "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
-          "contentVersion": "1.0.0.0",
-          "parameters": { },
-          "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2016-03-30",
-              "location": "[resourceGroup().location]",
-              "name": "[concat(parameters('context').vmName, '-nic', add(parameters('iteration') , 1), '-pip')]",
-              "properties": {
-                "publicIPAllocationMethod": "[parameters('source').publicIPAllocationMethod]"
-              }
+        "templateLink": { "uri": "[variables('pipTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString') , '-publicDynamic')]"
             }
-          ],
-          "outputs": {
-            "instance": {
-              "type": "array",
-              "value": [
-                {
-                  "name": "[concat(parameters('context').vmName, '-nic', add(parameters('iteration') ,1))]",
-                  "ipConfigurations": [
-                    {
-                      "name": "ipconfig1",
-                      "properties": {
-                        "publicIPAddress": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('context').vmName, '-nic', add(parameters('iteration') , 1), '-pip'))]" },
-                        "privateIPAllocationMethod": "dynamic",
-                        "subnet": { "id": "[resourceId(parameters('context').vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', parameters('context').vnetName, parameters('source').subnetName)]" }
-                      }
-                    }
-                  ],
-                  "primary": "[parameters('source').isPrimary]",
-                  "enableIPForwarding": "[parameters('source').enableIPForwarding]",
-                  "dnsSettings": {
-                    "dnsServers": "[parameters('source').dnsServers]",
-                    "appliedDnsServers": "[parameters('source').dnsServers]"
-                  }
-                }
-              ]
-            }
-          }
+          },
+          "name": { "value": "[concat(parameters('context').vmName, '-nic', add(parameters('iteration') , 1), '-pip')]" },
+          "publicIPAllocationMethod": { "value": "[parameters('source').publicIPAllocationMethod]" },
+          "domainNameLabel": { "value": "[parameters('source').domainNameLabel]" }
         }
       }
     }
@@ -73,7 +43,27 @@
   "outputs": {
     "collection": {
       "type": "array",
-      "value": "[reference(variables('deploymentName')).outputs.instance.value]"
+      "value": [
+        {
+          "name": "[concat(parameters('context').vmName, '-nic', add(parameters('iteration') ,1))]",
+          "ipConfigurations": [
+            {
+              "name": "ipconfig1",
+              "properties": {
+                "publicIPAddress": { "id": "[resourceId('Microsoft.Network/publicIPAddresses', concat(parameters('context').vmName, '-nic', add(parameters('iteration') , 1), '-pip'))]" },
+                "privateIPAllocationMethod": "dynamic",
+                "subnet": { "id": "[resourceId(parameters('context').vnetResourceGroup, 'Microsoft.Network/virtualNetworks/subnets', parameters('context').vnetName, parameters('source').subnetName)]" }
+              }
+            }
+          ],
+          "primary": "[parameters('source').isPrimary]",
+          "enableIPForwarding": "[parameters('source').enableIPForwarding]",
+          "dnsSettings": {
+            "dnsServers": "[parameters('source').dnsServers]",
+            "appliedDnsServers": "[parameters('source').dnsServers]"
+          }
+        }
+      ]
     }
   }
 }
