@@ -19,7 +19,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
-            "domainNameLabel": "",
+            "domainNameLabel": "bb-dev-dns",
             "dnsServers": [
             ],
             "isPrimary": "true"
