@@ -21,7 +21,7 @@
           "subnetName": "[parameters('context').dmzSettings.subnets.inSubnet.name]",
           "privateIPAllocationMethod": "dynamic",
           "enableIPForwarding": true,
-          "domainNameLabel": "",
+          "domainNameLabelPrefix": "",
           "dnsServers": [ ],
           "isPrimary": "true"
         },
@@ -30,7 +30,7 @@
           "subnetName": "[parameters('context').dmzSettings.subnets.outSubnet.name]",
           "privateIPAllocationMethod": "dynamic",
           "enableIPForwarding": true,
-          "domainNameLabel": "",
+          "domainNameLabelPrefix": "",
           "dnsServers": [ ],
           "isPrimary": "false"
         }

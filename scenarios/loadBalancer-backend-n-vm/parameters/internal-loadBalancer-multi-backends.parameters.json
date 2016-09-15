@@ -114,7 +114,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.21",
             "enableIPForwarding": true,
-            "domainNameLabel": "",
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -124,7 +124,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
-            "domainNameLabel": "",
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"

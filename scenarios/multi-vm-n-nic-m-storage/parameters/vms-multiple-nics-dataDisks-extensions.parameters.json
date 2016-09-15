@@ -19,7 +19,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.240",
             "enableIPForwarding": true,
-            "domainNameLabel": "bb-dev-dns",
+            "domainNameLabelPrefix": "bb-dev-dns",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -29,7 +29,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
-            "domainNameLabel": "",
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"
@@ -40,7 +40,7 @@
             "privateIPAllocationMethod": "Static",
             "startingIPAddress": "10.0.2.240",
             "enableIPForwarding": false,
-            "domainNameLabel": "",
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"

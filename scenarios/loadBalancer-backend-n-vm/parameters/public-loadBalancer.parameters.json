@@ -57,7 +57,7 @@
             "privateIPAllocationMethod": "Static",
             "startingIPAddress": "10.0.1.101",
             "enableIPForwarding": false,
-            "domainNameLabel": "",
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
