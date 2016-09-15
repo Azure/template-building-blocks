@@ -91,7 +91,8 @@
             "settingsConfig": {
               "modulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/ra-multi-vm-extend/guidance-compute-multi-vm/extensions/windows/iisaspnet.ps1.zip",
               "configurationFunction": "iisaspnet.ps1\\iisaspnet"
-            }
+            },
+            "protectedSettingsConfig": { }
           }
         ],
         "availabilitySet": {

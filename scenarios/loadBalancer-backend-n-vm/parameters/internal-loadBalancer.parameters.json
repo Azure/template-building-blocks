@@ -96,7 +96,7 @@
     "virtualNetworkSettings": {
       "value": {
         "name": "bb-dev-vnet",
-        "resourceGroup": "rs-t77-rg"
+        "resourceGroup": "bb-dev-rg"
       },
       "metadata": {
         "description": "Infrastructure Settings"
