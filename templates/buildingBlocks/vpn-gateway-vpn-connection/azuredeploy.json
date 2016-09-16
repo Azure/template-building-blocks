@@ -79,10 +79,6 @@
     "resources": {
       "type": "array",
       "value": "[concat(reference(variables('virtualNetworkGatewayDeploymentName')).outputResources, reference(variables('connectionDeploymentName')).outputResources)]"
-    },
-    "publicIPAddress": {
-      "type": "object",
-      "value": "[reference(variables('virtualNetworkGatewayDeploymentName')).outputs.publicIPAddress.value]"
     }
   }
 }
