@@ -13,16 +13,29 @@
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualNetworkSettings')), string(parameters('virtualNetworkGatewaySettings'))))]",
     "publicIPAddressName": "[concat(parameters('virtualNetworkGatewaySettings').name, '-pip')]",
-    "publicIPAddressReferenceTemplateName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', variables('publicIPAddressName'), 'Ref-', variables('templateUniqueString'))]"
+    "publicIPAddressReferenceTemplateName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', variables('publicIPAddressName'), 'Ref-', variables('templateUniqueString'))]",
+    "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-pip-', variables('templateUniqueString'))]",
+    "pipTemplate": "[uri(deployment().properties.templateLink.uri, '../publicIPAddresses/publicIPAddress.json')]"
+
   },
   "resources": [
     {
-      "apiVersion": "2016-03-30",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[variables('publicIPAddressName')]",
-      "location": "[resourceGroup().location]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "name": "[variables('deploymentName')]",
       "properties": {
-        "publicIPAllocationMethod": "Dynamic"
+        "mode": "Incremental",
+        "templateLink": { "uri": "[variables('pipTemplate')]" },
+        "parameters": {
+          "deploymentContext": {
+            "value": {
+              "parentTemplateUniqueString": "[concat(variables('templateUniqueString') , '-pip')]"
+            }
+          },
+          "name": { "value": "[variables('publicIPAddressName')]" },
+          "publicIPAllocationMethod": { "value": "Dynamic" },
+          "domainNameLabel": { "value": "" }
+        }
       }
     },
     {
@@ -31,7 +44,7 @@
       "name": "[parameters('virtualNetworkGatewaySettings').name]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
-        "[variables('publicIPAddressName')]"
+        "[variables('deploymentName')]"
       ],
       "properties": {
         "ipConfigurations": [

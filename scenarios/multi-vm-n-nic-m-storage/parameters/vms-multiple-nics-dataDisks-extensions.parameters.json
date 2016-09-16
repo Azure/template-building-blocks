@@ -17,8 +17,9 @@
             "subnetName": "web",
             "privateIPAllocationMethod": "Static",
             "publicIPAllocationMethod": "Dynamic",
-            "startingIPAddress": "10.0.0.240",
+            "startingIPAddress": "10.0.1.240",
             "enableIPForwarding": true,
+            "domainNameLabelPrefix": "bb-dev-dns",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -28,6 +29,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"
@@ -36,8 +38,9 @@
             "isPublic": "false",
             "subnetName": "data",
             "privateIPAllocationMethod": "Static",
-            "startingIPAddress": "10.0.2.240",
+            "startingIPAddress": "10.0.3.240",
             "enableIPForwarding": false,
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"

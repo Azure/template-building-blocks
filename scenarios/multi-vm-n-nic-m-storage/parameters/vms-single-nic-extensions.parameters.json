@@ -19,6 +19,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.242",
             "enableIPForwarding": false,
+            "domainNameLabelPrefix": "bb-dev-dns",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -59,7 +60,8 @@
                 "Paths": "c:\\test",
                 "Processes": "test.exe"
               }
-            }
+            },
+            "protectedSettingsConfig": { }
           },
           {
             "name": "malware",
@@ -69,7 +71,8 @@
             "autoUpgradeMinorVersion": true,
             "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
             "settingsConfig": {
-            }
+            },
+            "protectedSettingsConfig": { }
           }
 
         ],

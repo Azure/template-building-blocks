@@ -8,6 +8,7 @@
         "frontendIPConfigurations": [
           {
             "name": "bb-dev-lbfe1",
+            "domainNameLabel": "bb-dev-web-dns",
             "loadBalancerType": "public"
           }
         ],
@@ -56,6 +57,7 @@
             "privateIPAllocationMethod": "Static",
             "startingIPAddress": "10.0.1.101",
             "enableIPForwarding": false,
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -89,7 +91,8 @@
             "settingsConfig": {
               "modulesUrl": "https://raw.githubusercontent.com/mspnp/reference-architectures/master/ra-multi-vm-extend/guidance-compute-multi-vm/extensions/windows/iisaspnet.ps1.zip",
               "configurationFunction": "iisaspnet.ps1\\iisaspnet"
-            }
+            },
+            "protectedSettingsConfig": { }
           }
         ],
         "availabilitySet": {

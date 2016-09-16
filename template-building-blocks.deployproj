@@ -160,6 +160,9 @@
     <None Include="templates\resources\Microsoft.Network\networkSecurityGroups\networkSecurityGroup-subnets.json" />
     <None Include="templates\resources\Microsoft.Network\networkSecurityGroups\networkSecurityGroup.json" />
     <None Include="templates\resources\Microsoft.Network\networkSecurityGroups\networkSecurityGroups.json" />
+    <None Include="templates\resources\Microsoft.Network\publicIPAddresses\publicIPAddress.json" />
+    <None Include="templates\resources\Microsoft.Network\publicIPAddresses\publicIPAddress-dns-label.json" />
+    <None Include="templates\resources\Microsoft.Network\publicIPAddresses\publicIPAddress-empty-dns-label.json" />
     <None Include="templates\resources\Microsoft.Network\routeTables\routeTable-nop.json" />
     <None Include="templates\resources\Microsoft.Network\routeTables\routeTable-routes.json" />
     <None Include="templates\resources\Microsoft.Network\routeTables\routeTable.json" />

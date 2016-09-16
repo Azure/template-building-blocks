@@ -67,7 +67,7 @@
               "vnetName": "[parameters('context').vnetName]",
               "vnetResourceGroup": "[parameters('context').vnetResourceGroup]",
               "vmName": "[variables('vmName')]",
-              "vmIndex": "[add(parameters('iteration'), parameters('context').deployedVMCount)]"
+              "vmIndex": "[add(parameters('iteration'), parameters('context').vmNamePostFixStartIndex)]"
             }
           },
           "mapperTemplateUri": { "value": "[uri(deployment().properties.templateLink.uri, 'virtualMachines-nics-settings.json')]" }
@@ -93,7 +93,7 @@
               "vnetName": "[parameters('context').vnetName]",
               "storageAccounts": "[parameters('context').storageAccounts]",
               "vmName": "[variables('vmName')]",
-              "vmIndex": "[parameters('iteration')]"
+              "vmIndex": "[add(parameters('iteration'), parameters('context').vmNamePostFixStartIndex)]"
             }
           },
           "mapperTemplateUri": { "value": "[uri(deployment().properties.templateLink.uri, 'virtualMachine-datadisk.json')]" },

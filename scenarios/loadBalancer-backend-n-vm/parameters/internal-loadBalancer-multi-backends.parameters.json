@@ -9,6 +9,7 @@
           {
             "name": "lbfe1",
             "loadBalancerType": "internal",
+            "domainNameLabel": "",
             "internalLoadBalancerSettings": {
               "privateIPAddress": "10.0.0.254",
               "subnetName": "web"
@@ -113,6 +114,7 @@
             "publicIPAllocationMethod": "Dynamic",
             "startingIPAddress": "10.0.0.21",
             "enableIPForwarding": true,
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "true"
@@ -122,6 +124,7 @@
             "subnetName": "biz",
             "privateIPAllocationMethod": "Dynamic",
             "enableIPForwarding": false,
+            "domainNameLabelPrefix": "",
             "dnsServers": [
             ],
             "isPrimary": "false"
