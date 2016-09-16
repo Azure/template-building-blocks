@@ -42,7 +42,8 @@
           },
           "name": { "value": "[concat(parameters('context').vmName, '-nic', add(parameters('iteration') , 1), '-pip')]" },
           "publicIPAllocationMethod": { "value": "[parameters('source').publicIPAllocationMethod]" },
-          "domainNameLabel": { "value": "[concat(parameters('source').domainNameLabelPrefix, parameters('context').vmIndex)]" }
+          "domainNameLabel": { "value": "[parameters('source').domainNameLabelPrefix]" },
+          "vmIndex": { "value": "[parameters('context').vmIndex]" }
         }
       }
     }

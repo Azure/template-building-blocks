@@ -8,7 +8,8 @@
       "type": "string",
       "defaultValue": ""
     },
-    "publicIPAllocationMethod": {"type": "string"}
+    "publicIPAllocationMethod": { "type": "string" },
+    "vmIndex": { "type": "string", "defaultValue": "" }
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), parameters('name'), parameters('domainNameLabel')))]",
@@ -37,7 +38,7 @@
           },
           "name": { "value": "[parameters('name')]" },
           "publicIPAllocationMethod": { "value": "[parameters('publicIPAllocationMethod')]" },
-          "domainNameLabel": { "value": "[parameters('domainNameLabel')]" }
+          "domainNameLabel": { "value": "[concat(parameters('domainNameLabel'), parameters('vmIndex'))]" }
         }
       }
     }
