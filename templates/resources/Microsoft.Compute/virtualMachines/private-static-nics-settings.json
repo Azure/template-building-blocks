@@ -16,7 +16,7 @@
   },
   "variables": {
     "ipAddressArray": "[split(parameters('source').startingIPAddress, '.')]",
-    "updatedIPAddressInDecimal": "[add(add(add(mul(int(variables('ipAddressArray')[0]), 16777216), mul(int(variables('ipAddressArray')[1]), 65536)), add(mul(int(variables('ipAddressArray')[2]), 256), mul(int(variables('ipAddressArray')[3]), 1))), parameters('context').vmIndex)]",
+    "updatedIPAddressInDecimal": "[add(add(add(mul(int(variables('ipAddressArray')[0]), 16777216), mul(int(variables('ipAddressArray')[1]), 65536)), add(mul(int(variables('ipAddressArray')[2]), 256), mul(int(variables('ipAddressArray')[3]), 1))), parameters('context').vmCount)]",
     "newIPAddress_part1": "[div(variables('updatedIPAddressInDecimal'), 16777216)]",
     "newIPAddress_part2": "[div(mod(variables('updatedIPAddressInDecimal'), 16777216), 65536)]",
     "newIPAddress_part3": "[div(mod(variables('updatedIPAddressInDecimal'), 65536), 256)]",

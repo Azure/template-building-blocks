@@ -67,7 +67,8 @@
               "vnetName": "[parameters('context').vnetName]",
               "vnetResourceGroup": "[parameters('context').vnetResourceGroup]",
               "vmName": "[variables('vmName')]",
-              "vmIndex": "[add(parameters('iteration'), parameters('context').vmNamePostFixStartIndex)]"
+              "vmIndex": "[add(parameters('iteration'), parameters('context').vmNamePostFixStartIndex)]",
+              "vmCount": "[add(parameters('iteration'), parameters('context').deployedVMCount)]"
             }
           },
           "mapperTemplateUri": { "value": "[uri(deployment().properties.templateLink.uri, 'virtualMachines-nics-settings.json')]" }
