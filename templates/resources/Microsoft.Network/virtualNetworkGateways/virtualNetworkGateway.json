@@ -13,7 +13,6 @@
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('virtualNetworkSettings')), string(parameters('virtualNetworkGatewaySettings'))))]",
     "publicIPAddressName": "[concat(parameters('virtualNetworkGatewaySettings').name, '-pip')]",
-    "publicIPAddressReferenceTemplateName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', variables('publicIPAddressName'), 'Ref-', variables('templateUniqueString'))]",
     "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-pip-', variables('templateUniqueString'))]",
     "pipTemplate": "[uri(deployment().properties.templateLink.uri, '../publicIPAddresses/publicIPAddress.json')]"
 
@@ -69,34 +68,8 @@
           "tier": "[parameters('virtualNetworkGatewaySettings').sku]"
         }
       }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "name": "[variables('publicIPAddressReferenceTemplateName')]",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[uri(deployment().properties.templateLink.uri, '../../common/reference.json')]"
-        },
-        "parameters": {
-          "resourceType": {
-            "value": "Microsoft.Network/publicIPAddresses"
-          },
-          "resourceName1": {
-            "value": "[variables('publicIPAddressName')]"
-          }
-        }
-      },
-      "dependsOn": [
-        "[parameters('virtualNetworkGatewaySettings').name]"
-      ]
     }
   ],
   "outputs": {
-    "publicIPAddress": {
-      "type": "object",
-      "value": "[reference(variables('publicIPAddressReferenceTemplateName')).outputs.reference.value]"
-    }
   }
 }
