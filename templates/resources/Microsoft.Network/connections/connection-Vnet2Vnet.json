@@ -18,10 +18,10 @@
         "routingWeight": 10,
         "sharedKey": "[parameters('connectionSettings').sharedKey]",
         "virtualNetworkGateway1": {
-          "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway1.name)]"
+          "id": "[resourceId(parameters('connectionSettings').virtualNetworkGateway1.resourceGroup, 'Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway1.name)]"
         },
         "virtualNetworkGateway2": {
-          "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway2.name)]"
+          "id": "[resourceId(parameters('connectionSettings').virtualNetworkGateway2.resourceGroup, 'Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway2.name)]"
         }
       }
     }

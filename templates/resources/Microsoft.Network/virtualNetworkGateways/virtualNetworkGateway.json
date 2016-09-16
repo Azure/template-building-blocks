@@ -52,7 +52,7 @@
             "properties": {
               "privateIPAllocationMethod": "Dynamic",
               "subnet": {
-                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkSettings').name, 'GatewaySubnet')]"
+                "id": "[resourceId(parameters('virtualNetworkSettings').resourceGroup, 'Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkSettings').name, 'GatewaySubnet')]"
               },
               "publicIPAddress": {
                 "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"

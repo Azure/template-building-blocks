@@ -16,10 +16,10 @@
         "connectionType": "ExpressRoute",
         "routingWeight": 10,
         "virtualNetworkGateway1": {
-          "id": "[resourceId('Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway1.name)]"
+          "id": "[resourceId(parameters('connectionSettings').virtualNetworkGateway1.resourceGroup, 'Microsoft.Network/virtualNetworkGateways', parameters('connectionSettings').virtualNetworkGateway1.name)]"
         },
         "peer": {
-          "id": "[resourceId('Microsoft.Network/expressRouteCircuits', parameters('connectionSettings').expressRouteCircuit.name)]"
+          "id": "[resourceId(parameters('connectionSettings').expressRouteCircuit.resourceGroup, 'Microsoft.Network/expressRouteCircuits', parameters('connectionSettings').expressRouteCircuit.name)]"
         }
       }
     }
