@@ -9,7 +9,7 @@
       "defaultValue": ""
     },
     "publicIPAllocationMethod": { "type": "string" },
-    "vmIndex": { "type": "string", "defaultValue": "" }
+    "vmIndex": { "type": "int", "defaultValue": 0 }
   },
   "variables": {
     "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), parameters('name'), parameters('domainNameLabel')))]",
