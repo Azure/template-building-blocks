@@ -15,7 +15,7 @@
       "ExpressRoute": "connection-ExpressRoute.json"
     },
     "connectionTemplate": "[uri(deployment().properties.templateLink.uri, variables('templates')[parameters('connectionSettings').connectionType])]",
-    "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', parameters('connectionSettings').name, '-', variables('templateUniqueString'))]"
+    "deploymentName": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-connSettings-', variables('templateUniqueString'))]"
   },
   "resources": [
     {
