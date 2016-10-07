@@ -17,7 +17,7 @@ iptables -X
 iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination "${DEST_IP_ADDRESS}:80"
 iptables -t nat -A PREROUTING -p tcp --dport 443 -j DNAT --to-destination "${DEST_IP_ADDRESS}:443"
 iptables -t nat -A POSTROUTING -p tcp -d $DEST_IP_ADDRESS --dport 80 -j SNAT --to-source $IP_ADDRESS
-iptables -t nat -A POSTROUTING -p tcp -d $DEST_IP_ADDRESS --dport 80 -j SNAT --to-source $IP_ADDRESS
+iptables -t nat -A POSTROUTING -p tcp -d $DEST_IP_ADDRESS --dport 443 -j SNAT --to-source $IP_ADDRESS
 
 service ufw stop
 service ufw start
