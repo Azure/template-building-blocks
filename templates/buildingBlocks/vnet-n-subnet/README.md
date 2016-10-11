@@ -159,3 +159,9 @@ azure group create -n "app1-rg" -l "West US"
 azure config mode arm
 azure group deployment create app1-rg --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/vnet-n-subnet/azuredeploy.json -p "{\"templateParameterUri\":{\"value\":\"http://buildingblocksample.blob.core.windows.net/building-block-params/vnet.parameters.json\"}}"
 ```
+
+## Extending the building block
+
+You can extend existing building blocks, and create your own building blocks. Each building block is created using a set of templates. The flowchart below represents the different templates used to create the load balancer building block.
+
+![DMZ template flowchart](./flowchart-vnet.png)

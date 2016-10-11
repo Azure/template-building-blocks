@@ -245,3 +245,9 @@ The command below deploys a networkSecurityGroups building block to the **app1-r
 azure config mode arm
 azure group deployment create app1-rg --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/networkSecurityGroups/azuredeploy.json -p "{\"templateParameterUri\":{\"value\":\"http://buildingblocksample.blob.core.windows.net/building-block-params/nsg.parameters.json\"}}"
 ```
+
+## Extending the building block
+
+You can extend existing building blocks, and create your own building blocks. Each building block is created using a set of templates. The flowchart below represents the different templates used to create the NSG building block.
+
+![DMZ template flowchart](./flowchart-nsg.png)
