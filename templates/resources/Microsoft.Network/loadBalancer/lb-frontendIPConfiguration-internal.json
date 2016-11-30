@@ -30,7 +30,7 @@
   "outputs": {
     "collection": {
       "type": "array",
-      "value": "[concat(parameters('state'), variables('instance'))]"
+      "value": "[variables('instance')]"
     }
   }
 }
