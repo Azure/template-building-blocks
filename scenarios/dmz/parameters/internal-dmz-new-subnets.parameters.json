@@ -49,10 +49,10 @@
                 "type": "CustomScriptForLinux",
                 "typeHandlerVersion": "1.5",
                 "autoUpgradeMinorVersion": true,
-                "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
+                "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
                 "settingsConfig": {
                   "fileUris": [
-                    "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
+                    "https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
                   ],
                   "commandToExecute": "bash enable-iptables-routes.sh internal 10.0.1.100"
                 },

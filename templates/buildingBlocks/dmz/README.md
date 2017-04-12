@@ -1,339 +1,260 @@
 # DMZ
-You can use the DMZ template building block to create a DMZ capable of allowing access to specific network resources while keeping the rest of your network safely isolated from external users. It can be used to secure both traffic between Azure and your on-premises datacenter, and Azure and the Internet. 
 
-The block can create its own subnets, set up a [load balancer](https://github.com/mspnp/template-building-blocks/tree/master/scenarios/loadBalancer-backend-n-vm), and [add VMs](https://github.com/mspnp/template-building-blocks/tree/master/scenarios/multi-vm-n-nic-m-storage) to handle the IP routing required for DMZ access restriction.
-
-**Note** This building block deploys the VMs used as network virtual appliances (NVAs) as Ubuntu servers with routing enabled. You need to use your own images, or images from the Azure marketplace, to deploy third party NVAs.
+Use the DMZ template building block template to create a perimeter network, also known as a DMZ. A DMZ allows access to specific network resources while keeping the rest of the network safely isolated from external users. This building block tempalte can be used to deploy resources that secure traffic between Azure and an on-premises datacenter or between Azure and the Internet. 
 
 ## Parameters
-You need to configure two parameters for this building block, **dmzSettings** and **virtualNetworkSettings**.
+
+This building block includes two parameters: **dmzSettings** and **virtualNetworkSettings**.
 
 ### dmzSettings
-The **dmzSettings** parameter contains most of the configuration options used to deploy the DMZ. It contains the following properties:
+
+The **dmzSettings** parameter specifies properties to configure the DMZ. It contains the following properties:
 
 - **namePrefix**  
-  Required. The name prefix is applied to all VMs, appliances, availability sets, and NICs created by this template. For example, and namePrefix of **public-dmz** will result in VMs named **public-dmz-vm1**, **public-dmz-vm2**, etc...  
-  ```json
-  "namePrefix": "internet-dmz"
-  ``` 
+_Value_. _Required_.  
+The name prefix applied to all VMs, appliances, and availability sets created by this template.   
 - **endpoint**  
-  Required. The endpoint property configures the DMZ endpoint. it contains the following properties:
-  - **hasPublicEndpoint** - Required. Specifies if DMZ faces the public internet or not. (**yes** or **no**) If "yes" the deployment will create a public IP for the load balancer used by the NVAs.
-  - **internalLoadBalancerSettings** - Required. Configures the load balancer endpoint if the DMZ is not public facing. Leave empty if the DMZ is public facing.  
-    - **privateIPAddress** - Optional. The private IP address to use for the load balancer. 
-    - **subnetName** - Optional. Subnet the internal load balancer is attached to. 
-  ```json
-  "endpoint": {
-    "hasPublicEndpoint": "no",
-    "internalLoadBalancerSettings": {
-      "privateIPAddress": "10.0.0.10",
-      "subnetName": "dmz-in"
-    }
-  }
-  ```
+_Object_. _Required_.  
+The endpoint object contains values that configure the DMZ endpoint. DMZ endpoints are specified using the following object:
+  - **hasPublicEndpoint**  
+  _Value_. _Required_.  
+  Valid values: `yes` | `no`  
+  Specifies if the DMZ includes a connection public internet. If `yes`, a public IP will be assigned to the load balancer used by the NVAs.  
+  - **domainNameLabel**  
+  _Value_. _Required_.  
+  Specifies the DNS domain name label for the public IP. Creates a mapping from _domainnamelabel.location_.cloudapp.azure.com to the public IP address in Azure DNS servers.  
+  - **internalLoadBalancerSettings**  
+  _Object_. _Required_.  
+  If **hasPublicEndpoint** is set to `no`, this object specifies the private IP address assigned to the internal load balancer. Set to an empty object if  **hasPublicEndpoint** is set to `yes`. The internal load balancer settings are specified by the following object:  
+    - **privateIPAddress**  
+    _Value_. _Optional_.  
+    The private IP address to use for the load balancer.  
+    - **subnetName**  
+    _Value_. _Optional_.  
+    Specifies the subnet the that internal load balancer is attached to.  
 - **applianceSettings**  
-  Required. The applianceSettings property is an object that defines the configuration of the DMZ's load balancer and VMs that will perform routing between the external and internal networks. It contains the following properties:
-  - **ports** - Required. An array of one or more port settings that will define a load balancer rule. Each port definition requires the following information:
-    - **port** - Required. Port number of load balancing rule.
-    - **protocol** - Required. Protocol of load balancing rule. ("Tcp" or "Udp")
-    - **healthProbe** - Required. Name of probe to use for checking VM status for this rule. 
-    ```json
-    "ports": [
-      {
-        "port": 80,
-        "protocol": "Tcp",
-        "healthProbe": "hp1"
-      }
-    ]
-    ```
-  - **healthProbes** - Required. An array of one or more probe settings, which are used to create load balancer probes which get used to determine the health of the individual VMs providing firewall services. Each probe setting contains the following:    
-    - **name** - Required. Name of probe.
-    - **port** - Required. Port to check for machine health.
-    - **protocol** - Required. Type of probe check. ("Http" or "Tcp")
-    - **requestPath** - Optional. Path on remote machine to check for Http status. (Not used for probes using the "Tcp" protocol check, required when using "http")
-    ```json
-    "healthProbes": [
-      {
-        "name": "hp1",
-        "port": 80,
-        "protocol": "http",
-        "requestPath": "/"
-      }
-    ]
-    ```
-  - **virtualMachineSettings** - Required. Configures the VMs that the DMZ uses to perform firewall and routing services between the external and internal networks. Note that this block only creates linux VMs to perform these services. It contains the following settings:
-    - **count** - Required. The number of VMs to create.
-    - **size** - Required. Size of the VMs to create. Note that this block uses [premium storage](https://azure.microsoft.com/en-us/documentation/articles/storage-premium-storage/), and only supports VM sizes that make use of premium storage. See [Sizes for virtual machines in Azure](https://azure.microsoft.com/en-us/documentation/articles/virtual-machines-windows-sizes/) for more information.
-    - **adminUsername** - Required. Administrator user name for logging into the VM's OS. 
-    - **adminPassword** - Optional. Administrator user name for logging into the VM's OS. (Required if osAuthenticationType = "password")
-    - **sshPublicKey** - Optional. SSH key used to log into the VM OS's Administrator account. (Required if osAuthenticationType = "ssh")
-    - **osAuthenticationType** - Required. Login authentication type. ("password" or "ssh") 
-    - **imageReference** - Required. The imageReference property defines the operating system installed on the VMs you're creating. Note that only Linux based images can be used for VMs in this block it contains the following properties:
-      - **publisher** - Required. OS publisher
-      - **offer** - Required. OS Offering 
-      - **sku** - Required. OS Product SKU 
-      - **version** - Required. OS Version (specific version number or "latest")
-    ```json
-    "virtualMachineSettings": {
-      "count": 2,
-      "size": "Standard_DS2_v2",
-      "adminUsername": "testuser",
-      "adminPassword": "AweS0me@PW",
-      "sshPublicKey": "",
-      "osAuthenticationType": "password",
-      "imageReference": {
-        "publisher": "Canonical",
-        "offer": "UbuntuServer",
-        "sku": "14.04.5-LTS",
-        "version": "latest"
-      }
-    }
-    ```
-  - **extensions** - Required. The extensions property is an array of one or more extension definition object, which allows you to specify any [VM Extensions](https://github.com/Azure/azure-content/blob/master/includes/virtual-machines-common-extensions-features.md) you want loaded on the DMZ VMs.  
-  
-      Note that although you can use the extensions mechanism to install and configure any number of VM extensions (as is possible in the [multi-vm-n-nic-m-storage](https://github.com/mspnp/template-building-blocks/tree/master/scenarios/multi-vm-n-nic-m-storage) template building block), the primary purpose for it in this block is defining the iptables firewall that get deployed on the DMZ VMs.    
-  
-     Each definition contains the following properties:
-    - **name** - Required. Defines the display name of this extension. 
-    - **publisher** - Required. Extension publisher name.
-    - **type** - Required. Extension type. If configuring IP Tables, should be
-    - **typeHandlerVersion** - Required. Extensions version to use.
-    - **autoUpgradeMinorVersion** - Required. Sets if the extension is allowed to upgrade automatically. (true / false)
-    - **settingsConfigMapperUri** - Required. URL of template used during the deployment process. Should always be "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json"
-    - **settingsConfig** - Required. Object containing extension specific settings. Can be empty.
-    - **protectedSettingsConfig** - Required. Object containing extension specific settings that need to be encrypted. Can be empty. 
-
-    If configuring the IP Table Firewall for your DMZ VMs, your extensions definition should look like this:
-  
-    ```json
-    "extensions": [
-      {
-        "name": "enable-iptables-routes",
-        "publisher": "Microsoft.OSTCExtensions",
-        "type": "CustomScriptForLinux",
-        "typeHandlerVersion": "1.5",
-        "autoUpgradeMinorVersion": true,
-        "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
-        "settingsConfig": {
-          "fileUris": [
-            "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
-          ],
-          "commandToExecute": "bash enable-iptables-routes.sh public 10.0.1.100"
-        },
-        "protectedSettingsConfig": { }
-      }
-    ]
-    ```
-
-    In CustomScriptForLinux extension type, there are two values you need to provide in the settingsConfig section, fileUris and commandToExecute:
-    - **fileUris** - Allows you to provide an array of URIs pointing to one or more bash shell scripts that will be available for the VMs to execute. In the case of the DMZ setup, this should point to a script that configures the ip tables routes on the linux VM (see the URI in the example for a sample script file that enables port 80 and 443 forwarding).
-    - **commandToExecute** - Executes a shell command on the linux VM, allowing you to execute the scripts specified by the fileUris setting. For the example script file, you need to pass two parameters indicating if the DMZ endpoint is public facing or not, and the IP address of the internal routing target.  
-      
+_Object_. _Required_.  
+Specifies the configuration information for the load balancer and VMs that perform routing between the external and internal networks. The configuration information is specified by the following object:  
+  - **ports**  
+  _Array of objects_. _At least one required_.  
+  Specifies port settings that define a load balancer rule. The port settings are specified by the following object:  
+    - **port**  
+    _Value_. _Required_.  
+    Integer value of the port number used for the load balancing rule.  
+    - **protocol**  
+    _Value_. _Required_.  
+    Valid values: `Tcp` | `Udp`  
+    Protocol used for the load balancing rule.  
+    - **healthProbe**  
+    _Value_. _Required_.  
+    Name of the health probe object from the **healthProbes** array below that will be used by the load balancer to monitor health of the VMs.  
+  - **healthProbes**  
+  _Array of objects_. _At least one required_.  
+  Specifies the configuration information for a health probe used by the load balancer to determine the health of a VM. The health probe configuration information is specified by the following object:  
+    - **name**  
+    _Value_. _Required_.  
+    Name of the probe.  
+    - **port**  
+    _Value_. _Required_.  
+    Integer value of the port number probed to check machine health.  
+    - **protocol**  
+    _Value_. _Required_.  
+    Valid values: `Http` | `Tcp`  
+    Protocol used to perform the probe.  
+    - **requestPath**  
+    _Value_. _Required if **protocol** value is `Http`, blank if `Tcp`_.  
+    HTTP path to query on the VM for health status.  
+  - **virtualMachineSettings**  
+  _Object_. _Required_.  
+  Specifices the configuration information for the VMs used in the DMZ for firewall and routing services between the external and internal networks. **Note** that only Linux VMs are supported by this building block template. The VM configuration settings are specified by the following object:  
+    - **count**  
+    _Value_. _Required_.  
+    Integer value of the number of VMs to create.  
+    - **size**  
+    _Value._ _Required_.  
+    String representing size of the VMs to create. This string is listed in the `Size` column of the table that describes each VM type in the [sizes for Linux virtual machines in Azure](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-sizes) document. Note that this template creates premium storage accounts and only supports VM sizes that support premium storage. See the 'premium storage-supported VMs' section of the [high-performance premium storage and unmanaged and managed Azure VM disks]((https://docs.microsoft.com/azure/storage/storage-premium-storage) document for more information.  
+    - **adminUsername**  
+    _Value._ _Required_.  
+    Administrator user name for the VM operating system (OS).  
+    - **adminPassword**  
+    _Value._ _Required if **osAuthenticationType** is `password`, optional if `ssh`_.  
+    Administrator password for the VM OS.  
+    - **sshPublicKey**  
+    _Value._ _Required if **osAuthenticationType** is `ssh`, set to empty value if `password`_.  
+    SSH key for the VM OS Administrator account.  
+    - **osAuthenticationType**  
+    _Value_. _Required_.  
+    Valid values: `password` | `ssh`  
+    Login authentication type, either using a password or SSH key.  
+    - **imageReference**  
+    _Object_. _Required_.  
+    Specifies the OS image for the VM. Only Linux based images are supported. The operating system is specified by the following object:  
+      - **publisher**  
+      _Value_. _Required_.  
+      Publisher of the OS. Note that valid strings for this value as well as the next three values can be obtained using [Azure CLI](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-cli-ps-findimage) or [PowerShell](https://msdn.microsoft.com/en-us/library/azure/dn495275.aspx).  
+      - **offer**  
+      _Value_. _Required_.  
+      OS offer.  
+      - **sku**  
+      _Value._ _Required_.  
+      OS Product SKU.  
+      - **version**  
+      _Value_. _Required_.  
+      OS Version.  
+    - **extensions**  
+    _Array of objects_. _At least one required_.  
+    Specifies configuration information for [VM Extensions](https://docs.microsoft.com/azure/virtual-machines/virtual-machines-linux-extensions-features).  The VM extension configuration is specified using the following object:  
+      - **name**  
+      _Value_. _Required_.  
+      Specifies the display name of this extension.  
+      - **publisher**  
+      _Value_. _Required_.  
+      Extension publisher name.  
+      - **type**  
+      _Value_. _Required_.  
+      Extension type.  
+      - **typeHandlerVersion**  
+      _Value_. _Required_.  
+      Extension version.  
+      - **autoUpgradeMinorVersion**  
+      _Value_. _Required_.  
+      Valid values: `true` | `false`  
+      Specifies if the extension is allowed to upgrade automatically.  
+      - **settingsConfigMapperUri**  
+      _Value_. _Required_.  
+      Valid value: `https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json`  
+      - **settingsConfig**  
+      _Object_. _Required_.  
+      Object specifying extension-specific settings. Set to empty if there are none.  
+      - **protectedSettingsConfig**  
+      _Object_. _Required_.  
+      Object specifying extension-specific settings to be encrypted. Set to empty if there are none.  
 - **securedAddressSpace**  
-  Required. The securedAddressSpace property is an array of CIDR blocks defining the secured internal subnets that the DMZ can communicate with.
-  ```json
-  "securedAddressSpace": [ "10.0.1.0/24", "10.0.2.0/24" ],
-  ```
-
+_Array of values_. _Required_.  
+Specifies an array of CIDR blocks defining the secured internal subnets that the DMZ can communicate with.  
 - **subnets**  
-  Required. The subnets object defines the subnets used by the NICs handling traffic traffic through the DMZ. It has the following properties:  
-  - **useExistingSubnets** - Required. Sets whether the block will use pre-existing subnets or create new ones.  
-    - **inSubnet** - Required. Settings for the subnet handling traffic coming from the unsecured external network. It has the following properties. 
-      - **name** - Required. Name of subnet to use.
-      - **addressPrefix** - Required. CIDR block to use when defining new subnet. Leave empty if using existing subnet.
-    - **outSubnet** - Required. Settings for the subnet handling traffic going to the secured internal network. It has the following properties. 
-      - **name** - Required. Name of subnet to use.
-      - **addressPrefix** - Required. CIDR block to use when defining new subnet. Leave empty if using existing subnet.
-  ```json
-  "subnets": {
-    "useExistingSubnets": "no",
-    "inSubnet": {
-      "name": "dmz-in",
-      "addressPrefix": "10.0.0.0/27"
-    },
-    "outSubnet": {
-      "name": "dmz-out",
-      "addressPrefix": "10.0.0.32/27"
-    }
-  }
-  ```
+_Object_. _Required_.  
+Specifies the subnets used by the NICs handling traffic traffic through the DMZ. The subnets are specified by the following object:  
+  - **useExistingSubnets**  
+  _Value_. _Required_.  
+  Valid values: `yes` | `no`  
+  Set to `yes` to use pre-existing subnets or set to `no` to create new ones.  
+  - **inSubnet**  
+  _Object_. _Required_.  
+  Specifies settings for the subnet handling traffic coming from the unsecured external network. The subnet is specified using the following object:  
+    - **name**  
+    _Value_. _Required_.  
+    Name of subnet.  
+    - **addressPrefix**  
+    _Value_. _Required_.  
+    If **useExistingSubnets** is set to `no`, specify a CIDR block to use when defining new subnet. Otherwise, set this to an empty value.  
+  - **outSubnet**  
+  _Object_. _Required_.  
+  Specifies settings for the subnet handling traffic going out to the secured internal network. The subnet is specified using the following object:  
+    - **name**  
+    _Value_. _Required_.  
+    Name of subnet to use.  
+    - **addressPrefix**  
+    _Value_. _Required_.  
+    If **useExistingSubnets** is set to `no`, specify a CIDR block to use when defining new subnet. Otherwise, leave this value empty.  
 
 ### virtualNetworkSettings
-The virtualNetworkSettings parameter is an object that specifies the VNet and resource group associated with your DMZ. It contains the following properties:
+
+The **virtualNetworkSettings** parameter is an object that specifies the existing VNet and resource group associated with your DMZ. It contains the following properties:
 
 - **name**  
-   Required. Name of the VNet that this DMZ will be created for.   
-	```json
-	"name": "bb-dev-vnet"
-	```
-
+_Value_. _Required_.  
+Specifies the name of the existing VNet that the DMZ will be deployed to.  
 - **resourceGroup**  
-Required. Azure Resource Group the DMZ belongs to.  
-  ```json
-  "resourceGroup": "bb-dev-rg"
-  ```
-
-
-## Sample parameters file
-
-The following parameters file will create a public facing DMZ. It creates a load balancer with a public IP address, incoming and outgoing subnets, two VMs each with one NIC attached to the incoming subnet and a second to the outgoing, and configures the balancer rules and firewall settings to allow port 80 and 443 traffic to pass along to a specific IP on the internally secured network.    
-
-```json
-{
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    "dmzSettings": {
-      "value": {
-        "namePrefix": "internet-dmz",
-        "endpoint": {
-          "hasPublicEndpoint": "yes",
-          "internalLoadBalancerSettings": { }
-        },
-        "applianceSettings": {
-          "ports": [
-            {
-              "port": 80,
-              "protocol": "Tcp",
-              "healthProbe": "hp1"
-            }
-          ],
-          "healthProbes": [
-            {
-              "name": "hp1",
-              "port": 80,
-              "protocol": "http",
-              "requestPath": "/"
-            }
-          ],
-          "virtualMachineSettings": {
-            "count": 2,
-            "size": "Standard_DS2_v2",
-            "adminUsername": "testuser",
-            "adminPassword": "AweS0me@PW",
-            "sshPublicKey": "",
-            "osAuthenticationType": "password",
-            "imageReference": {
-              "publisher": "Canonical",
-              "offer": "UbuntuServer",
-              "sku": "14.04.5-LTS",
-              "version": "latest"
-            },
-            "extensions": [
-              {
-                "name": "enable-iptables-routes",
-                "publisher": "Microsoft.OSTCExtensions",
-                "type": "CustomScriptForLinux",
-                "typeHandlerVersion": "1.5",
-                "autoUpgradeMinorVersion": true,
-                "settingsConfigMapperUri": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/vm-extension-passthrough-settings-mapper.json",
-                "settingsConfig": {
-                  "fileUris": [
-                    "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates/resources/Microsoft.Compute/virtualMachines/extensions/linux/enable-iptables-routes/enable-iptables-routes.sh"
-                  ],
-                  "commandToExecute": "bash enable-iptables-routes.sh public 10.0.1.100"
-                },
-                "protectedSettingsConfig": { }
-              }
-            ]
-          }
-        },
-        "securedAddressSpace": [ "10.0.1.0/24", "10.0.2.0/24" ],
-        "subnets": {
-          "useExistingSubnets": "no",
-          "inSubnet": {
-            "name": "dmz-in",
-            "addressPrefix": "10.0.0.0/27"
-          },
-          "outSubnet": {
-            "name": "dmz-out",
-            "addressPrefix": "10.0.0.32/27"
-          }
-        }
-
-      }
-    },
-    "virtualNetworkSettings": {
-      "value": {
-        "name": "bb-dev-vnet",
-        "resourceGroup": "bb-dev-rg"
-      }
-    }
-  }
-}
-
-```
-
+_Value_. _Required_.  
+Specifies the name of the existing Azure Resource Group that the DMZ belongs to.  
 
 ## Deployment
 
-You can deploy a building block by using the Azure portal, PowerShell, or Azure CLI. The examples below show how to deploy the building block using the sample parameters file above.
+You can deploy a building block by using the Azure portal, PowerShell, or Azure CLI.
 
 ### Azure portal
 
-Note that the building block deployment process will require you store your parameters file in a location with a publicly available URI, which you provide during deployment.
+To deploy this building block template using a parameter file at a publicly hosted URI, follow these steps:
 
-[![Click to deploy template on Azure](https://camo.githubusercontent.com/9285dd3998997a0835869065bb15e5d500475034/687474703a2f2f617a7572656465706c6f792e6e65742f6465706c6f79627574746f6e2e706e67 "Click to deploy template on Azure")](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Ftemplate-building-blocks%2Fmaster%2Fscenarios%2Fdmz%2Fazuredeploy.json)  
-
-1. Click the above deployment button, the Azure portal will be opened.
-1. In the deployment's **TEMPLATEPARAMETERURI** parameter, specify the public URI where your parameters file is located. 
-2. Specify or create the Resource Group where you want the VNet deployed to.
-3. Click the **Create** button.
+1. Right click the button below and select the option to open the link in a new tab or a new window:
+<br><a href=https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmspnp%2Ftemplate-building-blocks%2Fv1.0.0%2Fscenarios%2Fdmz%2Fazuredeploy.json><img src = "http://azuredeploy.net/deploybutton.png"/></a>
+2. Wait for the Azure Portal to open.
+3. In the `Basics` section:
+  - Select your `Subscription` from the drop-down list.
+  - For the `Resource group`, you can either create a new resource group or use an existing resource group.
+  - Select the region where you'd like to deploy the VNet in the `Location` drop-down list.
+4. In the `Settings` section, enter a URI to a valid parameter file. There are several [example parameter files](https://github.com/mspnp/template-building-blocks/tree/v1.0.0/scenarios/dmz/parameters) in Github. Note that if you want to use one of these parameter files the URI must be the path to the `raw` file in Github. 
+5. Review the terms and conditions, then click the **I agree to the terms and conditions stated above** checkbox.
+6. Click the **Purchase** button.
+7. Wait for the deployment to complete.
 
 ### PowerShell
 
-You can use the **New-AzureRmResourceGroupDeployment** to deploy the building block template using a parameter file located at a publicly available URI.
+To deploy this building block template using a parameter file hosted at a publicly available URI, follow these steps:
 
-1. Upload a parameters file to a location with a publicly available URI.
-2. If you do not have an existing resource group, run the **New-AzureRmResourceGroup** cmdlet as shown below.
-```PowerShell
-New-AzureRmResourceGroup -Location <Target Azure Region> -Name <Resource Group Name> 
-```
-3. Run the **New-AzureRmResourceGroupDeployment** cmdlet as shown below.
-```PowerShell
-New-AzureRmResourceGroupDeployment -ResourceGroupName <Resource Group Name>
-  -TemplateUri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/dmz/azuredeploy.json 
-  -templateParameterUriFromTemplate <URI of parameters file>
-```
+1. Upload your parameter file to a location with a publicly available URI.
+2. Log in to Azure using your selected subscription:
+  ```Powershell
+  Login-AzureRmAccount -SubscriptionId <your subscription ID>
+  ```
+3. If you do not have an existing resource group, run the **New-AzureRmResourceGroup** cmdlet to create one as shown below:
+  ```PowerShell
+  New-AzureRmResourceGroup -Location <Target Azure Region> -Name <Resource Group Name> 
+  ```
+4. Deploy a VNet. For more information see the [vnet-n-subnet](https://github.com/mspnp/template-building-blocks/blob/v1.0.0/templates/buildingBlocks/vnet-n-subnet/README.md) building block template.  
+5. Run the **New-AzureRmResourceGroupDeployment** cmdlet as shown below:  
+  ```PowerShell
+  New-AzureRmResourceGroupDeployment -ResourceGroupName <Resource Group Name> -TemplateUri https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/azuredeploy.json -templateParameterUriFromTemplate <URI of parameter file>
+  ```
 
-**Example**  
-The cmdlet below creates a resource group named **app1-rg** in the **westus** location, and then deploys dmz building block using a parameter file hosted in Azure blob storage.
+#### Example
+
+The cmdlet below creates deploys the [internal-dmz-new-subnets](https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/parameters/internal-dmz-new-subnets.parameters.json) parameter file from the [scenarios folder](https://github.com/mspnp/template-building-blocks/tree/v1.0.0/scenarios/dmz/parameters) in Github.
+
+Note that this scenario requires an existing resource group named `bb-dev-rg`, and a VNet named `bb-dev-vnet` with a `10.0.0.0/22` address space. The VNet must have one subnet with a `10.0.1.0/24` address space, one with a `10.0.2.0/24` address space, and one named `GatewaySubnet` with any address space.
 
 ```PowerShell
-New-AzureRmResourceGroup -Location westus -Name app1-rg 
-New-AzureRmResourceGroupDeployment -ResourceGroupName app1-rg -TemplateUri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/dmz/azuredeploy.json   -templateParameterUriFromTemplate http://buildingblocksample.blob.core.windows.net/building-block-params/vnet.parameters.json
+New-AzureRmResourceGroupDeployment -ResourceGroupName bb-dev-rg -TemplateUri https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/azuredeploy.json   -templateParameterUriFromTemplate https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/parameters/internal-dmz-new-subnets.parameters.json
 ```
+> The parameter files in the scenarios folder include hard-coded administrator usernames and passwords. It is **strongly** recommended that you immediately change the administrator password on the NVA VMs when the deployment is complete.
 
 ### Azure CLI
 
-To deploy the building block using a parameters file available from a URI:
+Before you begin, install the latest version of the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli).
 
-1. Upload a parameters file to a location with a publicly available URL.
-2. If you do not have an existing resource group, create a new one using the following command:
+To deploy the building block template using a parameter file hosted at a publicly available URI, follow these steps:
+
+1. Upload your parameter file to a location with a publicly available URI.
+2. Log in to Azure using your selected subscripton:
+  ```AzureCLI
+  az login
+  ```
+3. Set your selected subscription:
+  ```AzureCLI
+  az account set --subscription <your subscripton ID>
+  ```
+4. If you do not have an existing resource group, create a new one using the following command:
+  ```AzureCLI
+  az group create -l <Target Azure Region> -n <Resource Group Name> 
+  ```
+5. Deploy a VNet. For more information see the [vnet-n-subnet](https://github.com/mspnp/template-building-blocks/blob/v1.0.0/templates/buildingBlocks/vnet-n-subnet/README.md) building block template.  
+6. Run the `az group deployment create` command as shown below:
+  ```AzureCLI
+  az group deployment create -g <Resource Group Name>
+  --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/azuredeploy.json 
+  --parameters "{\"templateParameterUri\":{\"value\":\"<parameter file public URI>\"}}"
+  ```
+
+#### Example
+
+The cmdlet below deploys the [internal-dmz-new-subnets](https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/parameters/internal-dmz-new-subnets.parameters.json) parameter file from the [scenarios folder](https://github.com/mspnp/template-building-blocks/tree/v1.0.0/scenarios/dmz/parameters) in Github.  
+
+Note that this scenario requires an existing resource group named `bb-dev-rg`, and a VNet named `bb-dev-vnet` with a `10.0.0.0/22` address space. The VNet must have one subnet with a `10.0.1.0/24` address space, one with a `10.0.2.0/24` address space, and one named `GatewaySubnet` with any address space.
+
 ```AzureCLI
-  azure group create -n <Resource Group Name> -l <Target Azure Region>
+az login
+az group deployment create -g bb-dev-rg --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/azuredeploy.json --parameters "{\"templateParameterUri\":{\"value\":\"https://raw.githubusercontent.com/mspnp/template-building-blocks/v1.0.0/scenarios/dmz/parameters/internal-dmz-new-subnets.parameters.json\"}}"
 ```
 
-  
-3. Run the command shown below to deploy the VNet
-```AzureCLI
-azure config mode arm
-azure group deployment create <Resource Group Name>
-  --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/dmz/azuredeploy.json 
-  -p "{\"templateParameterUri\":{\"value\":\"<parameters File Public URI>\"}}"
-```
-
-**Example**  
-The command below creates a resource group named **app1-rg** in the **westus** location, and then deploys a dmz building block using a parameter file hosted in Azure blob storage.
-
-```AzureCLI
-azure group create -n "app1-rg" -l "West US"
-azure config mode arm
-azure group deployment create app1-rg --template-uri https://raw.githubusercontent.com/mspnp/template-building-blocks/master/scenarios/dmz/azuredeploy.json -p "{\"templateParameterUri\":{\"value\":\"http://buildingblocksample.blob.core.windows.net/building-block-params/vnet.parameters.json\"}}"
-```
-
-## Extending the building block
-
-You can extend existing building blocks, and create your own building blocks. Each building block is created using a set of templates. The flowchart below represents the different templates used to create the DMZ building block.
-
-![DMZ template flowchart](./flowchart-dmz.png)
+> The parameter files in the scenarios folder include hard-coded administrator usernames and passwords. It is **strongly** recommended that you immediately change the administrator password on the NVA VMs when the deployment is complete.
