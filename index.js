@@ -259,7 +259,7 @@ let defaultOptions = {
     cloudName: 'AzureCloud',
     outputFormat: 'files',
     deploy: false,
-    templateBaseUri: 'https://raw.githubusercontent.com/mspnp/template-building-blocks/roshar/spikes/spikes/nodejs-spike/templates'
+    templateBaseUri: 'https://raw.githubusercontent.com/mspnp/template-building-blocks/master/templates'
 };
 
 let getCloud = ({name}) => {
