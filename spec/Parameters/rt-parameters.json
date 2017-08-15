@@ -1,0 +1,87 @@
+{
+    "$schema": "file:///Source/mspnp/template-building-blocks/spikes/nodejs-spike/schemas/settings.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "RouteTable",
+                    "settings": [
+                        {
+                            "name": "route-rt",
+                            "resourceGroupName": "my-test-rg10",
+                            "virtualNetworks": [
+                                {
+                                    "name": "my-virtual-network",
+                                    "subnets": [
+                                        "biz"
+                                    ]
+                                }
+                            ],
+                            "routes": [
+                                {
+                                    "name": "route1",
+                                    "addressPrefix": "10.0.1.0/24",
+                                    "nextHop": "VnetLocal"
+                                },
+                                {
+                                    "name": "route2",
+                                    "addressPrefix": "10.0.2.0/24",
+                                    "nextHop": "VirtualNetworkGateway"
+                                },
+                                {
+                                    "name": "route3",
+                                    "addressPrefix": "10.0.3.0/24",
+                                    "nextHop": "192.168.1.1"
+                                }
+                            ],
+                            "tags": {
+                                "tag6": "value6",
+                                "tag7": "value7"
+                            }
+                        },
+                        {
+                            "name": "route2-rt",
+                            "resourceGroupName": "my-test-rg11",
+                            "virtualNetworks": [
+                                {
+                                    "name": "my-virtual-network",
+                                    "resourceGroupName": "my-test-rg10",
+                                    "subnets": [
+                                        "web"
+                                    ]
+                                },
+                                {
+                                    "name": "my-other-virtual-network",
+                                    "subnets": [
+                                        "web"
+                                    ]
+                                }
+                            ],
+                            "routes": [
+                                {
+                                    "name": "route1",
+                                    "addressPrefix": "10.0.1.0/24",
+                                    "nextHop": "VnetLocal"
+                                },
+                                {
+                                    "name": "route2",
+                                    "addressPrefix": "10.0.2.0/24",
+                                    "nextHop": "VirtualNetworkGateway"
+                                },
+                                {
+                                    "name": "route3",
+                                    "addressPrefix": "10.0.3.0/24",
+                                    "nextHop": "192.168.1.1"
+                                }
+                            ],
+                            "tags": {
+                                "tag8": "value8"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

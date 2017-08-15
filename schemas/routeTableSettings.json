@@ -1,0 +1,76 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the route table building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/routeTableSettings.json#",
+    "type": "object",
+    "definitions": {
+        "nextHop": {
+            "type": "string",
+            "enum": [
+                "Internet",
+                "None",
+                "VirtualNetworkGateway",
+                "VnetLocal"
+            ]
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "routes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/definitions/route"
+                            }
+                        },
+                        "virtualNetworks": {
+                            "$ref": "virtualNetworkSettings.json#/definitions/subnetsReference"
+                        }
+                    }
+                }
+            ],
+            "required":[
+                "name",
+                "routes"
+            ]
+        },
+        "route": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "properties": {
+                        "addressPrefix": {
+                            "$ref": "types.json#/definitions/cidr"
+                        },
+                        "nextHop": {
+                            "type": "string",
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/nextHop"
+                                },
+                                {
+                                    "$ref": "types.json#/definitions/ipAddress"
+                                }
+                            ]
+                        }
+                    },
+                    "required": [
+                        "addressPrefix",
+                        "nextHop"
+                    ]
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        }
+    }
+}

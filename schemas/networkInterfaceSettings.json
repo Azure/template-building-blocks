@@ -1,0 +1,107 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the virtual network building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/networkInterfaceSettings.json#",
+    "definitions": {
+        "privateIpAllocationMethod": {
+            "oneOf": [
+                {
+                    "properties": {
+                        "privateIPAllocationMethod": {
+                            "type": "string",
+                            "enum": [
+                                "Dynamic"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "privateIPAllocationMethod"
+                    ]
+                },
+                {
+                    "properties": {
+                        "privateIPAllocationMethod": {
+                            "type": "string",
+                            "enum": [
+                                "Static"
+                            ]
+                        },
+                        "startingIPAddress": {
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "privateIPAllocationMethod",
+                        "startingIPAddress"
+                    ]
+                }
+            ]
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "isPrimary": {
+                            "type": "boolean"
+                        },
+                        "isPublic": {
+                            "type": "boolean"
+                        },
+                        "subnetName": {
+                            "type": "string"
+                        },
+                        "publicIPAllocationMethod": {
+                            "type": "string",
+                            "enum": [
+                                "Dynamic",
+                                "Static"
+                            ]
+                        },
+                        "privateIPAddressVersion": {
+                            "type": "string",
+                            "enum": [
+                                "IPv4",
+                                "IPv6"
+                            ]
+                        },
+                        "enableIPForwarding": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "domainNameLabelPrefix": {
+                            "type": "string"
+                        },
+                        "dnsServers": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "$ref": "types.json#/definitions/ipAddress"
+                            }
+                        },
+                        "backendPoolNames": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "inboundNatRulesNames": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/privateIpAllocationMethod"
+                }
+            ],
+            "required": [
+                "subnetName"
+            ]
+        }
+    }
+}

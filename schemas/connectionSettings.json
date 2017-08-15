@@ -1,0 +1,125 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the route table building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/connectionSettings.json#",
+    "type": "object",
+    "definitions": {
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "routingWeight": {
+                            "type": "integer",
+                            "minimum": 1
+                        }
+                    },
+                    "required": [
+                        "routingWeight"
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/expressRouteConnection"
+                        },
+                        {
+                            "allOf": [
+                                {
+                                    "properties": {
+                                        "sharedKey": {
+                                            "type": "string",
+                                            "minLength": 1
+                                        }
+                                    },
+                                    "required": [
+                                        "sharedKey"
+                                    ]
+                                },
+                                {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "#/definitions/ipsecConnection"
+                                        },
+                                        {
+                                            "$ref": "#/definitions/vnet2VnetConnection"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "expressRouteConnection": {
+            "properties": {
+                "connectionType": {
+                    "type": "string",
+                    "enum": [
+                        "ExpressRoute"
+                    ]
+                },
+                "expressRouteCircuit": {
+                    "$ref": "types.json#/definitions/resourceReference"
+                },
+                "virtualNetworkGateway": {
+                    "$ref": "types.json#/definitions/resourceReference"
+                }
+            },
+            "required": [
+                "connectionType",
+                "expressRouteCircuit",
+                "virtualNetworkGateway"
+            ]
+        },
+        "ipsecConnection": {
+            "properties": {
+                "connectionType": {
+                    "type": "string",
+                    "enum": [
+                        "IPsec"
+                    ]
+                },
+                "localNetworkGateway": {
+                    "$ref": "localNetworkGatewaySettings.json#/definitions/settings"
+                },
+                "virtualNetworkGateway": {
+                    "$ref": "types.json#/definitions/resourceReference"
+                }
+            },
+            "required": [
+                "connectionType",
+                "localNetworkGateway",
+                "virtualNetworkGateway"
+            ]
+        },
+        "vnet2VnetConnection": {
+            "properties": {
+                "connectionType": {
+                    "type": "string",
+                    "enum": [
+                        "Vnet2Vnet"
+                    ]
+                },
+                "virtualNetworkGateway1": {
+                    "$ref": "types.json#/definitions/resourceReference"
+                },
+                "virtualNetworkGateway2": {
+                    "$ref": "types.json#/definitions/resourceReference"
+                }
+            },
+            "required": [
+                "connectionType",
+                "virtualNetworkGateway1",
+                "virtualNetworkGateway2"
+            ]
+        }
+    }
+}

@@ -1,1 +1,0 @@
-For more information, see the [network security groups (v1) document](https://github.com/mspnp/template-building-blocks/wiki/NSG-(v1)) in the [template building blocks wiki](https://github.com/mspnp/template-building-blocks/wiki).

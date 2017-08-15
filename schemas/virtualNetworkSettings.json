@@ -1,0 +1,133 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the virtual network building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualNetworkSettings.json#",
+    "definitions": {
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "addressPrefixes": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "types.json#/definitions/cidr"
+                            }
+                        },
+                        "dnsServers": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "$ref": "types.json#/definitions/ipAddress"
+                            }
+                        },
+                        "subnets": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "$ref": "#/definitions/subnet"
+                            }
+                        },
+                        "virtualNetworkPeerings": {
+                            "type": "array",
+                            "minItems": 0,
+                            "default": [],
+                            "items": {
+                                "$ref": "#/definitions/virtualNetworkPeering"
+                            }
+                        }
+                    },
+                    "required": [
+                        "addressPrefixes",
+                        "subnets"
+                    ]
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "subnet": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "properties": {
+                        "addressPrefix": {
+                            "$ref": "types.json#/definitions/cidr"
+                        }
+                    },
+                    "required": [
+                        "addressPrefix"
+                    ]
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "virtualNetworkPeering": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "properties": {
+                        "allowForwardedTraffic": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "allowGatewayTransit": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "remoteVirtualNetwork": {
+                            "$ref": "types.json#/definitions/resourceReference"
+                        },
+                        "useRemoteGateways": {
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    "required": [
+                        "remoteVirtualNetwork"
+                    ]
+                }
+            ]
+        },
+        "subnetsReference": {
+            "type": "array",
+            "minItems": 0,
+            "default": [],
+            "items": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "types.json#/definitions/resourceReference"
+                    },
+                    {
+                        "properties": {
+                            "subnets": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "required":[
+                            "subnets"
+                        ]
+                    }
+                ]
+            }
+        }
+    }
+}

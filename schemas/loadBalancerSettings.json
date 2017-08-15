@@ -1,0 +1,358 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/loadBalancerSettings.json#",
+    "type": "object",
+    "definitions": {
+        "protocol": {
+            "type": "string",
+            "enum": [
+                "Tcp",
+                "Udp"
+            ]
+        },
+        "loadDistribution": {
+            "type": "string",
+            "enum": [
+                "Default",
+                "SourceIP",
+                "SourceIPProtocol"
+            ]
+        },
+        "loadBalancingRule": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "oneOf":[
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Tcp"
+                                    ]
+                                },
+                                "idleTimeoutInMinutes": {
+                                    "type": "integer",
+                                    "minimum": 4,
+                                    "maximum": 30
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Udp"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "properties": {
+                        "frontendIPConfigurationName": {
+                            "type": "string"
+                        },
+                        "backendPoolName": {
+                            "type": "string"
+                        },
+                        "frontendPort": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65534
+                        },
+                        "backendPort": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                        },
+                        "enableFloatingIP": {
+                            "type": "boolean"
+                        },
+                        "probeName": {
+                            "type": "string"
+                        },
+                        "loadDistribution": {
+                            "$ref": "#/definitions/loadDistribution"
+                        }
+                    }
+                }
+            ]
+        },
+        "probe": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "oneOf":[
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Http"
+                                    ]
+                                },
+                                "requestPath": {
+                                    "type": "string"
+                                }
+                            },
+                            "required":[
+                                "protocol",
+                                "requestPath"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Tcp"
+                                    ]
+                                }
+                            },
+                            "required":[
+                                "protocol"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "properties": {
+                        "port": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                        },
+                        "intervalInSeconds": {
+                            "type": "integer",
+                            "minimum": 5,
+                            "maximum": 300
+                        },
+                        "numberOfProbes": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 20
+                        }
+                    }
+                }
+            ]
+        },
+        "backendPool": {
+            "type": "object",
+            "allOf":[
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                }
+            ]
+        },
+        "inboundNatBase": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "properties": {
+                        "startingFrontendPort": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65534
+                        },
+                        "backendPort": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65535
+                        },
+                        "frontendIPConfigurationName": {
+                            "type": "string"
+                        }
+                    }
+                }
+            ]
+        },
+        "inboundNatRule": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/inboundNatBase"
+                },
+                {
+                    "properties": {
+                        "enableFloatingIP": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                {
+                    "oneOf":[
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Tcp"
+                                    ]
+                                },
+                                "idleTimeoutInMinutes": {
+                                    "type": "integer",
+                                    "minimum": 4,
+                                    "maximum": 30
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Udp"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "inboundNatPool": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "#/definitions/inboundNatBase"
+                },
+                {
+                    "properties": {
+                        "protocol": {
+                            "$ref": "#/definitions/protocol"
+                        },
+                        "frontendPortRangeEnd": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 65534
+                        }
+                    }
+                }
+            ]
+        },
+        "internalLoadBalancer": {
+            "type": "object",
+            "properties": {
+                "privateIPAddress": {
+                    "$ref": "types.json#/definitions/ipAddress"
+                },
+                "subnetName": {
+                    "type": "string"
+                }
+            }
+        },
+        "frontendIPConfiguration": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "loadBalancerType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Public"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "loadBalancerType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Internal"
+                                    ]
+                                },
+                                "internalLoadBalancerSettings": {
+                                    "$ref": "#/definitions/internalLoadBalancer"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "inboundNatRules": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/inboundNatRule"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "inboundNatRules"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "inboundNatPools": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/inboundNatPool"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "inboundNatPools"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "properties": {
+                        "loadBalancingRules": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/loadBalancingRule"
+                            }
+                        },
+                        "probes": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/probe"
+                            }
+                        },
+                        "backendPools": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/backendPool"
+                            }
+                        },
+                        "frontendIPConfigurations": {
+                            "type": "array",
+                            "items":{
+                                "$ref": "#/definitions/frontendIPConfiguration"                                
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

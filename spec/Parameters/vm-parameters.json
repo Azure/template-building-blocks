@@ -1,0 +1,262 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "VirtualNetwork",
+                    "settings": [
+                        {
+                            "name": "test-vnet",
+                            "addressPrefixes": [
+                                "10.0.0.0/16"
+                            ],
+                            "subnets": [
+                                {
+                                    "name": "web",
+                                    "addressPrefix": "10.0.1.0/24"
+                                },
+                                {
+                                    "name": "biz",
+                                    "addressPrefix": "10.0.2.0/24"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "settings": {
+                        "vmCount": 2,
+                        "namePrefix": "test",
+                        "size": "Standard_DS2_v2",
+                        "computerNamePrefix": "test",
+                        "adminUsername": "testadminuser",
+                        "adminPassword": "test$!Passw0rd111",
+                        "virtualNetwork": {
+                            "name": "test-vnet"
+                        },
+                        "storageAccounts": {
+                            "count": 0,
+                            "managed": true
+                        },
+                        "diagnosticStorageAccounts": {
+                            "count": 1,
+                            "encryptBlobStorage": false,
+                            "encryptFileStorage": false
+                        },
+                        "nics": [
+                            {
+                                "isPublic": true,
+                                "subnetName": "web",
+                                "privateIPAllocationMethod": "Static",
+                                "startingIPAddress": "10.0.1.240",
+                                "isPrimary": true,
+                                "dnsServers": [],
+                                "applicationGatewayBackendPoolNames": [
+                                    "bp2"
+                                ],
+                                "backendPoolNames": [
+                                    "bp1"
+                                ],
+                                "inboundNatRulesNames": [],
+                                "inboundNatPoolNames": []
+                            }
+                        ],
+                        "imageReference": {},
+                        "osType": "windows",
+                        "osDisk": {},
+                        "dataDisks": {
+                            "count": 0,
+                            "properties": {
+                                "diskSizeGB": 127
+                            }
+                        },
+                        "extensions": [],
+                        "loadBalancerSettings": {
+                            "backendPools": [
+                                {
+                                    "name": "bp1"
+                                }
+                            ]
+                        },
+                        "scaleSetSettings": {
+                            
+                        },
+                        "applicationGatewaySettings": {
+                            "sku": {
+                                "name": "WAF_Medium",
+                                "tier": "WAF",
+                                "capacity": 2
+                            },
+                            "gatewayIPConfigurations": [
+                                {
+                                    "name": "appGatewayIpConfig",
+                                    "subnetName": "biz"
+                                }
+                            ],
+                            "sslCertificates": [],
+                            "authenticationCertificates": [],
+                            "frontendIPConfigurations": [
+                                {
+                                    "name": "appGatewayFrontendIP",
+                                    "applicationGatewayType": "Public"
+                                },
+                                {
+                                    "name": "testfec",
+                                    "applicationGatewayType": "Internal",
+                                    "internalApplicationGatewaySettings": {
+                                        "subnetName": "biz"
+                                    }
+                                }
+                            ],
+                            "frontendPorts": [
+                                {
+                                    "name": "appGatewayFrontendPort",
+                                    "port": 80
+                                },
+                                {
+                                    "name": "list1-http1",
+                                    "port": 81
+                                },
+                                {
+                                    "name": "list-http2",
+                                    "port": 82
+                                }
+                            ],
+                            "backendAddressPools": [
+                                {
+                                    "name": "appGatewayBackendPool",
+                                    "backendAddresses": [
+                                        {
+                                            "fqdn": "www.contoso.com"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "name": "bp2",
+                                    "backendIPConfigurations": []
+                                }
+                            ],
+                            "backendHttpSettingsCollection": [
+                                {
+                                    "name": "appGatewayBackendHttpSettings",
+                                    "port": 80,
+                                    "protocol": "Http",
+                                    "cookieBasedAffinity": "Disabled",
+                                    "pickHostNameFromBackendAddress": false,
+                                    "probeEnabled": true,
+                                    "requestTimeout": 30
+                                },
+                                {
+                                    "name": "test-settings",
+                                    "port": 80,
+                                    "protocol": "Http",
+                                    "cookieBasedAffinity": "Enabled",
+                                    "pickHostNameFromBackendAddress": false,
+                                    "probeEnabled": true,
+                                    "requestTimeout": 20,
+                                    "probeName": "p1"
+                                }
+                            ],
+                            "httpListeners": [
+                                {
+                                    "name": "appGatewayHttpListener",
+                                    "frontendIPConfigurationName": "appGatewayFrontendIP",
+                                    "frontendPortName": "appGatewayFrontendPort",
+                                    "protocol": "Http",
+                                    "requireServerNameIndication": false
+                                },
+                                {
+                                    "name": "list1",
+                                    "frontendIPConfigurationName": "testfec",
+                                    "frontendPortName": "list1-http1",
+                                    "protocol": "Http",
+                                    "requireServerNameIndication": false
+                                },
+                                {
+                                    "name": "list2",
+                                    "frontendIPConfigurationName": "testfec",
+                                    "frontendPortName": "list-http2",
+                                    "protocol": "Http",
+                                    "requireServerNameIndication": false
+                                }
+                            ],
+                            "urlPathMaps": [
+                                {
+                                    "name": "pb-rule1",
+                                    "defaultBackendAddressPoolName": "appGatewayBackendPool",
+                                    "defaultBackendHttpSettingName": "appGatewayBackendHttpSettings",
+                                    "pathRules": [
+                                        {
+                                            "name": "p1",
+                                            "paths": [
+                                                "/foo"
+                                            ],
+                                            "backendAddressPoolName": "bp2",
+                                            "backendHttpSettingName": "test-settings"
+                                        },
+                                        {
+                                            "name": "p2",
+                                            "paths": [
+                                                "/bar"
+                                            ],
+                                            "backendAddressPoolName": "appGatewayBackendPool",
+                                            "backendHttpSettingName": "appGatewayBackendHttpSettings"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "requestRoutingRules": [
+                                {
+                                    "name": "rule1",
+                                    "ruleType": "Basic",
+                                    "httpListenerName": "appGatewayHttpListener",
+                                    "backendAddressPoolName": "appGatewayBackendPool",
+                                    "backendHttpSettingName": "appGatewayBackendHttpSettings"
+                                },
+                                {
+                                    "name": "rule2",
+                                    "ruleType": "Basic",
+                                    "httpListenerName": "list1",
+                                    "backendAddressPoolName": "bp2",
+                                    "backendHttpSettingName": "test-settings"
+                                },
+                                {
+                                    "name": "pb-rule1",
+                                    "ruleType": "PathBasedRouting",
+                                    "httpListenerName": "list2",
+                                    "urlPathMapName": "pb-rule1"
+                                }
+                            ],
+                            "probes": [
+                                {
+                                    "name": "p1",
+                                    "protocol": "Http",
+                                    "host": "roshartest.com",
+                                    "path": "/",
+                                    "interval": 30,
+                                    "timeout": 30,
+                                    "unhealthyThreshold": 3,
+                                    "pickHostNameFromBackendHttpSettings": false,
+                                    "minServers": 0,
+                                    "match": {}
+                                }
+                            ],
+                            "redirectConfigurations": [],
+                            "webApplicationFirewallConfiguration": {
+                                "enabled": false,
+                                "firewallMode": "Prevention",
+                                "ruleSetType": "OWASP",
+                                "ruleSetVersion": "3.0",
+                                "disabledRuleGroups": []
+                            },
+                            "sslPolicy": {}
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

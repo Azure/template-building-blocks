@@ -1,0 +1,54 @@
+{
+    "env": {
+        "es6": true,
+        "node": true,
+        "jasmine": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "sourceType": "module"
+    },
+    "rules": {
+        "indent": [
+            "error",
+            4
+        ],
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "quotes": [
+            "error",
+            "single"
+        ],
+        "semi": [
+            "error",
+            "always"
+        ],
+        "no-console": "off",
+        "keyword-spacing": [
+            "error",
+            {
+                "after": true
+            }
+        ],
+        "no-multi-spaces": "error",
+        "space-in-parens": [
+            "error",
+            "never"
+        ],
+        "eqeqeq": [
+            "error",
+            "always"
+        ],
+        "no-trailing-spaces": "error",
+        "space-before-blocks": [
+            "error",
+            "always"
+        ],
+        "quote-props": [
+            "error",
+            "consistent-as-needed"
+        ]
+    }
+}

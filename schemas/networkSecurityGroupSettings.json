@@ -1,0 +1,224 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the network security group building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/networkSecurityGroupSettings.json#",
+    "type": "object",
+    "definitions": {
+        "protocols": {
+            "type": "string",
+            "enum": [
+                "TCP",
+                "UDP",
+                "*"
+            ]
+        },
+        "defaultTags": {
+            "type": "string",
+            "enum": [
+                "VirtualNetwork",
+                "AzureLoadBalancer",
+                "Internet",
+                "*"
+            ]
+        },
+        "directions": {
+            "type": "string",
+            "enum": [
+                "Inbound",
+                "Outbound"
+            ]
+        },
+        "accesses": {
+            "type": "string",
+            "enum": [
+                "Allow",
+                "Deny"
+            ]
+        },
+        "addressPrefix": {
+            "type": "string",
+            "oneOf": [
+                {
+                    "$ref": "types.json#/definitions/cidr"
+                },
+                {
+                    "$ref": "types.json#/definitions/ipAddress"
+                },
+                {
+                    "$ref": "#/definitions/defaultTags"
+                }
+            ]
+        },
+        "portRange": {
+            "oneOf": [
+                {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                },
+                {
+                    "type": "string",
+                    "enum": [
+                        "*"
+                    ]
+                },
+                {
+                    "type": "string",
+                    "pattern": "^\\d+-\\d+$"
+                }
+            ]
+        },
+        "namedSecurityRules": {
+            "type": "string",
+            "enum": [
+                "ActiveDirectory",
+                "Cassandra",
+                "Cassandra-JMX",
+                "Cassandra-Thrift",
+                "CouchDB",
+                "CouchDB-HTTPS",
+                "DNS-TCP",
+                "DNS-UDP",
+                "DynamicPorts",
+                "ElasticSearch",
+                "FTP",
+                "HTTP",
+                "HTTPS",
+                "IMAP",
+                "IMAPS",
+                "Kestrel",
+                "LDAP",
+                "Memcached",
+                "MongoDB",
+                "MSSQL",
+                "MySQL",
+                "Neo4J",
+                "POP3",
+                "POP3S",
+                "PostgreSQL",
+                "RabbitMQ",
+                "Riak",
+                "Riak-JMX",
+                "RDP",
+                "Redis",
+                "SMTP",
+                "SMTPS",
+                "SSH",
+                "WinRM"
+            ]
+        },
+        "baseSecurityRule": {
+            "properties": {
+                "sourcePortRange": {
+                    "$ref": "#/definitions/portRange"
+                },
+                "sourceAddressPrefix": {
+                    "$ref": "#/definitions/addressPrefix"
+                },
+                "destinationAddressPrefix": {
+                    "$ref": "#/definitions/addressPrefix"
+                }
+            }
+        },
+        "namedSecurityRule": {
+            "allOf":[
+                {
+                    "$ref": "#/definitions/baseSecurityRule"
+                },
+                {
+                    "properties": {
+                        "name": {
+                            "$ref": "#/definitions/namedSecurityRules"
+                        }
+                    }
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "securityRule": {
+            "allOf":[
+                {
+                    "$ref": "#/definitions/baseSecurityRule"
+                },
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "protocol": {
+                            "$ref": "#/definitions/protocols"
+                        },
+                        "destinationPortRange": {
+                            "$ref": "#/definitions/portRange"
+                        },
+                        "direction": {
+                            "$ref": "#/definitions/directions"
+                        },
+                        "priority": {
+                            "type": "integer",
+                            "minimum": 100,
+                            "maximum": 4096
+                        },
+                        "access": {
+                            "$ref": "#/definitions/accesses"
+                        }
+                    }
+                }
+            ],
+            "required": [
+                "name",
+                "protocol",
+                "sourcePortRange",
+                "destinationPortRange",
+                "sourceAddressPrefix",
+                "destinationAddressPrefix",
+                "direction",
+                "priority",
+                "access"
+            ]
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "securityRules": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/definitions/namedSecurityRule"
+                                    },
+                                    {
+                                        "$ref": "#/definitions/securityRule"
+                                    }
+                                ]
+                            }
+                        },
+                        "virtualNetworks": {
+                            "$ref": "virtualNetworkSettings.json#/definitions/subnetsReference"
+                        },
+                        "networkInterfaces": {
+                            "type": "array",
+                            "minItems": 0,
+                            "default": [],
+                            "items": {
+                                "$ref": "types.json#/definitions/resourceReference"
+                            }
+                        }
+                    }
+                }
+            ],
+            "required":[
+                "name",
+                "securityRules"
+            ]
+        }
+    }
+}

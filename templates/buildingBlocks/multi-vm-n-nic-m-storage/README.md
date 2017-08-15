@@ -1,1 +1,0 @@
-For more information, see the [Windows and Linux VMs (v1) document](https://github.com/mspnp/template-building-blocks/wiki/Windows-and-Linux-VMs-(v1)) in the [template building blocks wiki](https://github.com/mspnp/template-building-blocks/wiki).

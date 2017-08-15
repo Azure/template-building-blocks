@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object"
+    },
+    "localNetworkGateways": {
+      "type": "array",
+      "defaultValue": []
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('localNetworkGateways'))))]"
+  },
+  "resources": [
+      {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-lgw-', copyIndex(), '-', variables('templateUniqueString'))]",
+      "resourceGroup": "[parameters('localNetworkGateways')[copyIndex()].resourceGroupName]",
+      "copy": {
+        "name": "localNetworkGateways",
+        "count": "[length(parameters('localNetworkGateways'))]",
+        "mode": "Parallel"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+                "type": "Microsoft.Network/localNetworkGateways",
+                "apiVersion": "2016-06-01",
+                "location": "[resourceGroup().location]",
+                "name": "[parameters('localNetworkGateways')[copyIndex()].name]",
+                "properties": "[parameters('localNetworkGateways')[copyIndex()].properties]"
+            }
+          ],
+          "outputs": {}
+        }
+      }
+    }
+  ],
+  "outputs": {
+  }
+}

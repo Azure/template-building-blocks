@@ -1,0 +1,47 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentContext": {
+            "type": "object"
+        },
+        "applicationGateways": {
+            "type": "array"
+        }
+    },
+    "variables": {
+        "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('applicationGateways'))))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-agw-', copyIndex(), '-', variables('templateUniqueString'))]",
+            "resourceGroup": "[parameters('applicationGateways')[copyIndex()].resourceGroupName]",
+            "copy": {
+                "name": "applicationGateways",
+                "count": "[length(parameters('applicationGateways'))]",
+                "mode": "Parallel"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Network/applicationGateways",
+                            "apiVersion": "2017-06-01",
+                            "location": "[parameters('applicationGateways')[copyIndex()].location]",
+                            "name": "[parameters('applicationGateways')[copyIndex()].name]",
+                            "properties": "[parameters('applicationGateways')[copyIndex()].properties]"
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ]
+}

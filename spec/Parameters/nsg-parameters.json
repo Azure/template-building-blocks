@@ -1,0 +1,291 @@
+{
+    "$schema": "file:///Source/mspnp/template-building-blocks/spikes/nodejs-spike/schemas/settings.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "NetworkSecurityGroup",
+                    "settings": [
+                        {
+                            "name": "test-nsg",
+                            "tags": {
+                                "tag9": "value9",
+                                "tag10": "value10"
+                            },
+                            "securityRules": [
+                                {
+                                    "name": "ActiveDirectory",
+                                    "sourceAddressPrefix": "127.0.0.1"
+                                },
+                                {
+                                    "name": "FTP"
+                                },
+                                {
+                                    "name": "SSH"
+                                },
+                                {
+                                    "name": "SMTP"
+                                },
+                                {
+                                    "name": "DNS-TCP"
+                                },
+                                {
+                                    "name": "DNS-UDP"
+                                },
+                                {
+                                    "name": "HTTP"
+                                },
+                                {
+                                    "name": "POP3"
+                                },
+                                {
+                                    "name": "IMAP"
+                                },
+                                {
+                                    "name": "LDAP"
+                                },
+                                {
+                                    "name": "HTTPS"
+                                },
+                                {
+                                    "name": "SMTPS"
+                                },
+                                {
+                                    "name": "IMAPS"
+                                },
+                                {
+                                    "name": "POP3S"
+                                },
+                                {
+                                    "name": "MSSQL"
+                                },
+                                {
+                                    "name": "MySQL"
+                                },
+                                {
+                                    "name": "RDP"
+                                },
+                                {
+                                    "name": "PostgreSQL"
+                                },
+                                {
+                                    "name": "RabbitMQ"
+                                },
+                                {
+                                    "name": "CouchDB"
+                                },
+                                {
+                                    "name": "WinRM"
+                                },
+                                {
+                                    "name": "Redis"
+                                },
+                                {
+                                    "name": "CouchDB-HTTPS"
+                                },
+                                {
+                                    "name": "Cassandra-JMX"
+                                },
+                                {
+                                    "name": "Neo4J"
+                                },
+                                {
+                                    "name": "Riak"
+                                },
+                                {
+                                    "name": "Riak-JMX"
+                                },
+                                {
+                                    "name": "Cassandra"
+                                },
+                                {
+                                    "name": "Cassandra-Thrift"
+                                },
+                                {
+                                    "name": "ElasticSearch"
+                                },
+                                {
+                                    "name": "Memcached"
+                                },
+                                {
+                                    "name": "Kestrel"
+                                },
+                                {
+                                    "name": "MongoDB"
+                                },
+                                {
+                                    "name": "DynamicPorts"
+                                },
+                                {
+                                    "name": "rule1",
+                                    "direction": "Inbound",
+                                    "priority": 100,
+                                    "sourceAddressPrefix": "192.168.1.1",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule2",
+                                    "direction": "Inbound",
+                                    "priority": 101,
+                                    "sourceAddressPrefix": "192.168.1.1/24",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule3",
+                                    "direction": "Inbound",
+                                    "priority": 102,
+                                    "sourceAddressPrefix": "VirtualNetwork",
+                                    "destinationAddressPrefix": "AzureLoadBalancer",
+                                    "sourcePortRange": "1-65535",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule4",
+                                    "direction": "Inbound",
+                                    "priority": 103,
+                                    "sourceAddressPrefix": "Internet",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": 1234,
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "test2-nsg",
+                            "tags": {
+                                "tag9": "value9",
+                                "tag10": "value10"
+                            },
+                            "securityRules": [
+                                {
+                                    "name": "rule1",
+                                    "direction": "Inbound",
+                                    "priority": 100,
+                                    "sourceAddressPrefix": "192.168.1.1",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule2",
+                                    "direction": "Inbound",
+                                    "priority": 101,
+                                    "sourceAddressPrefix": "192.168.1.1/24",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule3",
+                                    "direction": "Inbound",
+                                    "priority": 102,
+                                    "sourceAddressPrefix": "VirtualNetwork",
+                                    "destinationAddressPrefix": "AzureLoadBalancer",
+                                    "sourcePortRange": "1-65535",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule4",
+                                    "direction": "Inbound",
+                                    "priority": 103,
+                                    "sourceAddressPrefix": "Internet",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": 1234,
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                }
+                            ]
+                        },
+                        {
+                            "name": "test3-nsg",
+                            "tags": {
+                                "tag9": "value9",
+                                "tag10": "value10"
+                            },
+                            "securityRules": [
+                                {
+                                    "name": "rule1",
+                                    "direction": "Inbound",
+                                    "priority": 100,
+                                    "sourceAddressPrefix": "192.168.1.1",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule2",
+                                    "direction": "Inbound",
+                                    "priority": 101,
+                                    "sourceAddressPrefix": "192.168.1.1/24",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule3",
+                                    "direction": "Inbound",
+                                    "priority": 102,
+                                    "sourceAddressPrefix": "VirtualNetwork",
+                                    "destinationAddressPrefix": "AzureLoadBalancer",
+                                    "sourcePortRange": "1-65535",
+                                    "destinationPortRange": "*",
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                },
+                                {
+                                    "name": "rule4",
+                                    "direction": "Inbound",
+                                    "priority": 103,
+                                    "sourceAddressPrefix": "Internet",
+                                    "destinationAddressPrefix": "*",
+                                    "sourcePortRange": "*",
+                                    "destinationPortRange": 1234,
+                                    "access": "Allow",
+                                    "protocol": "*"
+                                }
+                            ],
+                            "virtualNetworks": [
+                                {
+                                    "name": "my-virtual-network",
+                                    "subnets": [
+                                        "web"
+                                    ]
+                                }
+                            ],
+                            "networkInterfaces": [
+                                {
+                                    "name": "test-vm1-nic1",
+                                    "resourceGroupName": "my-test-rg4"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

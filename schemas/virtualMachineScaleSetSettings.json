@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "JSON Schema for the Virtual Machine building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualMachineScaleSetSettings.json#",
+    "type": "object",
+    "definitions": {
+        "upgradePolicy": {
+            "type": "string",
+            "enum": [
+                "Automatic",
+                "Manual"
+            ],
+            "default": "Automatic"
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/subResource"
+                },
+                {
+                    "properties": {
+                        "upgradePolicy": {
+                            "$ref": "#/definitions/upgradePolicy"
+                        },
+                        "overprovision": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "singlePlacementGroup": {
+                            "type": "boolean",
+                            "default": true
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

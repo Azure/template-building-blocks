@@ -1,0 +1,297 @@
+{
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/buildingBlocks.json#",
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Building Block Parameters",
+    "description": "A building blocks settings file",
+    "type": "object",
+    "definitions": {
+        "deploymentInformation": {
+            "properties": {
+                "subscriptionId": {
+                    "$ref": "types.json#/definitions/guid"
+                },
+                "resourceGroupName": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                }
+            }
+        },
+        "buildingBlock": {
+            "type": "object",
+            "allOf":[
+                {
+                    "$ref": "#/definitions/deploymentInformation"
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Connection"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "connectionSettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "connectionSettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "NetworkSecurityGroup"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "networkSecurityGroupSettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "networkSecurityGroupSettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "RouteTable"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "routeTableSettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "routeTableSettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "VirtualMachine"
+                                    ]
+                                },
+                                "settings": {
+                                    "$ref": "virtualMachineSettings.json#/definitions/settings"
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "VirtualMachineExtensions"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "virtualMachineExtensionsSettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "virtualMachineExtensionsSettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "VirtualNetwork"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "virtualNetworkSettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "virtualNetworkSettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "VirtualNetworkGateway"
+                                    ]
+                                },
+                                "settings": {
+                                    "oneOf": [
+                                        {
+                                            "$ref": "virtualNetworkGatewaySettings.json#/definitions/settings"
+                                        },
+                                        {
+                                            "type": "array",
+                                            "minItems": 1,
+                                            "items": {
+                                                "$ref": "virtualNetworkGatewaySettings.json#/definitions/settings"
+                                            }
+                                        }
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "type",
+                                "settings"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "properties": {
+        "$schema": {
+            "type": "string"
+        },
+        "contentVersion": {
+            "type": "string",
+            "pattern": "(^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$)",
+            "description": "A 4 number format for the version number of this parameter file. For example, 1.0.0.0"
+        },
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "buildingBlocks": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "oneOf": [
+                                {
+                                    "$ref": "#/definitions/buildingBlock"
+                                },
+                                {
+                                    "type": "array",
+                                    "minItems": 1,
+                                    "items": {
+                                        "$ref": "#/definitions/buildingBlock"
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "required":[
+                        "value"
+                    ]
+                },
+                "subscriptionId": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "$ref": "types.json#/definitions/guid"
+                        }
+                    },
+                    "required":[
+                        "value"
+                    ]
+                },
+                "resourceGroupName": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required":[
+                        "value"
+                    ]
+                },
+                "location": {
+                    "type": "object",
+                    "properties": {
+                        "value": {
+                            "type": "string"
+                        }
+                    },
+                    "required":[
+                        "value"
+                    ]
+                }
+            },
+            "required":[
+                "buildingBlocks"
+            ]
+        }
+    },
+    "required":[
+        "$schema",
+        "contentVersion",
+        "parameters"
+    ]
+}

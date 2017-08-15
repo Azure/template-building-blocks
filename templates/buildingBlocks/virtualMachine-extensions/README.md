@@ -1,1 +1,0 @@
-For more information, see the [virtual machine extensions (v1) document](https://github.com/mspnp/template-building-blocks/wiki/VM-Extensions-(v1)) in the [template building blocks wiki](https://github.com/mspnp/template-building-blocks/wiki).

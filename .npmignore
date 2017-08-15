@@ -1,0 +1,7 @@
+.vscode/**
+coverage/**
+outputs/**
+schemas/**
+templates/**
+.eslintrc.json
+jsconfig.json
