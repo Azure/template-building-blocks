@@ -1,7 +1,7 @@
 describe('availabilitySetSettings:', () => {
-    let availabilitySetSettings = require('../core/availabilitySetSettings.js');
+    let availabilitySetSettings = require('../src/core/availabilitySetSettings.js');
     let _ = require('lodash');
-    let v = require('../core/validation.js');
+    let v = require('../src/core/validation.js');
 
     let availabilitySetParams = {
         name: 'test-as',

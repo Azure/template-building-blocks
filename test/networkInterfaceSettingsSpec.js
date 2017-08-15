@@ -1,7 +1,7 @@
 describe('networkInterfaceSettings:', () => {
-    let networkInterfaceSettings = require('../core/networkInterfaceSettings.js');
+    let networkInterfaceSettings = require('../src/core/networkInterfaceSettings.js');
     let _ = require('lodash');
-    let v = require('../core/validation.js');
+    let v = require('../src/core/validation.js');
 
     let buildingBlockSettings = {
         resourceGroupName: 'test-rg',

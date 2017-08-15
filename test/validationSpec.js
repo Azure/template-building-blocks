@@ -1,5 +1,5 @@
 describe('validation', () => {
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
     let _ = require('lodash');
 
     describe('utilities', () => {

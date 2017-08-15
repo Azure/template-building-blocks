@@ -1,8 +1,8 @@
 describe('extensionSettings:', () => {
     let rewire = require('rewire');
-    let extensionSettings = rewire('../core/virtualMachineExtensionsSettings.js');
+    let extensionSettings = rewire('../src/core/virtualMachineExtensionsSettings.js');
     let _ = require('lodash');
-    let v = require('../core/validation.js');
+    let v = require('../src/core/validation.js');
 
     let buildingBlockSettings = {
         subscriptionId: '00000000-0000-1000-8000-000000000000',

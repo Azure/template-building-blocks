@@ -1,8 +1,8 @@
 describe('routeTableSettings', () => {
     let rewire = require('rewire');
-    let routeTableSettings = rewire('../core/routeTableSettings.js');
+    let routeTableSettings = rewire('../src/core/routeTableSettings.js');
     let _ = require('lodash');
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
 
     describe('isValidNextHop', () => {
         let isValidNextHop = routeTableSettings.__get__('isValidNextHop');

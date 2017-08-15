@@ -1,8 +1,8 @@
 describe('virtualNetworkSettings', () => {
     let rewire = require('rewire');
-    let virtualNetworkSettings = rewire('../core/virtualNetworkSettings.js');
+    let virtualNetworkSettings = rewire('../src/core/virtualNetworkSettings.js');
     let _ = require('lodash');
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
 
     describe('validations', () => {
         let virtualNetworkSettingsValidations = virtualNetworkSettings.__get__('virtualNetworkSettingsValidations');

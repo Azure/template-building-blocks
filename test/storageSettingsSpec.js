@@ -1,8 +1,8 @@
 describe('storageSettings:', () => {
     let rewire = require('rewire');
-    let storageSettings = rewire('../core/storageSettings.js');
+    let storageSettings = rewire('../src/core/storageSettings.js');
     let _ = require('lodash');
-    let v = require('../core/validation.js');
+    let v = require('../src/core/validation.js');
 
     let storageParams = {
         nameSuffix: 'ST',

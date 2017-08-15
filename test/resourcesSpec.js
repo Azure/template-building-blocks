@@ -1,5 +1,5 @@
-let resources = require('../core/resources.js');
-let validationMessages = require('../core/validationMessages.js');
+let resources = require('../src/core/resources.js');
+let validationMessages = require('../src/core/validationMessages.js');
 
 describe('resources', () => {
     describe('resourceId function', () => {
