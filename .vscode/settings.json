@@ -1,0 +1,10 @@
+{
+    "json.schemas": [
+        {
+            "fileMatch": [
+                "/test/Parameters/*.json"
+            ],
+            "url": "./schemas/buildingBlocks.json"
+        }
+    ]
+}

@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "Settings for a local network gateway",
-    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/localNetworkGatewaySettings.json#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/localNetworkGatewaySettings.json#",
     "type": "object",
     "definitions": {
         "settings": {

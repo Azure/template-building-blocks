@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "Settings for the virtual network building block",
-    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualNetworkSettings.json#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/virtualNetworkSettings.json#",
     "definitions": {
         "settings": {
             "type": "object",
