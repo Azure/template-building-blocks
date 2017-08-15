@@ -1,6 +1,6 @@
 describe('virtualMachineScaleSetSettings:', () => {
-    let virtualMachineScaleSetSettings = require('../core/virtualMachineScaleSetSettings.js');
-    let v = require('../core/validation');
+    let virtualMachineScaleSetSettings = require('../src/core/virtualMachineScaleSetSettings.js');
+    let v = require('../src/core/validation');
     let _ = require('lodash');
     let testSettings = {
         name: 'scaleSet1',

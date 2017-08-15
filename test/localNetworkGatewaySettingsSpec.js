@@ -1,7 +1,7 @@
 describe('localNetworkGatewaySettings', () => {
-    let localNetworkGatewaySettings = require('../core/localNetworkGatewaySettings.js');
+    let localNetworkGatewaySettings = require('../src/core/localNetworkGatewaySettings.js');
     let _ = require('lodash');
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
 
     describe('merge', () => {
         let merge = localNetworkGatewaySettings.merge;

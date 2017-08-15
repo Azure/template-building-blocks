@@ -20,11 +20,27 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Run Unit Tests with Coverage",
+            "name": "Run Merge and Validate Unit Tests with Coverage",
             "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
             "stopOnEntry": false,
             "env": {
                 "RUN_TRANSFORM": "false"
+            },
+            "args": [
+                "run-tests-with-coverage"
+            ],
+            "protocol": "inspector",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceRoot}"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run All Unit Tests with Coverage",
+            "program": "${workspaceRoot}/node_modules/gulp/bin/gulp.js",
+            "stopOnEntry": false,
+            "env": {
+                "RUN_TRANSFORM": "true"
             },
             "args": [
                 "run-tests-with-coverage"

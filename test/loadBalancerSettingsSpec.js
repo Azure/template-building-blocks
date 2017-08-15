@@ -1,7 +1,7 @@
 describe('loadBalancerSettings', () => {
     let rewire = require('rewire');
-    let loadBalancerSettings = rewire('../core/loadBalancerSettings.js');
-    let validation = require('../core/validation.js');
+    let loadBalancerSettings = rewire('../src/core/loadBalancerSettings.js');
+    let validation = require('../src/core/validation.js');
     let _ = require('lodash');
 
     describe('isValidLoadBalancerType', () => {

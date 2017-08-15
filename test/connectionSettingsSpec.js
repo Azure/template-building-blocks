@@ -1,8 +1,8 @@
 describe('connectionSettings', () => {
     let _ = require('lodash');
     let rewire = require('rewire');
-    let connectionSettings = rewire('../core/connectionSettings.js');
-    let validation = require('../core/validation.js');
+    let connectionSettings = rewire('../src/core/connectionSettings.js');
+    let validation = require('../src/core/validation.js');
 
     describe('isValidConnectionType', () => {
         let isValidConnectionType = connectionSettings.__get__('isValidConnectionType');

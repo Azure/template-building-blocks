@@ -1,8 +1,8 @@
 describe('networkSecurityGroupSettings', () => {
     let rewire = require('rewire');
     let _ = require('lodash');
-    let nsgSettings = rewire('../core/networkSecurityGroupSettings.js');
-    let validation = require('../core/validation.js');
+    let nsgSettings = rewire('../src/core/networkSecurityGroupSettings.js');
+    let validation = require('../src/core/validation.js');
 
     describe('isValidProtocol', () => {
         let isValidProtocol = nsgSettings.__get__('isValidProtocol');

@@ -1,8 +1,8 @@
 describe('virtualNetworkGatewaySettings', () => {
     let rewire = require('rewire');
-    let virtualNetworkGatewaySettings = rewire('../core/virtualNetworkGatewaySettings.js');
+    let virtualNetworkGatewaySettings = rewire('../src/core/virtualNetworkGatewaySettings.js');
     let _ = require('lodash');
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
 
     describe('isValidGatewayType', () => {
         let isValidGatewayType = virtualNetworkGatewaySettings.__get__('isValidGatewayType');

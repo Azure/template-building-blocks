@@ -1,8 +1,8 @@
 describe('publicIpAddressSettings', () => {
     let rewire = require('rewire');
-    let publicIpAddressSettings = rewire('../core/publicIpAddressSettings.js');
+    let publicIpAddressSettings = rewire('../src/core/publicIpAddressSettings.js');
     let _ = require('lodash');
-    let validation = require('../core/validation.js');
+    let validation = require('../src/core/validation.js');
 
     describe('isValidIPAllocationMethod', () => {
         let isValidIPAllocationMethod = publicIpAddressSettings.__get__('isValidIPAllocationMethod');

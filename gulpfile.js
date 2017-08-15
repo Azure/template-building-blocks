@@ -14,7 +14,7 @@ gulp.doneCallback = () => {
 };
 
 gulp.task('pre-test', () =>{
-    return gulp.src(['core/**/*.js'])
+    return gulp.src(['src/core/**/*.js'])
         .pipe(istanbul())
         .pipe(istanbul.hookRequire());
 });
@@ -25,7 +25,7 @@ gulp.task('run-tests-with-coverage', ['pre-test'], () => {
         runTransform : (process.env.RUN_TRANSFORM) ? (process.env.RUN_TRANSFORM === 'true') : true
     };
 
-    return gulp.src('spec/**/*.js')
+    return gulp.src('test/**/*.js')
         .pipe(jasmine())
         .pipe(istanbul.writeReports());
         //.pipe(nyc({}));
@@ -36,13 +36,13 @@ gulp.task('run-tests', () => {
         runTransform : true
     };
 
-    return gulp.src('spec/**/*.js')
+    return gulp.src('test/**/*.js')
         .pipe(jasmine());
         //.pipe(nyc({}));
 });
 
 gulp.task('run-eslint', () => {
-    return gulp.src(['*.js', 'core/**/*.js', 'spec/*.js'])
+    return gulp.src(['src/**/*.js', 'test/**/*.js'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());

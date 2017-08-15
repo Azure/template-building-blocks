@@ -1,6 +1,6 @@
 describe('virtualMachineSettings:', () => {
     let rewire = require('rewire');
-    let virtualMachineSettings = rewire('../core/virtualMachineSettings.js');
+    let virtualMachineSettings = rewire('../src/core/virtualMachineSettings.js');
     let _ = require('lodash');
     let testSettings = {
         vmCount: 2,
