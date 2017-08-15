@@ -1,0 +1,25 @@
+{
+    "$schema": "file:///Source/mspnp/template-building-blocks/spikes/nodejs-spike/schemas/settings.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "VirtualNetworkGateway",
+                    "settings": [
+                        {
+                            "name": "my-vpn-gw",
+                            "gatewayType": "Vpn",
+                            "vpnType": "RouteBased",
+                            "sku": "VpnGw2",
+                            "isPublic": true,
+                            "virtualNetwork": {
+                                "name": "my-virtual-network"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

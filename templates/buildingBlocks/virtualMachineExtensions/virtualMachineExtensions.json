@@ -1,0 +1,46 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentContext": {
+            "type": "object"
+        },
+        "extensions": {
+            "type": "array",
+            "metadata": {
+                "description": "Settings for virtual machine extensions"
+            }
+        }
+    },
+    "variables": {
+        "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('extensions'))))]",
+        "location": "[resourceGroup().location]",
+        "extensionsTemplate": "[concat(uri(deployment().properties.templateLink.uri, '../../resources/Microsoft.Compute/virtualMachines/extensions/virtualMachineExtensions.json'), parameters('deploymentContext').sasToken)]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-', copyIndex(), '-', parameters('extensions')[copyIndex()].name, variables('templateUniqueString'))]",
+            "copy": {
+                "name": "ext-iterator",
+                "count": "[length(parameters('extensions'))]",
+                "mode": "Serial"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[variables('extensionsTemplate')]"
+                },
+                "parameters": {
+                    "extension": {
+                        "value": "[parameters('extensions')[copyIndex()]]"
+                    },
+                    "extensionProtectedSettings": "[parameters('extensions')[copyIndex()].extensionProtectedSettings]"
+                }
+            }
+        }
+    ],
+    "outputs": {    
+    }
+}

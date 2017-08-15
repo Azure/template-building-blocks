@@ -1,0 +1,108 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the route table building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualNetworkGatewaySettings.json#",
+    "type": "object",
+    "definitions": {
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "vpnType": {
+                            "$ref": "#/definitions/vpnType"
+                        },
+                        "enableBgp": {
+                            "type": "boolean",
+                            "default": false
+                        },
+                        "sku": {
+                            "$ref": "#/definitions/sku"
+                        },
+                        "bgpSettings": {
+                            "$ref": "types.json#/definitions/bgpSettings"
+                        },
+                        "virtualNetwork": {
+                            "$ref": "types.json#/definitions/resourceReference"
+                        }
+                    }
+                },
+                {
+                    "$ref": "#/definitions/gatewayType"
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "sku": {
+            "type": "string",
+            "enum": [
+                "Basic",
+                "VpnGw1",
+                "VpnGw2",
+                "VpnGw3"
+            ],
+            "default": "VpnGw1"
+        },
+        "vpnType": {
+            "type": "string",
+            "enum": [
+                "PolicyBased",
+                "RouteBased"
+            ],
+            "default": "RouteBased"
+        },
+        "gatewayType": {
+            "oneOf": [
+                {
+                    "$ref": "#/definitions/vpnGatewayType"
+                },
+                {
+                    "$ref": "#/definitions/expressRouteGatewayType"
+                }
+            ]
+        },
+        "vpnGatewayType": {
+            "properties": {
+                "gatewayType": {
+                    "type": "string",
+                    "enum": [
+                        "Vpn"
+                    ]
+                },
+                "isPublic": {
+                    "type": "boolean",
+                    "default": false
+                }
+            },
+            "required": [
+                "gatewayType",
+                "isPublic"
+            ]
+        },
+        "expressRouteGatewayType": {
+            "properties": {
+                "gatewayType": {
+                    "type": "string",
+                    "enum": [
+                        "ExpressRoute"
+                    ]
+                },
+                "isPublic": {
+                    "type": "boolean",
+                    "enum": [
+                        true
+                    ]
+                }
+            },
+            "required": [
+                "gatewayType",
+                "isPublic"
+            ]
+        }
+    }
+}

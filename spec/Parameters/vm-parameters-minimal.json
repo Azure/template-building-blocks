@@ -1,0 +1,64 @@
+{
+    "$schema": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/buildingBlocks.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "buildingBlocks": {
+            "value": [
+                {
+                    "type": "VirtualNetwork",
+                    "settings": [
+                        {
+                            "name": "ra-vnet",
+                            "addressPrefixes": [
+                                "10.0.0.0/16"
+                            ],
+                            "subnets": [
+                                {
+                                    "name": "web",
+                                    "addressPrefix": "10.0.1.0/24"
+                                },
+                                {
+                                    "name": "biz",
+                                    "addressPrefix": "10.0.2.0/24"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "VirtualMachine",
+                    "settings": {
+                        "vmCount": 3,
+                        "osType": "windows",
+                        "namePrefix": "test",
+                        "adminPassword": "testPassw0rd!23",
+                        "nics": [
+                            {
+                                "isPrimary": true,
+                                "subnetName": "web",
+                                "isPublic": false,
+                                "backendPoolsNames": [
+                                    "bp1"
+                                ]
+                            },
+                            {
+                                "subnetName": "biz",
+                                "isPublic": false
+                            }
+                        ],
+                        "virtualNetwork": {
+                            "name": "ra-vnet"
+                        },
+                        "loadBalancerSettings": {
+                            "backendPools": [
+                                {
+                                    "name": "bp1"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}

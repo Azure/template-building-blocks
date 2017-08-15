@@ -1,0 +1,39 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for a local network gateway",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/localNetworkGatewaySettings.json#",
+    "type": "object",
+    "definitions": {
+        "settings": {
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resourceReference"
+                },
+                {
+                    "properties": {
+                        "ipAddress": {
+                            "$ref": "types.json#/definitions/ipAddress"
+                        },
+                        "addressPrefixes": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "types.json#/definitions/cidr"
+                            },
+                            "minItems": 1
+                        },
+                        "tags": {
+                            "$ref": "types.json#/definitions/tags"
+                        },
+                        "bgpSettings": {
+                            "$ref": "types.json#/definitions/bgpSettings"
+                        }
+                    }
+                }
+            ],
+            "required": [
+                "ipAddress",
+                "addressPrefixes"
+            ]
+        }
+    }
+}

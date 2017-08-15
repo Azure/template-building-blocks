@@ -1,0 +1,55 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentContext": {
+            "type": "object"
+        },
+        "scaleSet": {
+            "type": "array"
+        },
+        "secret": {
+            "type": "securestring"
+        }
+    },
+    "variables": {
+        "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('scaleSet'))))]",
+        "updatedSource": "[json(replace(concat(string(parameters('scaleSet'))), '$SECRET$', parameters('secret')))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-vmss-', copyIndex(), '-', variables('templateUniqueString'))]",
+            "resourceGroup": "[variables('updatedSource')[copyIndex()].resourceGroupName]",
+            "copy": {
+                "name": "virtualMachineScaleSet",
+                "count": "[length(variables('updatedSource'))]",
+                "mode": "Parallel"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Compute/virtualMachineScaleSets",
+                            "apiVersion": "2017-03-30",
+                            "location": "[variables('updatedSource')[copyIndex()].location]",
+                            "name": "[variables('updatedSource')[copyIndex()].name]",
+                            "sku": "[variables('updatedSource')[copyIndex()].sku]",
+                            "properties": "[variables('updatedSource')[copyIndex()].properties]",
+                            "identity": {
+                                "type": "SystemAssigned"
+                            }
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ]
+}

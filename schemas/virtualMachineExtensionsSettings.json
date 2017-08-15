@@ -1,0 +1,78 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualMachineExtensionsSettings.json#",
+    "type": "object",
+    "definitions": {
+        "settings": {
+            "type": "object",
+            "properties": {
+                "extensions": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "object",
+                        "allOf": [
+                            {
+                                "$ref": "types.json#/definitions/subResource"
+                            },
+                            {
+                                "properties": {
+                                    "autoUpgradeMinorVersion": {
+                                        "type": "boolean",
+                                        "default": false
+                                    }
+                                }
+                            },
+                            {
+                                "oneOf": [
+                                    {
+                                        "$ref": "extensions/windows/customScriptExtension1_4.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/windows/customScriptExtension1_7.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/windows/dsc.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/windows/microsoftMonitoringAgent.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/windows/jsonADDomainExtension.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/linux/customScript.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/linux/omsAgentForLinux.json#"
+                                    },
+                                    {
+                                        "$ref": "extensions/linux/osPatchingForLinux.json#"
+                                    }
+                                ]
+                            }
+                        ],
+                        "required": [
+                            "publisher",
+                            "type",
+                            "typeHandlerVersion",
+                            "settings",
+                            "protectedSettings"
+                        ]
+                    }
+                },
+                "vms": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": [
+                "extensions",
+                "vms"
+            ]
+        }
+    }
+}

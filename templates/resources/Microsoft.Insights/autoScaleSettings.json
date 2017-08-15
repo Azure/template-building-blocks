@@ -1,0 +1,47 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "deploymentContext": {
+            "type": "object"
+        },
+        "autoScaleSettings": {
+            "type": "array"
+        }
+    },
+    "variables": {
+        "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('autoScaleSettings'))))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2017-05-10",
+            "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-auto-', copyIndex(), '-', variables('templateUniqueString'))]",
+            "resourceGroup": "[parameters('autoScaleSettings')[copyIndex()].resourceGroupName]",
+            "copy": {
+                "name": "autoScaleSettings",
+                "count": "[length(parameters('autoScaleSettings'))]",
+                "mode": "Parallel"
+            },
+            "properties": {
+                "mode": "Incremental",
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.Insights/autoScaleSettings",
+                            "apiVersion": "2015-04-01",
+                            "location": "[parameters('autoScaleSettings')[copyIndex()].location]",
+                            "name": "[parameters('autoScaleSettings')[copyIndex()].name]",
+                            "properties": "[parameters('autoScaleSettings')[copyIndex()].properties]"
+                        }
+                    ],
+                    "outputs": {}
+                }
+            }
+        }
+    ]
+}

@@ -1,0 +1,106 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the virtual network building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/storageSettings.json#",
+    "definitions": {
+        "keyVaultProperties": {
+            "type": "object",
+            "properties": {
+                "keyName": {
+                    "type": "string"
+                },
+                "keyVersion": {
+                    "type": "string"
+                },
+                "keyVaultUri": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "keyName",
+                "keyVersion",
+                "keyVaultUri"
+            ]
+        },
+        "baseStorageSettings": {
+            "type": "object",
+            "properties": {
+                "nameSuffix": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "count": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "default": 1
+                },
+                "skuType": {
+                    "type": "string"
+                },
+                "supportsHttpsTrafficOnly": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "encryptBlobStorage": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "encryptFileStorage": {
+                    "type": "boolean",
+                    "default": false
+                },
+                "keyVaultProperties": {
+                    "$ref": "#/definitions/keyVaultProperties"
+                },
+                "accounts": {
+                    "type": "array",
+                    "items":{
+                        "type": "string"
+                    },
+                    "minItems": 0,
+                    "default": []
+                }
+            }
+        },
+        "storageSettings": {
+            "type": "object",
+            "allOf":[
+                {
+                    "$ref": "#/definitions/baseStorageSettings"
+                },
+                {
+                    "properties": {
+                        "managed": {
+                            "type": "boolean",
+                            "default": true
+                        },
+                        "nameSuffix": {
+                            "default": "st"
+                        },
+                        "skuType": {
+                            "default": "Premium_LRS"
+                        }
+                    }
+                }
+            ]
+        },
+        "diagnosticStorageSettings": {
+            "type": "object",
+            "allOf":[
+                {
+                    "$ref": "#/definitions/baseStorageSettings"
+                },
+                {
+                    "properties": {
+                        "nameSuffix": {
+                            "default": "diag"
+                        },
+                        "skuType": {
+                            "default": "Standard_LRS"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
