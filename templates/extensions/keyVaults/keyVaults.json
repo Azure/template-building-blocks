@@ -1,0 +1,49 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object"
+    },
+    "keyVaults": {
+      "type": "array"
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('keyVaults'))))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-kv-', copyIndex(), '-', variables('templateUniqueString'))]",
+      "resourceGroup": "[parameters('keyVaults')[copyIndex()].resourceGroupName]",
+      "copy": {
+        "name": "keyVaults",
+        "count": "[length(parameters('keyVaults'))]",
+        "mode": "Parallel"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2016-10-01",
+              "location": "[parameters('keyVaults')[copyIndex()].location]",
+              "name": "[parameters('keyVaults')[copyIndex()].name]",
+              "properties": "[parameters('keyVaults')[copyIndex()].properties]",
+              "tags": "[parameters('keyVaults')[copyIndex()].tags]"
+            }
+          ],
+          "outputs": {}
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}

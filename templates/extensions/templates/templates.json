@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object"
+    },
+    "templates": {
+      "type": "array"
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('templates'))))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[concat('bb-', copyIndex(), '-tmp-', variables('templateUniqueString'))]",
+      "resourceGroup": "[parameters('templates')[copyIndex()].resourceGroupName]",
+      "copy": {
+        "name": "templates",
+        "count": "[length(parameters('templates'))]",
+        "mode": "Serial"
+      },
+      "properties": "[parameters('templates')[copyIndex()].properties]"
+    }
+  ],
+  "outputs": {}
+}

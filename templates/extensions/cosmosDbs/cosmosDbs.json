@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "deploymentContext": {
+      "type": "object"
+    },
+    "cosmosDbs": {
+      "type": "array"
+    }
+  },
+  "variables": {
+    "templateUniqueString": "[uniqueString(concat(string(parameters('deploymentContext')), string(parameters('cosmosDbs'))))]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2017-05-10",
+      "name": "[concat(parameters('deploymentContext').parentTemplateUniqueString, '-cdb-', copyIndex(), '-', variables('templateUniqueString'))]",
+      "resourceGroup": "[parameters('cosmosDbs')[copyIndex()].resourceGroupName]",
+      "copy": {
+        "name": "cosmosDbs",
+        "count": "[length(parameters('cosmosDbs'))]",
+        "mode": "Parallel"
+      },
+      "properties": {
+        "mode": "Incremental",
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "parameters": {},
+          "variables": {},
+          "resources": [
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts",
+              "apiVersion": "2016-03-31",
+              "location": "[parameters('cosmosDbs')[copyIndex()].location]",
+              "name": "[parameters('cosmosDbs')[copyIndex()].name]",
+              "kind": "[parameters('cosmosDbs')[copyIndex()].kind]",
+              "properties": "[parameters('cosmosDbs')[copyIndex()].properties]",
+              "tags": "[parameters('cosmosDbs')[copyIndex()].tags]"
+            }
+          ],
+          "outputs": {}
+        }
+      }
+    }
+  ],
+  "outputs": {}
+}
