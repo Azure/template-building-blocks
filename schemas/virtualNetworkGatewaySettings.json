@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "Settings for the route table building block",
-    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualNetworkGatewaySettings.json#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/virtualNetworkGatewaySettings.json#",
     "type": "object",
     "definitions": {
         "settings": {

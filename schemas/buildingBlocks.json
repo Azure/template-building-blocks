@@ -1,5 +1,5 @@
 {
-    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/buildingBlocks.json#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/buildingBlocks.json#",
     "$schema": "http://json-schema.org/draft-04/schema#",
     "title": "Building Block Parameters",
     "description": "A building blocks settings file",

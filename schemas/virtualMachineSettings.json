@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-04/schema#",
     "description": "JSON Schema for the Virtual Machine building block",
-    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/spikes/spikes/nodejs-spike/schemas/virtualMachineSettings.json#",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/virtualMachineSettings.json#",
     "type": "object",
     "definitions": {
         "caching": {
