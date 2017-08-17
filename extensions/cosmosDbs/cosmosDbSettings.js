@@ -6,8 +6,6 @@ module.exports = (application) => {
     let v = application.require('./core/validation');
     let r = application.require('./core/resources');
     let az = application.require('./azCLI');
-    let chalk = require('chalk');
-    console.log(chalk.blue('Hello, World!'));
 
     const COSMOSDB_SETTINGS_DEFAULTS = {
         kind: 'DocumentDB',
