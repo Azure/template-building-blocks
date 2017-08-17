@@ -59,7 +59,8 @@ let processParameters = ({buildingBlock, parameters, buildingBlockSettings, defa
 
     // Call preProcess if it exists.
     if (processor.preProcess) {
-        parameters = processor.preProcess(parameters, buildingBlockSettings);
+        let copy = _.cloneDeep(parameters);
+        parameters = processor.preProcess(copy, buildingBlockSettings);
     }
 
     let results = processor.process({
