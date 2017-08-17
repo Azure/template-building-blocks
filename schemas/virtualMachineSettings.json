@@ -452,6 +452,9 @@
                         },
                         "scaleSetSettings": {
                             "$ref": "virtualMachineScaleSetSettings.json#/definitions/settings"
+                        },
+                        "applicationGatewaySettings": {
+                            "$ref": "applicationGatewaySettings.json#/definitions/settings"
                         }
                     },
                     "required": [
