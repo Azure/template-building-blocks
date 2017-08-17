@@ -4,6 +4,7 @@ let _ = require('lodash');
 let v = require('./validation');
 let resources = require('./resources');
 let publicIpAddressSettings = require('./publicIpAddressSettings');
+const os = require('os');
 
 const APPLICATIONGATEWAY_SETTINGS_DEFAULTS = {
     sku: {
@@ -36,7 +37,11 @@ const APPLICATIONGATEWAY_SETTINGS_DEFAULTS = {
         }
     ],
     urlPathMaps: [],
-    requestRoutingRules: [],
+    requestRoutingRules: [
+        {
+            ruleType: 'Basic' // this is set by default, should be here or not ?
+        }
+    ],
     probes: [
         {
             interval: 30,
@@ -179,6 +184,7 @@ let isValidCookieBasedAffinityValue = (cookieBasedAffinityValue) => {
 let isValidPrivateIPAllocationMethod = (privateIPAllocationMethod) => {
     return v.utilities.isStringInArray(privateIPAllocationMethod, validPrivateIPAllocationMethods);
 };
+
 let frontendIPConfigurationValidations = {
     name: v.validationUtilities.isNotNullOrWhitespace,
     applicationGatewayType: (value) => {
@@ -209,24 +215,78 @@ let frontendIPConfigurationValidations = {
         return _.isNil(value) ? {
             result: true
         } : {
-                validations: publicIpAddressSettings.validations
-            };
+            validations: publicIpAddressSettings.validations
+        };
     }
+};
+
+let skuValidations = {
+    name: (value) => {
+        return {
+            result: isValidSkuName(value),
+            message: `Valid values are ${validSkuNames.join(' ,')}`
+        };
+    },
+    tier: (value) => {
+        return {
+            result: isValidSkuTier(value),
+            message: `Valid values are ${validSkuTiers.join(' ,')}`
+        };
+    }
+};
+
+let frontendPortsValidations = {
+    port: v.validationUtilities.isValidPortRange
+};
+
+let protocolValidation = (protocol) => {
+    if (_.isNil(protocol)) {
+        return { result: true };
+    }
+
+    return {
+        result: isValidProtocol(protocol),
+        message: `Valid values are ${validProtocols.join(' ,')}`
+    };
+};
+
+let cookieBasedAffinityValidation = (value) => {
+    return {
+        result: isValidCookieBasedAffinityValue(value),
+        message: `Valid values are ${validCookieBasedAffinityValues.join(' ,')}`
+    };
+};
+
+let requestRoutingRuleTypeValidation = (value) => {
+    return {
+        result: isValidRequestRoutingRuleType(value),
+        message: `Valid values are ${validApplicationGatewayRequestRoutingRuleTypes.join(' ,')}`
+    };
+};
+
+let backendHttpSettingsCollectionValidations = {
+    port: v.validationUtilities.isValidPortRange,
+    protocol: protocolValidation,
+    cookieBasedAffinity: cookieBasedAffinityValidation,
+    pickHostNameFromBackendAddress: v.validationUtilities.isBoolean,
+    probeEnabled: v.validationUtilities.isBoolean,
+    // probeName: v.validationUtilities.isNotNullOrWhitespace NOT a required field!
 };
 
 let applicationGatewayValidations = {
     //TODO: ApplicationGatewaySubnetCannotBeUsedByOtherResources\\\
-    //TODO: ApplicationGatewayBackendAddressPoolAlreadyHasBackendAddresses: nic cannot reference Backend Address Pool because the pool contains 
+    //TODO: ApplicationGatewayBackendAddressPoolAlreadyHasBackendAddresses: nic cannot reference Backend Address Pool because the pool contains
     // BackendAddresses. A pool can contain only one of these three: IPs in BackendAddresses array, IPConfigurations of standalone Network Interfaces,
     // IPConfigurations of VM Scale Set Network Interfaces. Also, two VM Scale Sets cannot use the same Backend Address Pool.\\\
     sku: () => {
-        return { result: true };
-        // TODO: values are valid values
-        // TODO: name maps to tier - Standard_Small -> Standard
+        return { validations: skuValidations };
     },
     gatewayIPConfigurations: () => {
-        return { result: true };
-        // TODO: subnet is provided
+        return {
+            validations: {
+                subnetName: v.validationUtilities.isNotNullOrWhitespace
+            }
+        };
     },
     sslCertificates: () => {
         return { result: true };
@@ -236,55 +296,194 @@ let applicationGatewayValidations = {
         return { result: true };
         // TODO: if provided, than in correct schema
     },
-    frontendIPConfigurations: () => {
-        // TODO: there can be only 2. 1 private and 1 pubilc
+    frontendIPConfigurations: (value) => {
+        let publicConfigs = _.filter(value, c => { return c.applicationGatewayType === 'Public'; });
+        let internalConfigs = _.filter(value, c => { return c.applicationGatewayType === 'Internal'; });
+        if (value.length > 2 || publicConfigs.length > 1 || internalConfigs.length > 1) {
+            return {
+                result: false,
+                message: 'There can be only 2 frontendIPConfigurations, 1 private and 1 public'
+            };
+        }
         return {
             validations: frontendIPConfigurationValidations
         };
     },
     frontendPorts: () => {
-        return { result: true };
-        // TODO: port is in range
+        return {
+            validations: frontendPortsValidations
+        };
     },
     backendAddressPools: () => {
         return { result: true };
         // TODO: Mixing IP/FQDN and virtual machine types is not allowed.
     },
     backendHttpSettingsCollection: () => {
-        return { result: true };
-        // TODO: 'port' in range
-        // TODO: valid 'protocol'
-        // TODO: valid cookieBasedAffinity
-        // TODO: pickHostNameFromBackendAddress is bool
-        // TODO: probeEnabled is bool
-        // TODO: requestTimeout
-        // TODO: valid probeName is specified
+        return { validations: backendHttpSettingsCollectionValidations };
     },
-    httpListeners: () => {
-        return { result: true };
-        // TODO: valid frontendIPConfigurationName is specified
-        // TODO: valid frontendPortName is specified
-        // TODO: protocol valid
-        // TODO: requireServerNameIndication is bool
+    httpListeners: (value, parent) => {
+        if (_.isNil(value) || value.length === 0) {
+            return { result: true };
+        }
+
+        let baseSettings = parent;
+        let httpListenersValidations = {
+            frontendIPConfigurationName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid frontendIPConfigurationName ${value} in httpListeners`
+                };
+                let matched = _.filter(baseSettings.frontendIPConfigurations, (o) => { return (o.name === value); });
+                return matched.length > 0 ? { result: true } : result;
+            },
+            frontendPortName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid frontendPortName ${value} in httpListeners`
+                };
+                let matched = _.filter(baseSettings.frontendPorts, (o) => { return (o.name === value); });
+                return (baseSettings.frontendPorts.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            protocol: protocolValidation,
+            requireServerNameIndication: v.validationUtilities.isBoolean
+        };
+        return {
+            validations: httpListenersValidations
+        };
     },
-    urlPathMaps: () => {
-        return { result: true };
-        // TODO: valid defaultBackendAddressPoolName is specified
-        // TODO: valid defaultBackendHttpSettingsName is specified
-        // TODO: valid backendAddressPoolName is specified
-        // TODO: valid backendHttpSettingsName is specified
+    urlPathMaps: (value, parent) => {
+        if (_.isNil(value) || value.length === 0) {
+            return { result: true };
+        }
+
+        let baseSettings = parent;
+        let urlPathMapsValidations = {
+            defaultBackendAddressPoolName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid defaultBackendAddressPoolName ${value} in urlPathMaps`
+                };
+                let matched = _.filter(baseSettings.backendAddressPools, (o) => { return (o.name === value); });
+                return (baseSettings.backendAddressPools.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            defaultBackendHttpSettingName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid defaultBackendHttpSettingName ${value} in urlPathMaps`
+                };
+                let matched = _.filter(baseSettings.backendHttpSettingsCollection, (o) => { return (o.name === value); });
+                return (baseSettings.backendHttpSettingsCollection.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            pathRules: (value) => {
+                if (_.isNil(value) || value.length === 0) {
+                    return {
+                        result: false,
+                        message: 'pathRules must be specified'
+                    };
+                }
+                let errorMessage = '';
+                value.forEach((pathRule, index) => {
+                    if (_.isNil(pathRule.paths) || pathRule.paths.length === 0) {
+                        errorMessage += `At least one path must be specified pathRules[${index}].paths.${os.EOL}`;
+                    }
+                });
+                if (errorMessage) {
+                    return {
+                        result: false,
+                        message: errorMessage
+                    };
+                }
+                let pathRulesValidations = {
+                    backendAddressPoolName: (value) => {
+                        let result = {
+                            result: false,
+                            message: `Invalid backendAddressPoolName ${value} in urlPathMaps`
+                        };
+                        let matched = _.filter(baseSettings.backendAddressPools, (o) => { return (o.name === value); });
+                        return (baseSettings.backendAddressPools.length > 0 && matched.length === 0) ? result : { result: true };
+                    },
+                    backendHttpSettingName: (value) => {
+                        let result = {
+                            result: false,
+                            message: `Invalid backendHttpSettingName ${value} in urlPathMaps`
+                        };
+                        let matched = _.filter(baseSettings.backendHttpSettingsCollection, (o) => { return (o.name === value); });
+                        return (baseSettings.backendHttpSettingsCollection.length > 0 && matched.length === 0) ? result : { result: true };
+                    }
+                };
+                return { validations: pathRulesValidations };
+            }
+        };
+        return {
+            validations: urlPathMapsValidations
+        };
     },
-    requestRoutingRules: () => {
-        return { result: true };
-        // TODO: valid httpListenerName is specified
-        // TODO: valid backendAddressPoolName is specified
-        // TODO: valid backendHttpSettingsName is specified
-        // TODO: valid urlPathMapName is specified
-        // TODO: 'ruleType': 'PathBasedRouting' has urlPathMap
+    requestRoutingRules: (value, parent) => {
+        if (_.isNil(value) || value.length === 0) {
+            return { result: true };
+        }
+
+        let baseSettings = parent;
+        let requestRoutingRulesValidations = {
+            name: v.validationUtilities.isNotNullOrWhitespace,
+            backendAddressPoolName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid backendAddressPoolName ${value} in requestRoutingRules`
+                };
+                let matched = _.filter(baseSettings.backendAddressPools, (o) => { return (o.name === value); });
+                return (baseSettings.backendAddressPools.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            backendHttpSettingName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid backendHttpSettingName ${value} in requestRoutingRules`
+                };
+                let matched = _.filter(baseSettings.backendHttpSettingsCollection, (o) => { return (o.name === value); });
+                return (baseSettings.backendHttpSettingsCollection.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            httpListenerName: (value) => {
+                let result = {
+                    result: false,
+                    message: `Invalid httpListenerName ${value} in requestRoutingRules`
+                };
+                let matched = _.filter(baseSettings.httpListeners, (o) => { return (o.name === value); });
+                return (baseSettings.httpListeners.length > 0 && matched.length === 0) ? result : { result: true };
+            },
+            ruleType: (value) => {
+                if (value === 'PathBasedRouting' && (_.isNil(baseSettings.urlPathMaps) || baseSettings.urlPathMaps.length === 0)) {
+                    return {
+                        result: false,
+                        message: 'At least one urlPathMaps must be specified when ruleType is PathBasedRouting'
+                    };
+                }
+
+                return { validations: requestRoutingRuleTypeValidation };
+            },
+            urlPathMapName: (value, parent) => {
+                if (_.isNil(value) && parent.ruleType !== 'PathBasedRouting') {
+                    return { result: true };
+                }
+                let result = {
+                    result: false,
+                    message: `Invalid urlPathMapName ${value} in requestRoutingRules`
+                };
+                let matched = _.filter(baseSettings.urlPathMaps, (o) => { return (o.name === value); });
+                return matched.length === 0 ? result : { result: true };
+            }
+        };
+        return {
+            validations: requestRoutingRulesValidations
+        };
     },
-    probes: () => {
-        return { result: true };
-        // TODO: valid protocol
+    probes: (value) => {
+        if (_.isNil(value)) {
+            return { result: true };
+        }
+
+        let probesValidation = {
+            protocol: protocolValidation,
+            pickHostNameFromBackendHttpSettings: v.validationUtilities.isBoolean
         // TODO: valid host
         // TODO: valid path
         // TODO: valid interval
@@ -293,6 +492,8 @@ let applicationGatewayValidations = {
         // TODO: valid pickHostNameFromBackendHttpSettings
         // TODO: valid minServers
         // TODO: match
+        };
+        return { validations: probesValidation };
     },
     redirectConfigurations: () => {
         return { result: true };
