@@ -1,0 +1,912 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "description": "Settings for the virtual network building block",
+    "id": "https://raw.githubusercontent.com/mspnp/template-building-blocks/master/schemas/applicationGatewaySettings.json#",
+    "definitions": {
+        "sku": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "capacity": {
+                            "type": "integer",
+                            "minimum": 1,
+                            "maximum": 10,
+                            "default": 2
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Small",
+                                        "Medium",
+                                        "Large"
+                                    ]
+                                },
+                                "tier": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Standard"
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "name": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Medium",
+                                        "Large"
+                                    ]
+                                },
+                                "tier": {
+                                    "type": "string",
+                                    "enum": [
+                                        "WAF"
+                                    ]
+                                }
+                            }
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "capacity",
+                "name",
+                "tier"
+            ]
+        },
+        "authenticationCertificate": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "data": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "name",
+                "data"
+            ]
+        },
+        "sslCertificate": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "data": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "password": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "name",
+                "data",
+                "password"
+            ]
+        },
+        "gatewayIpConfiguration": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1
+                },
+                "subnetName": {
+                    "type": "string",
+                    "minLength": 1
+                }
+            },
+            "required": [
+                "name",
+                "subnetName"
+            ]
+        },
+        "sslPolicy": {
+            "type": "object",
+            "oneOf": [
+                {
+                    "properties": {
+                        "policyType": {
+                            "type": "string",
+                            "enum": [
+                                "Predefined"
+                            ]
+                        },
+                        "policyName": {
+                            "type": "string",
+                            "enum": [
+                                "AppGwSslPolicy20150501",
+                                "AppGwSslPolicy20170401",
+                                "AppGwSslPolicy20170401S"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "policyType",
+                        "policyName"
+                    ]
+                },
+                {
+                    "properties": {
+                        "policyType": {
+                            "type": "string",
+                            "enum": [
+                                "Custom"
+                            ]
+                        },
+                        "disabledSslProtocols": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "TLSv1_0",
+                                    "TLSv1_1",
+                                    "TLSv1_2"
+                                ]
+                            }
+                        },
+                        "cipherSuites": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA",
+                                    "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_DHE_RSA_WITH_AES_256_GCM_SHA384",
+                                    "TLS_DHE_RSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_DHE_RSA_WITH_AES_256_CBC_SHA",
+                                    "TLS_DHE_RSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_RSA_WITH_AES_256_GCM_SHA384",
+                                    "TLS_RSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_RSA_WITH_AES_256_CBC_SHA256",
+                                    "TLS_RSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_RSA_WITH_AES_256_CBC_SHA",
+                                    "TLS_RSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA",
+                                    "TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA",
+                                    "TLS_DHE_DSS_WITH_AES_256_CBC_SHA256",
+                                    "TLS_DHE_DSS_WITH_AES_128_CBC_SHA256",
+                                    "TLS_DHE_DSS_WITH_AES_256_CBC_SHA",
+                                    "TLS_DHE_DSS_WITH_AES_128_CBC_SHA",
+                                    "TLS_RSA_WITH_3DES_EDE_CBC_SHA"
+                                ]
+                            }
+                        },
+                        "minProtocolVersion": {
+                            "type": "string",
+                            "enum": [
+                                "TLSv1_0",
+                                "TLSv1_1",
+                                "TLSv1_2"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "policyType",
+                        "disabledSslProtocols",
+                        "cipherSuites",
+                        "minProtocolVersion"
+                    ]
+                }
+            ]
+        },
+        "frontendPort": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 65535
+                }
+            },
+            "required": [
+                "name",
+                "port"
+            ]
+        },
+        "probe": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "protocol": {
+                    "type": "string",
+                    "enum": [
+                        "Http",
+                        "Https"
+                    ]
+                },
+                "host": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "interval": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 86400
+                },
+                "timeout": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 86400
+                },
+                "unhealthyThreshold": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 20
+                },
+                "pickHostNameFromBackendHttpSettings": {
+                    "type": "boolean"
+                },
+                "minServers": {
+                    "type": "integer"
+                },
+                "match": {
+                    "type": "object",
+                    "properties": {
+                        "body": {
+                            "type": "string"
+                        },
+                        "statusCodes": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "name",
+                "protocol",
+                "host",
+                "path"
+            ]
+        },
+        "backendHttpSetting": {
+            "type": "object",
+            "properties": {
+                "port": {
+                    "type": "integer"
+                },
+                "protocol": {
+                    "type": "string",
+                    "enum": [
+                        "Http",
+                        "Https"
+                    ]
+                },
+                "cookieBasedAffinity": {
+                    "type": "string",
+                    "enum": [
+                        "Disabled",
+                        "Enabled"
+                    ]
+                },
+                "connectionDraining": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "drainTimeoutInSec": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "hostName": {
+                    "type": "string"
+                },
+                "pickHostNameFromBackendAddress": {
+                    "type": "boolean"
+                },
+                "affinityCookieName": {
+                    "type": "string"
+                },
+                "probeEnabled": {
+                    "type": "boolean"
+                },
+                "requestTimeout": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 86400
+                },
+                "path": {
+                    "type": "string"
+                },
+                "probeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "frontendIPConfiguration": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "applicationGatewayType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Public"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "applicationGatewayType"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "applicationGatewayType": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Internal"
+                                    ]
+                                },
+                                "internalApplicationGatewaySettings": {
+                                    "type": "object",
+                                    "properties": {
+                                        "subnetName": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "subnetName"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "applicationGatewayType",
+                                "internalApplicationGatewaySettings"
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "required": [
+                "name"
+            ]
+        },
+        "backendAddressPool": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "backendAddresses": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "oneOf": [
+                            {
+                                "properties": {
+                                    "fqdn": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            {
+                                "properties": {
+                                    "ipAddress": {
+                                        "$ref": "types.json#/definitions/ipAddress"
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        "httpListener": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "frontendIPConfigurationName": {
+                            "type": "string"
+                        },
+                        "frontendPortName": {
+                            "type": "string"
+                        },
+                        "hostName": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Http"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "protocol"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "protocol": {
+                                    "type": "string",
+                                    "enum": [
+                                        "Https"
+                                    ]
+                                },
+                                "sslCertificateName": {
+                                    "type": "string"
+                                },
+                                "requireServerNameIndication": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "protocol",
+                                "sslCertificateName"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "urlPathMap": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "pathRules": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/pathRule"
+                            }
+                        }
+                    },
+                    "required": [
+                        "name"
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "defaultBackendAddressPoolName": {
+                                    "type": "string"
+                                },
+                                "defaultBackendHttpSettingsName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "defaultBackendAddressPoolName",
+                                "defaultBackendHttpSettingsName"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "defaultRedirectConfigurationName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "defaultRedirectConfigurationName"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "pathRule": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "paths": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "backendAddressPoolName": {
+                                    "type": "string"
+                                },
+                                "backendHttpSettingsName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "backendAddressPoolName",
+                                "backendHttpSettingsName"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "redirectConfigurationName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "redirectConfigurationName"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "basicRoutingRule": {
+            "allOf": [
+                {
+                    "properties": {
+                        "ruleType": {
+                            "type": "string",
+                            "enum": [
+                                "Basic"
+                            ]
+                        }
+                    },
+                    "required": [
+                        "ruleType"
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "backendAddressPoolName": {
+                                    "type": "string"
+                                },
+                                "backendHttpSettingsName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "backendAddressPoolName",
+                                "backendHttpSettingsName"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "redirectConfigurationName": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "redirectConfigurationName"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "pathBasedRoutingRule": {
+            "properties": {
+                "ruleType": {
+                    "type": "string",
+                    "enum": [
+                        "PathBasedRouting"
+                    ]
+                },
+                "urlPathMapName": {
+                    "type": "string"
+                },
+                "redirectConfigurationName": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "ruleType",
+                "urlPathMapName"
+            ]
+        },
+        "requestRoutingRule": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "name": {
+                            "type": "string"
+                        },
+                        "httpListenerName": {
+                            "type": "string"
+                        }
+                    }
+                },
+                {
+                    "oneOf": [
+                        {
+                            "$ref": "#/definitions/basicRoutingRule"
+                        },
+                        {
+                            "$ref": "#/definitions/pathBasedRoutingRule"
+                        }
+                    ]
+                }
+            ]
+        },
+        "redirectConfiguration": {
+            "type": "object",
+            "allOf": [
+                {
+                    "properties": {
+                        "redirectType": {
+                            "type": "string",
+                            "enum": [
+                                "Found",
+                                "Permanent",
+                                "SeeOther",
+                                "Temporary"
+                            ]
+                        },
+                        "includeQueryString": {
+                            "type": "boolean"
+                        },
+                        "requestRoutingRules": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "urlPathMaps": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "pathRules": {
+                            "type": "array",
+                            "default": [],
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "required": [
+                        "redirectType",
+                        "requestRoutingRules",
+                        "urlPathMaps",
+                        "pathRules"
+                    ]
+                },
+                {
+                    "oneOf": [
+                        {
+                            "properties": {
+                                "targetListenerName": {
+                                    "type": "string"
+                                },
+                                "includePath": {
+                                    "type": "boolean"
+                                }
+                            },
+                            "required": [
+                                "targetListenerName"
+                            ]
+                        },
+                        {
+                            "properties": {
+                                "targetUrl": {
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "targetUrl"
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        "firewallDisabledRuleGroup": {
+            "type": "object",
+            "properties": {
+                "ruleGroupName": {
+                    "type": "string"
+                },
+                "rules": {
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "required": [
+                "ruleGroupName"
+            ]
+        },
+        "webApplicationFirewallConfiguration": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "firewallMode": {
+                    "type": "string",
+                    "enum": [
+                        "Detection",
+                        "Prevention"
+                    ]
+                },
+                "ruleSetType": {
+                    "type": "string"
+                },
+                "ruleSetVersion": {
+                    "type": "string"
+                },
+                "disabledRuleGroups": {
+                    "type": "array",
+                    "default": [],
+                    "minItems": 0,
+                    "items": {
+                        "$ref": "#/definitions/firewallDisabledRuleGroup"
+                    }
+                }
+            },
+            "required": [
+                "enabled",
+                "firewallMode",
+                "ruleSetType",
+                "ruleSetVersion"
+            ]
+        },
+        "settings": {
+            "type": "object",
+            "allOf": [
+                {
+                    "$ref": "types.json#/definitions/resource"
+                },
+                {
+                    "properties": {
+                        "virtualNetwork": {
+                            "$ref": "types.json#/definitions/resourceReference"
+                        }
+                    }
+                },
+                {
+                    "properties": {
+                        "sku": {
+                            "$ref": "#/definitions/sku"
+                        },
+                        "sslPolicy": {
+                            "$ref": "#/definitions/sslPolicy"
+                        },
+                        "gatewayIPConfigurations": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/gatewayIpConfiguration"
+                            }
+                        },
+                        "authenticationCertificates": {
+                            "type": "array",
+                            "minItems": 0,
+                            "items": {
+                                "$ref": "#/definitions/authenticationCertificate"
+                            }
+                        },
+                        "sslCertificates": {
+                            "type": "array",
+                            "minItems": 0,
+                            "items": {
+                                "$ref": "#/definitions/sslCertificate"
+                            }
+                        },
+                        "frontendIPConfigurations": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/frontendIPConfiguration"
+                            }
+                        },
+                        "frontendPorts": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/frontendPort"
+                            }
+                        },
+                        "probes": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/probe"
+                            }
+                        },
+                        "backendAddressPools": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/backendAddressPool"
+                            }
+                        },
+                        "backendHttpSettingsCollection": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/backendHttpSetting"
+                            }
+                        },
+                        "httpListeners": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/httpListener"
+                            }
+                        },
+                        "urlPathMaps": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/urlPathMap"
+                            }
+                        },
+                        "requestRoutingRules": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/requestRoutingRule"
+                            }
+                        },
+                        "redirectConfigurations": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/redirectConfiguration"
+                            }
+                        },
+                        "webApplicationFirewallConfiguration": {
+                            "$ref": "#/definitions/webApplicationFirewallConfiguration"
+                        }
+                    }
+                }
+            ]
+        }
+    }
+}
