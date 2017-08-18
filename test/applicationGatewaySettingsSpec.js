@@ -48,32 +48,6 @@ describe('applicationGatewaySettings:', () => {
             });
             expect(result.length).toEqual(0);
         });
-        it('host validations', () => {
-            let isValidHost = applicationGatewaySettings.__get__('isValidHost');
-            let result = isValidHost('www.contoso.com');
-            expect(result.result).toEqual(true);
-
-            result = isValidHost('contoso.com');
-            expect(result.result).toEqual(true);
-
-            result = isValidHost('foo.com.ar');
-            expect(result.result).toEqual(true);
-
-            result = isValidHost('foo@bar.com');
-            expect(result.result).toEqual(false);
-
-            result = isValidHost('invalid!.com');
-            expect(result.result).toEqual(false);
-
-            result = isValidHost('noport.com:8080');
-            expect(result.result).toEqual(false);
-
-            result = isValidHost('http://noprotocol.com');
-            expect(result.result).toEqual(false);
-
-            result = isValidHost('nopath.com/path');
-            expect(result.result).toEqual(false);
-        });
     });
     describe('validations', () => {
         let skuValidations = applicationGatewaySettings.__get__('skuValidations');
@@ -904,22 +878,6 @@ describe('applicationGatewaySettings:', () => {
             expect(result.length).toEqual(1);
             expect(result[0].name).toEqual('.probes[0].protocol');
         });
-        it('probes host must conform to RFC 1123', () => {
-            settings.probes = [
-                {
-                    name: 'p1',
-                    protocol: 'Http',
-                    host: '$%@#',
-                    path: '/',
-                    interval: 30,
-                    timeout: 30,
-                    unhealthyThreshold: 3
-                }
-            ];
-            let result = mergeAndValidate(settings, buildingBlockSettings);
-            expect(result.length).toEqual(1);
-            expect(result[0].name).toEqual('.probes[0].host');
-        });
         it('probes path must start with /', () => {
             settings.probes = [
                 {
@@ -1084,23 +1042,6 @@ describe('applicationGatewaySettings:', () => {
             let result = mergeAndValidate(settings, buildingBlockSettings);
             expect(result.length).toEqual(0);
         });
-        it('webApplicationFirewallConfiguration disabledRuleGroups rules can be null', () => {
-            settings.webApplicationFirewallConfiguration = [
-                {
-                    enabled: true,
-                    firewallMode: 'Detection',
-                    ruleSetType: 'OWASP',
-                    disabledRuleGroups: [
-                        {
-                            ruleGroupName: 'rule1',
-                            rules: null
-                        }
-                    ]
-                }
-            ];
-            let result = mergeAndValidate(settings, buildingBlockSettings);
-            expect(result.length).toEqual(0);
-        });
         it('webApplicationFirewallConfiguration disabledRuleGroups rules can be empty', () => {
             settings.webApplicationFirewallConfiguration = [
                 {
@@ -1145,13 +1086,6 @@ describe('applicationGatewaySettings:', () => {
         });
         it('sslPolicy disabledSslProtocols can be undefined', () => {
             settings.sslPolicy = {};
-            let result = mergeAndValidate(settings, buildingBlockSettings);
-            expect(result.length).toEqual(0);
-        });
-        it('sslPolicy disabledSslProtocols can be null', () => {
-            settings.sslPolicy = {
-                disabledSslProtocols: null
-            };
             let result = mergeAndValidate(settings, buildingBlockSettings);
             expect(result.length).toEqual(0);
         });

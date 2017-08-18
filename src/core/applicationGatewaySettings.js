@@ -89,7 +89,7 @@ function merge({ settings, buildingBlockSettings, defaultSettings }) {
 
 function defaultsCustomizer(objValue, srcValue, key) {
     if (key === 'frontendIPConfigurations') {
-        if (_.isNil(srcValue) || srcValue.length === 0) {
+        if (_.isUndefined(srcValue) || srcValue.length === 0) {
             return objValue;
         } else {
             delete objValue[0].name;
@@ -131,25 +131,15 @@ let validApplicationGatewaySslCipherSuites = [
     'TLS_RSA_WITH_3DES_EDE_CBC_SHA'
 ];
 let validSslProtocols = ['TLSv1_0', 'TLSv1_1', 'TLSv1_2'];
-let validSslPolicyTypes = ['Predefined', 'Predefined'];
+let validSslPolicyTypes = ['Predefined', 'Custom'];
 let validApplicationGatewayRequestRoutingRuleTypes = ['Basic', 'PathBasedRouting'];
 let validCookieBasedAffinityValues = ['Enabled', 'Disabled'];
 let validPrivateIPAllocationMethods = ['Static', 'Dynamic'];
-
-//TODO: template deployment request that no protocol, port or path info is included
-let isValidHost = (host) => {
-    // RFC 1123
-    let regExpHostname = new RegExp(/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/);
-    let regResultHostname = regExpHostname.exec(host);
-    return {
-        result: regResultHostname !== null,
-        message: `${host} is not a valid host`
-    };
-};
+let validRuleSetTypes = ['OWASP'];
 
 let isNilOrInRange = (value, from, to) => {
     return {
-        result: _.isNil(value) || _.inRange(_.toSafeInteger(value), from, to),
+        result: _.isUndefined(value) || _.inRange(_.toSafeInteger(value), from, to),
         message: `Valid values are from ${from} to ${to}`
     };
 };
@@ -202,6 +192,10 @@ let isValidPrivateIPAllocationMethod = (privateIPAllocationMethod) => {
     return v.utilities.isStringInArray(privateIPAllocationMethod, validPrivateIPAllocationMethods);
 };
 
+let isValidRuleSetType = (ruleSetType) => {
+    return v.utilities.isStringInArray(ruleSetType, validRuleSetTypes);
+};
+
 let frontendIPConfigurationValidations = {
     name: v.validationUtilities.isNotNullOrWhitespace,
     applicationGatewayType: (value) => {
@@ -212,7 +206,7 @@ let frontendIPConfigurationValidations = {
     },
     internalApplicationGatewaySettings: (value, parent) => {
         if (parent.applicationGatewayType === 'Public') {
-            if (!_.isNil(value)) {
+            if (!_.isUndefined(value)) {
                 return {
                     result: false,
                     message: 'If applicationGatewayType is Public, internalApplicationGatewaySettings cannot be specified'
@@ -229,7 +223,7 @@ let frontendIPConfigurationValidations = {
         };
     },
     publicIpAddress: (value) => {
-        return _.isNil(value) ? {
+        return _.isUndefined(value) ? {
             result: true
         } : {
             validations: publicIpAddressSettings.validations
@@ -257,7 +251,7 @@ let frontendPortsValidations = {
 };
 
 let protocolValidation = (protocol) => {
-    if (_.isNil(protocol)) {
+    if (_.isUndefined(protocol)) {
         return { result: true };
     }
 
@@ -290,7 +284,7 @@ let backendHttpSettingsCollectionValidations = {
 };
 
 let disabledRuleGroupsValidations = (value) => {
-    if (_.isNil(value) || value.length === 0) {
+    if (_.isUndefined(value) || value.length === 0) {
         return { result: true };
     }
     let errorMessage = '';
@@ -355,7 +349,7 @@ let applicationGatewayValidations = {
         return { validations: backendHttpSettingsCollectionValidations };
     },
     httpListeners: (value, parent) => {
-        if (_.isNil(value) || value.length === 0) {
+        if (_.isUndefined(value) || value.length === 0) {
             return { result: true };
         }
 
@@ -385,7 +379,7 @@ let applicationGatewayValidations = {
         };
     },
     urlPathMaps: (value, parent) => {
-        if (_.isNil(value) || value.length === 0) {
+        if (_.isUndefined(value) || value.length === 0) {
             return { result: true };
         }
 
@@ -408,7 +402,7 @@ let applicationGatewayValidations = {
                 return (baseSettings.backendHttpSettingsCollection.length > 0 && matched.length === 0) ? result : { result: true };
             },
             pathRules: (value) => {
-                if (_.isNil(value) || value.length === 0) {
+                if (_.isUndefined(value) || value.length === 0) {
                     return {
                         result: false,
                         message: 'pathRules must be specified'
@@ -416,7 +410,7 @@ let applicationGatewayValidations = {
                 }
                 let errorMessage = '';
                 value.forEach((pathRule, index) => {
-                    if (_.isNil(pathRule.paths) || pathRule.paths.length === 0) {
+                    if (_.isUndefined(pathRule.paths) || pathRule.paths.length === 0) {
                         errorMessage += `At least one path must be specified pathRules[${index}].paths.${os.EOL}`;
                     }
                 });
@@ -452,7 +446,7 @@ let applicationGatewayValidations = {
         };
     },
     requestRoutingRules: (value, parent) => {
-        if (_.isNil(value) || value.length === 0) {
+        if (_.isUndefined(value) || value.length === 0) {
             return { result: true };
         }
 
@@ -484,7 +478,7 @@ let applicationGatewayValidations = {
                 return (baseSettings.httpListeners.length > 0 && matched.length === 0) ? result : { result: true };
             },
             ruleType: (value) => {
-                if (value === 'PathBasedRouting' && (_.isNil(baseSettings.urlPathMaps) || baseSettings.urlPathMaps.length === 0)) {
+                if (value === 'PathBasedRouting' && (_.isUndefined(baseSettings.urlPathMaps) || baseSettings.urlPathMaps.length === 0)) {
                     return {
                         result: false,
                         message: 'At least one urlPathMaps must be specified when ruleType is PathBasedRouting'
@@ -494,7 +488,7 @@ let applicationGatewayValidations = {
                 return { validations: requestRoutingRuleTypeValidation };
             },
             urlPathMapName: (value, parent) => {
-                if (_.isNil(value) && parent.ruleType !== 'PathBasedRouting') {
+                if (_.isUndefined(value) && parent.ruleType !== 'PathBasedRouting') {
                     return { result: true };
                 }
                 let result = {
@@ -510,7 +504,7 @@ let applicationGatewayValidations = {
         };
     },
     probes: (value) => {
-        if (_.isNil(value)) {
+        if (_.isUndefined(value)) {
             return { result: true };
         }
 
@@ -518,13 +512,12 @@ let applicationGatewayValidations = {
             name: v.validationUtilities.isNotNullOrWhitespace,
             protocol: protocolValidation,
             pickHostNameFromBackendHttpSettings: v.validationUtilities.isBoolean,
-            host: isValidHost,
             interval: (value) => isNilOrInRange(value, 1, 86400),
             timeout: (value) => isNilOrInRange(value, 1, 86400),
             unhealthyThreshold: (value) => isNilOrInRange(value, 1, 20),
             path: (value) => {
                 return {
-                    result: _.isNil(value) || value.indexOf('/') === 0,
+                    result: _.isUndefined(value) || value.indexOf('/') === 0,
                     message: 'Path must start with "/"'
                 };
             }
@@ -538,7 +531,7 @@ let applicationGatewayValidations = {
         // TODO: if provided, than in correct schema
     },
     webApplicationFirewallConfiguration: (value) => {
-        if (_.isNil(value)) {
+        if (_.isUndefined(value)) {
             return { result: true };
         }
 
@@ -552,8 +545,8 @@ let applicationGatewayValidations = {
             },
             ruleSetType: (value) => {
                 return {
-                    result: value === 'OWASP',
-                    message: 'Valid value for ruleSetType is OWASP'
+                    result: isValidRuleSetType(value),
+                    message: `Valid values for ruleSetType are ${validRuleSetTypes.join(', ')}`
                 };
             },
             ruleSetVersion: v.validationUtilities.isNotNullOrWhitespace,
@@ -562,13 +555,13 @@ let applicationGatewayValidations = {
         return { validations: webApplicationFirewallConfigurationValidations };
     },
     sslPolicy: (value) => {
-        if (_.isNil(value)) {
+        if (_.isUndefined(value)) {
             return { result: true };
         }
 
         let sslPolicyValidations = {
             disabledSslProtocols: (value) => {
-                if (_.isNil(value) || value.length === 0) {
+                if (_.isUndefined(value) || value.length === 0) {
                     return { result: true };
                 }
                 let errorMessage = '';
@@ -656,9 +649,9 @@ let processProperties = {
                 properties: {}
             };
 
-            if (!_.isNil(pool.backendAddresses) && pool.backendAddresses.length > 0) {
+            if (!_.isUndefined(pool.backendAddresses) && pool.backendAddresses.length > 0) {
                 addressPool.properties.backendAddresses = pool.backendAddresses;
-            } else if (!_.isNil(pool.backendIPConfigurations) && pool.backendIPConfigurations.length > 0) {
+            } else if (!_.isUndefined(pool.backendIPConfigurations) && pool.backendIPConfigurations.length > 0) {
                 // TODO: should get the machines dynamically from parent/nameprefix
                 addressPool.properties.backendIPConfigurations = pool.backendIPConfigurations;
             }
@@ -679,7 +672,7 @@ let processProperties = {
                     requestTimeout: httpSetting.requestTimeout
                 }
             };
-            if (!_.isNil(httpSetting.probeName)) {
+            if (!_.isUndefined(httpSetting.probeName)) {
                 setting.properties.probe = {
                     id: resources.resourceId(parent.subscriptionId, parent.resourceGroupName, 'Microsoft.Network/applicationGateways/probes', parent.name, httpSetting.probeName)
                 };
