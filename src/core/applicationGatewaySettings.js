@@ -89,7 +89,7 @@ function merge({ settings, buildingBlockSettings, defaultSettings }) {
 
 function defaultsCustomizer(objValue, srcValue, key) {
     if (key === 'frontendIPConfigurations') {
-        if (_.isUndefined(srcValue) || srcValue.length === 0) {
+        if (_.isUndefined(srcValue) || !_.isArray(srcValue) || srcValue.length === 0) {
             return objValue;
         } else {
             delete objValue[0].name;
@@ -284,7 +284,7 @@ let backendHttpSettingsCollectionValidations = {
 };
 
 let disabledRuleGroupsValidations = (value) => {
-    if (_.isUndefined(value) || value.length === 0) {
+    if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
         return { result: true };
     }
     let errorMessage = '';
@@ -349,7 +349,7 @@ let applicationGatewayValidations = {
         return { validations: backendHttpSettingsCollectionValidations };
     },
     httpListeners: (value, parent) => {
-        if (_.isUndefined(value) || value.length === 0) {
+        if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
             return { result: true };
         }
 
@@ -379,7 +379,7 @@ let applicationGatewayValidations = {
         };
     },
     urlPathMaps: (value, parent) => {
-        if (_.isUndefined(value) || value.length === 0) {
+        if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
             return { result: true };
         }
 
@@ -402,7 +402,7 @@ let applicationGatewayValidations = {
                 return (baseSettings.backendHttpSettingsCollection.length > 0 && matched.length === 0) ? result : { result: true };
             },
             pathRules: (value) => {
-                if (_.isUndefined(value) || value.length === 0) {
+                if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
                     return {
                         result: false,
                         message: 'pathRules must be specified'
@@ -446,7 +446,7 @@ let applicationGatewayValidations = {
         };
     },
     requestRoutingRules: (value, parent) => {
-        if (_.isUndefined(value) || value.length === 0) {
+        if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
             return { result: true };
         }
 
@@ -561,7 +561,7 @@ let applicationGatewayValidations = {
 
         let sslPolicyValidations = {
             disabledSslProtocols: (value) => {
-                if (_.isUndefined(value) || value.length === 0) {
+                if (_.isUndefined(value) || (_.isArray(value) && value.length === 0)) {
                     return { result: true };
                 }
                 let errorMessage = '';
