@@ -48,6 +48,32 @@ describe('applicationGatewaySettings:', () => {
             });
             expect(result.length).toEqual(0);
         });
+        it('host validations', () => {
+            let isValidHost = applicationGatewaySettings.__get__('isValidHost');
+            let result = isValidHost('www.contoso.com');
+            expect(result.result).toEqual(true);
+
+            result = isValidHost('contoso.com');
+            expect(result.result).toEqual(true);
+
+            result = isValidHost('foo.com.ar');
+            expect(result.result).toEqual(true);
+
+            result = isValidHost('foo@bar.com');
+            expect(result.result).toEqual(false);
+
+            result = isValidHost('invalid!.com');
+            expect(result.result).toEqual(false);
+
+            result = isValidHost('noport.com:8080');
+            expect(result.result).toEqual(false);
+
+            result = isValidHost('http://noprotocol.com');
+            expect(result.result).toEqual(false);
+
+            result = isValidHost('nopath.com/path');
+            expect(result.result).toEqual(false);
+        });
     });
     describe('validations', () => {
         let skuValidations = applicationGatewaySettings.__get__('skuValidations');
@@ -814,6 +840,336 @@ describe('applicationGatewaySettings:', () => {
             expect(result[0].name).toEqual('.requestRoutingRules[0].ruleType');
         });
 
+        it('valid probes', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3,
+                    pickHostNameFromBackendHttpSettings: false,
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('valid probes', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3,
+                    pickHostNameFromBackendHttpSettings: false
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('probes must have a name', () => {
+            settings.probes = [
+                {
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3,
+                    pickHostNameFromBackendHttpSettings: false
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].name');
+        });
+        it('probes protocol must be Http or Https', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'invalid',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].protocol');
+        });
+        it('probes host must conform to RFC 1123', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: '$%@#',
+                    path: '/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].host');
+        });
+        it('probes path must start with /', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: 'foo/',
+                    interval: 30,
+                    timeout: 30,
+                    unhealthyThreshold: 3
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].path');
+        });
+        it('probes interval must be between 1 and 86400', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 864999,
+                    timeout: 30,
+                    unhealthyThreshold: 3
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].interval');
+        });
+        it('probes timeout must be between 1 and 86400', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 1,
+                    timeout: 0,
+                    unhealthyThreshold: 3
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].timeout');
+        });
+        it('probes unhealthyThreshold must be between 1 and 20', () => {
+            settings.probes = [
+                {
+                    name: 'p1',
+                    protocol: 'Http',
+                    host: 'contoso.com',
+                    path: '/',
+                    interval: 5,
+                    timeout: 30,
+                    unhealthyThreshold: 21
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.probes[0].unhealthyThreshold');
+        });
+
+        it('valid webApplicationFirewallConfiguration', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: false,
+                    firewallMode: 'Prevention',
+                    ruleSetType: 'OWASP',
+                    ruleSetVersion: '3.0',
+                    disabledRuleGroups: []
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('webApplicationFirewallConfiguration enabled must be boolean', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: 'invalid',
+                    firewallMode: 'Prevention',
+                    ruleSetType: 'OWASP',
+                    ruleSetVersion: '3.0',
+                    disabledRuleGroups: []
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.webApplicationFirewallConfiguration[0].enabled');
+        });
+        it('webApplicationFirewallConfiguration firewallMode must be Detection or Prevention', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'invalid',
+                    ruleSetType: 'OWASP',
+                    ruleSetVersion: '3.0',
+                    disabledRuleGroups: []
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.webApplicationFirewallConfiguration[0].firewallMode');
+        });
+        it('webApplicationFirewallConfiguration ruleSetType must be OWASP', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'invalid',
+                    ruleSetVersion: '3.0'
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.webApplicationFirewallConfiguration[0].ruleSetType');
+        });
+        it('webApplicationFirewallConfiguration ruleSetVersion takes default when not specified', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: []
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('valid webApplicationFirewallConfiguration disabledRuleGroups', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: [
+                        {
+                            ruleGroupName: 'rule1',
+                            rules: [1,3]
+                        }
+                    ]
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('webApplicationFirewallConfiguration disabledRuleGroups rules can be undefined', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: [
+                        {
+                            ruleGroupName: 'rule1'
+                        }
+                    ]
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('webApplicationFirewallConfiguration disabledRuleGroups rules can be null', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: [
+                        {
+                            ruleGroupName: 'rule1',
+                            rules: null
+                        }
+                    ]
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('webApplicationFirewallConfiguration disabledRuleGroups rules can be empty', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: [
+                        {
+                            ruleGroupName: 'rule1',
+                            rules: []
+                        }
+                    ]
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('webApplicationFirewallConfiguration disabledRuleGroups ruleGroupName must be specified', () => {
+            settings.webApplicationFirewallConfiguration = [
+                {
+                    enabled: true,
+                    firewallMode: 'Detection',
+                    ruleSetType: 'OWASP',
+                    disabledRuleGroups: [
+                        {
+                            rules: [1,2,3]
+                        }
+                    ]
+                }
+            ];
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.webApplicationFirewallConfiguration[0].disabledRuleGroups');
+        });
+
+        it('valid sslPolicy', () => {
+            settings.sslPolicy = {
+                disabledSslProtocols: [ 'TLSv1_0', 'TLSv1_1' ]
+            };
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('sslPolicy disabledSslProtocols can be undefined', () => {
+            settings.sslPolicy = {};
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('sslPolicy disabledSslProtocols can be null', () => {
+            settings.sslPolicy = {
+                disabledSslProtocols: null
+            };
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('sslPolicy disabledSslProtocols can be empty', () => {
+            settings.sslPolicy = {
+                disabledSslProtocols: []
+            };
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(0);
+        });
+        it('sslPolicy disabledSslProtocols must be one of TLSv1_0, TLSv1_1 or TLSv1_2', () => {
+            settings.sslPolicy = {
+                disabledSslProtocols: [ 'invalid', 'TLSv1_1' ]
+            };
+            let result = mergeAndValidate(settings, buildingBlockSettings);
+            expect(result.length).toEqual(1);
+            expect(result[0].name).toEqual('.sslPolicy.disabledSslProtocols');
+        });
     });
 
     if (global.testConfiguration.runTransform) {

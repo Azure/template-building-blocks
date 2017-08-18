@@ -39,7 +39,7 @@ const APPLICATIONGATEWAY_SETTINGS_DEFAULTS = {
     urlPathMaps: [],
     requestRoutingRules: [
         {
-            ruleType: 'Basic' // this is set by default, should be here or not ?
+            ruleType: 'Basic' //TODO: this is set by default, should be here or not ?
         }
     ],
     probes: [
@@ -136,6 +136,23 @@ let validApplicationGatewayRequestRoutingRuleTypes = ['Basic', 'PathBasedRouting
 let validCookieBasedAffinityValues = ['Enabled', 'Disabled'];
 let validPrivateIPAllocationMethods = ['Static', 'Dynamic'];
 
+//TODO: template deployment request that no protocol, port or path info is included
+let isValidHost = (host) => {
+    // RFC 1123
+    let regExpHostname = new RegExp(/^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$/);
+    let regResultHostname = regExpHostname.exec(host);
+    return {
+        result: regResultHostname !== null,
+        message: `${host} is not a valid host`
+    };
+};
+
+let isNilOrInRange = (value, from, to) => {
+    return {
+        result: _.isNil(value) || _.inRange(_.toSafeInteger(value), from, to),
+        message: `Valid values are from ${from} to ${to}`
+    };
+};
 
 let isValidSkuName = (skuName) => {
     return v.utilities.isStringInArray(skuName, validSkuNames);
@@ -269,8 +286,24 @@ let backendHttpSettingsCollectionValidations = {
     protocol: protocolValidation,
     cookieBasedAffinity: cookieBasedAffinityValidation,
     pickHostNameFromBackendAddress: v.validationUtilities.isBoolean,
-    probeEnabled: v.validationUtilities.isBoolean,
-    // probeName: v.validationUtilities.isNotNullOrWhitespace NOT a required field!
+    probeEnabled: v.validationUtilities.isBoolean
+};
+
+let disabledRuleGroupsValidations = (value) => {
+    if (_.isNil(value) || value.length === 0) {
+        return { result: true };
+    }
+    let errorMessage = '';
+    value.forEach((ruleGroup, index) => {
+        let result = v.validationUtilities.isNotNullOrWhitespace(ruleGroup.ruleGroupName);
+        if (result.result === false) {
+            errorMessage += `disabledRuleGroups[${index}].ruleGroupName ` + result.message + `.${os.EOL}`;
+        }
+    });
+    return {
+        result: errorMessage === '',
+        message: errorMessage
+    };
 };
 
 let applicationGatewayValidations = {
@@ -482,16 +515,21 @@ let applicationGatewayValidations = {
         }
 
         let probesValidation = {
+            name: v.validationUtilities.isNotNullOrWhitespace,
             protocol: protocolValidation,
-            pickHostNameFromBackendHttpSettings: v.validationUtilities.isBoolean
-        // TODO: valid host
-        // TODO: valid path
-        // TODO: valid interval
-        // TODO: valid timeout
-        // TODO: valid unhealthyThreshold
-        // TODO: valid pickHostNameFromBackendHttpSettings
-        // TODO: valid minServers
-        // TODO: match
+            pickHostNameFromBackendHttpSettings: v.validationUtilities.isBoolean,
+            host: isValidHost,
+            interval: (value) => isNilOrInRange(value, 1, 86400),
+            timeout: (value) => isNilOrInRange(value, 1, 86400),
+            unhealthyThreshold: (value) => isNilOrInRange(value, 1, 20),
+            path: (value) => {
+                return {
+                    result: _.isNil(value) || value.indexOf('/') === 0,
+                    message: 'Path must start with "/"'
+                };
+            }
+            // TODO: valid minServers
+            // TODO: match
         };
         return { validations: probesValidation };
     },
@@ -499,17 +537,55 @@ let applicationGatewayValidations = {
         return { result: true };
         // TODO: if provided, than in correct schema
     },
-    webApplicationFirewallConfiguration: () => {
-        return { result: true };
-        // TODO: valid enabled
-        // TODO: valid firewallMode
-        // TODO: valid ruleSetType
-        // TODO: valid ruleSetVersion
-        // TODO: valid disabledRuleGroups
+    webApplicationFirewallConfiguration: (value) => {
+        if (_.isNil(value)) {
+            return { result: true };
+        }
+
+        let webApplicationFirewallConfigurationValidations = {
+            enabled: v.validationUtilities.isBoolean,
+            firewallMode: (value) => {
+                return {
+                    result: isValidFirewallMode(value),
+                    message: `Valid values are ${validFirewallModes.join(' ,')}`
+                };
+            },
+            ruleSetType: (value) => {
+                return {
+                    result: value === 'OWASP',
+                    message: 'Valid value for ruleSetType is OWASP'
+                };
+            },
+            ruleSetVersion: v.validationUtilities.isNotNullOrWhitespace,
+            disabledRuleGroups: disabledRuleGroupsValidations
+        };
+        return { validations: webApplicationFirewallConfigurationValidations };
     },
-    sslPolicy: () => {
-        return { result: true };
-        // TODO: if provided, than in correct schema
+    sslPolicy: (value) => {
+        if (_.isNil(value)) {
+            return { result: true };
+        }
+
+        let sslPolicyValidations = {
+            disabledSslProtocols: (value) => {
+                if (_.isNil(value) || value.length === 0) {
+                    return { result: true };
+                }
+                let errorMessage = '';
+                value.forEach((sslProtocol, index) => {
+                    if (!isValidSslProtocol(sslProtocol)) {
+                        errorMessage += `Valid values for sslPolicy.disabledSslProtocols[${index}] are ${validSslProtocols.join(', ')}.${os.EOL}`;
+                    }
+                });
+
+                //TODO: Does it make sense to have the 3 disabled?
+                return {
+                    result: errorMessage === '',
+                    message: errorMessage
+                };
+            }
+        };
+        return { validations: sslPolicyValidations };
     }
 };
 
